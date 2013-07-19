@@ -19,7 +19,7 @@ class block_module_info_edit_form extends block_edit_form {
         }
 
         // Section header title according to language file.
-        $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
+        $mform->addElement('header', 'configheader', get_string('core_info_header', 'block_module_info'));
  
         // Block title
         $mform->addElement('text', 'config_title', get_string('config_title', 'block_module_info'));
@@ -46,6 +46,8 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->setDefault('config_module_semester', 1);
         $mform->addElement('text', 'config_module_semester_override', get_string('config_module_semester_override', 'block_module_info'));
         $mform->setType('config_module_semester_override', PARAM_MULTILANG);
+        
+        $mform->addElement('header', 'configheader', get_string('teaching_header', 'block_module_info'));
         
         $mform->addElement('advcheckbox', 'config_display_convenor', get_string('config_display_convenor', 'block_module_info'));
         $mform->setDefault('config_convenor', 1);
