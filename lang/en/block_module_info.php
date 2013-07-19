@@ -34,6 +34,9 @@
 	$string[ 'defaulthtml' ]                    =   'Default HTML';
 
     //Customisations
+    
+	$string[ 'core_info_header']                =   'Core info';
+	
     $string[ 'config_title' ]                   =   'Title';
     $string[ 'config_module_code' ]             =   'Display Module Code';
     $string[ 'config_module_code_override']     =   'Override Code';
@@ -44,7 +47,9 @@
     $string[ 'config_module_semester' ]         =   'Display Module Semester';
     $string[ 'config_module_semester_override' ] =   'Override Semester';
     
-    $string[ 'config_display_convenor' ]        =   'Display Convenor Info';
+    $string[ 'teaching_header']                 =   'Teaching';
+    
+    $string[ 'config_display_convenor' ]        =   'Display Module Owner name';
     $string[ 'config_module_convenor_override' ] =   'Convenor email (override)';
     
     $string[ 'convenor_not_found']              =   ' not found in QMplus database';
