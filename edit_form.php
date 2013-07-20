@@ -18,7 +18,7 @@ class block_module_info_edit_form extends block_edit_form {
             $this->_form->values->config_htmlcontent = $defaulthtml;
         }
 
-        // Section header title according to language file.
+        // Core info
         $mform->addElement('header', 'configheader', get_string('core_info_header', 'block_module_info'));
  
         // Block title
@@ -26,7 +26,6 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->setDefault('config_title', get_string('module_info', 'block_module_info'));
         $mform->setType('config_title', PARAM_MULTILANG);
 
-        // Settings
         $mform->addElement('advcheckbox', 'config_module_code', get_string('config_module_code', 'block_module_info'));
         $mform->setDefault('config_module_code', 1);
         $mform->addElement('text', 'config_module_code_override', get_string('config_module_code_override', 'block_module_info'));
@@ -47,15 +46,45 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('text', 'config_module_semester_override', get_string('config_module_semester_override', 'block_module_info'));
         $mform->setType('config_module_semester_override', PARAM_MULTILANG);
         
+        // Teaching
         $mform->addElement('header', 'configheader', get_string('teaching_header', 'block_module_info'));
         
-        $mform->addElement('advcheckbox', 'config_display_convenor', get_string('config_display_convenor', 'block_module_info'));
-        $mform->setDefault('config_convenor', 1);
-        $mform->addElement('text', 'config_module_convenor_override', get_string('config_module_convenor_override', 'block_module_info'));
-        $mform->setType('config_module_convenor_override', PARAM_EMAIL);
+        // Module owner name
+        $mform->addElement('advcheckbox', 'config_display_convenor_name', get_string('config_display_convenor_name', 'block_module_info'));
+        $mform->setDefault('config_display_convenor_name', 1);
+        $mform->addElement('text', 'config_convenor_name_override', get_string('config_convenor_name_override', 'block_module_info'));
+        
+        // Module owner email
+        $mform->addElement('advcheckbox', 'config_display_convenor_email', get_string('config_display_convenor_email', 'block_module_info'));
+        $mform->setDefault('config_display_convenor_email', 1);
+        $mform->addElement('text', 'config_convenor_email_override', get_string('config_convenor_email_override', 'block_module_info'));
+        $mform->setType('config_convenor_email_override', PARAM_EMAIL);
+        
+        // Module owner location
+        $mform->addElement('advcheckbox', 'config_display_convenor_location', get_string('config_display_convenor_location', 'block_module_info'));
+        $mform->setDefault('config_display_convenor_location', 1);
+        $mform->addElement('text', 'config_convenor_location_override', get_string('config_convenor_location_override', 'block_module_info'));
+        
+        // Module owner office hours
+        $mform->addElement('advcheckbox', 'config_display_convenor_office_hours', get_string('config_display_convenor_office_hours', 'block_module_info'));
+        $mform->setDefault('config_display_convenor_office_hours', 1);
+        $mform->addElement('text', 'config_convenor_office_hours_override', get_string('config_convenor_office_hours_override', 'block_module_info'));
+        
+        // Personal web page
+        $mform->addElement('advcheckbox', 'config_display_convenor_personal_webpage', get_string('config_display_convenor_personal_webpage', 'block_module_info'));
+        $mform->setDefault('config_display_convenor_personal_webpage', 1);
+        
+        // Additional teachers
+        $mform->addElement('header', 'configheader', get_string('additional_teachers_header', 'block_module_info'));
+        
+        $mform->addElement('text', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'));
+        $mform->setDefault('config_additional_teachers_heading', get_string('config_additional_teachers_heading_default', 'block_module_info'));
+        
+        // Legacy
+        $mform->addElement('header', 'configheader', get_string('legacy_header', 'block_module_info'));
         
         $mform->addElement('advcheckbox', 'config_html', get_string('config_html', 'block_module_info'));
-        $mform->setDefault('config_html', 1);
+        $mform->setDefault('config_html', 0);
 
         // A sample string variable with a default value.
         $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean'=>true, 'context'=>$this->block->context);
