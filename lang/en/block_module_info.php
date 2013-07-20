@@ -35,6 +35,7 @@
 
     //Customisations
     
+	// Core info
 	$string[ 'core_info_header']                =   'Core info';
 	
     $string[ 'config_title' ]                   =   'Title';
@@ -47,10 +48,27 @@
     $string[ 'config_module_semester' ]         =   'Display Module Semester';
     $string[ 'config_module_semester_override' ] =   'Override Semester';
     
+    // Teaching
     $string[ 'teaching_header']                 =   'Teaching';
     
-    $string[ 'config_display_convenor' ]        =   'Display Module Owner name';
-    $string[ 'config_module_convenor_override' ] =   'Convenor email (override)';
+    $string[ 'config_display_convenor_name' ]   =   'Display Module Owner name';
+    $string[ 'config_convenor_name_override' ]  =   'Module Owner name override';
+    $string[ 'config_display_convenor_email']   =    'Display Module Owner email';
+    $string[ 'config_convenor_email_override' ] = 'Module owner email override';
+    $string[ 'config_display_convenor_location' ] =   'Display module owner location';
+    $string[ 'config_convenor_location_override' ]  =   'Module owner location override';
+    $string[ 'config_display_convenor_office_hours']  =    'Display module owner office hours';
+    $string[ 'config_convenor_office_hours_override' ] = 'Module owner email override';
+    $string[ 'config_display_convenor_personal_webpage' ] = 'Display personal webpage';
+    
+    // Additional teachers
+    $string[ 'additional_teachers_header' ]     = 'Additional teachers';
+    
+    $string[ 'config_additional_teachers_heading' ] = 'Additional teachers heading';
+    $string[ 'config_additional_teachers_heading_default' ] = 'e.g. GTAs, TAs';
+    
+    // Legacy
+    $string[ 'legacy_header']                 =   'Legacy';
     
     $string[ 'convenor_not_found']              =   ' not found in QMplus database';
     
