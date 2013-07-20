@@ -22,7 +22,7 @@
  * @copyright 2012 onwards University of London Computer Centre
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version = 2012091100;  // YYYYMMDDHH (year, month, day, 24-hr time)
