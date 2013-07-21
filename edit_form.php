@@ -80,6 +80,61 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('text', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'));
         $mform->setDefault('config_additional_teachers_heading', get_string('config_additional_teachers_heading_default', 'block_module_info'));
         
+        $repeatarray = array();
+        $repeatarray[] = $mform->createElement('header', '', get_string('config_additional_teacher','block_module_info').' {no}');
+        $repeatarray[] = $mform->createElement('text', 'config_additional_teacher_name', get_string('config_additional_teacher_name','block_module_info'));
+        $repeatarray[] = $mform->createElement('text', 'config_additional_teacher_email', get_string('config_additional_teacher_email','block_module_info'));
+        $repeatarray[] = $mform->createElement('text', 'config_additional_teacher_location', get_string('config_additional_teacher_location','block_module_info'));
+        $repeatarray[] = $mform->createElement('text', 'config_additional_teacher_office_hours', get_string('config_additional_teacher_office_hours','block_module_info'));
+        $repeatarray[] = $mform->createElement('hidden', 'additionalteacherid', 0);
+        
+        if ($this->_instance) {
+            $repeatno = $DB->count_records('moduleinfo_teachers', array('moduleinfoid'=>$this->_instance));
+            $repeatno += 1;
+        } else {
+            $repeatno = 1;
+        }
+        
+        // No settings options specified for now...
+        $repeateloptions = array();
+        
+        $mform->setType('additionalteacherid', PARAM_INT);
+        
+        $this->repeat_elements($repeatarray, $repeatno,
+                $repeateloptions, 'option_repeats', 'option_add_fields', 1);
+        
+        // Schedule
+        $mform->addElement('header', 'configheader', get_string('schedule_header', 'block_module_info'));
+        
+        $mform->addElement('advcheckbox', 'config_enable_personal_timetable_link', get_string('config_enable_personal_timetable_link', 'block_module_info'));
+        $mform->setDefault('config_enable_personal_timetable_link', 1);
+        $mform->addElement('advcheckbox', 'config_enable_module_timetable_link', get_string('config_enable_module_timetable_link', 'block_module_info'));
+        $mform->setDefault('config_enable_module_timetable_link', 1);
+        
+        $sessionarray = array();
+        $sessionarray[] = $mform->createElement('header', '', get_string('config_additional_session','block_module_info').' {no}');
+        $sessionarray[] = $mform->createElement('text', 'config_additional_session_subheading', get_string('config_additional_session_subheading','block_module_info'));
+        $sessionarray[] = $mform->createElement('text', 'config_additional_session_day', get_string('config_additional_session_day','block_module_info'));
+        $sessionarray[] = $mform->createElement('text', 'config_additional_session_time', get_string('config_additional_session_time','block_module_info'));
+        $sessionarray[] = $mform->createElement('text', 'config_additional_session_location', get_string('config_additional_session_location','block_module_info'));
+        $sessionarray[] = $mform->createElement('hidden', 'additionalsessionid', 0);
+        
+        if ($this->_instance) {
+            $sessionno = $DB->count_records('moduleinfo_sessions', array('moduleinfoid'=>$this->_instance));
+            $sessionno += 1;
+        } else {
+            $sessionno = 1;
+        }
+        
+        // No settings options specified for now...
+        $repeateloptions = array();
+        
+        $mform->setType('additionalsessionid', PARAM_INT);
+        
+        $this->repeat_elements($sessionarray, $sessionno,
+                $repeateloptions, 'option_repeats', 'option_add_fields', 1);
+        
+        
         // Legacy
         $mform->addElement('header', 'configheader', get_string('legacy_header', 'block_module_info'));
         
