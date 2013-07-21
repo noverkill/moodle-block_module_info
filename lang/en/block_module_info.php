@@ -67,6 +67,23 @@
     $string[ 'config_additional_teachers_heading' ] = 'Additional teachers heading';
     $string[ 'config_additional_teachers_heading_default' ] = 'e.g. GTAs, TAs';
     
+    $string[ 'config_additional_teacher' ]     =    'Additional teacher';
+    $string[ 'config_additional_teacher_name' ] =     'Name';
+    $string[ 'config_additional_teacher_email' ] =     'Email';
+    $string[ 'config_additional_teacher_location' ] =     'Location';
+    $string[ 'config_additional_teacher_office_hours' ] =     'Office hours';
+    
+    // Schedule
+    $string[ 'schedule_header' ]                = 'Schedule';
+    $string[ 'config_enable_personal_timetable_link' ] = 'Enable personal timetable link (SMART)';
+    $string[ 'config_enable_module_timetable_link' ] = 'Enable module timetable link (SMART)';
+    
+    $string[ 'config_additional_session' ]     =    'Additional teaching session';
+    $string[ 'config_additional_session_subheading' ] =     'Teaching subheading';
+    $string[ 'config_additional_session_day' ] =     'Day';
+    $string[ 'config_additional_session_time' ] =     'Time';
+    $string[ 'config_additional_session_location' ] =     'Location';
+    
     // Legacy
     $string[ 'legacy_header']                 =   'Legacy';
     
