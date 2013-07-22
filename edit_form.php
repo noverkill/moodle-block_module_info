@@ -80,19 +80,19 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('text', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'));
         $mform->setDefault('config_additional_teachers_heading', get_string('config_additional_teachers_heading_default', 'block_module_info'));
         
-        $repeatarray = array();
-        $repeatarray[] = $mform->createElement('header', '', get_string('config_additional_teacher','block_module_info').' {no}');
-        $repeatarray[] = $mform->createElement('text', 'config_additional_teacher_name', get_string('config_additional_teacher_name','block_module_info'));
-        $repeatarray[] = $mform->createElement('text', 'config_additional_teacher_email', get_string('config_additional_teacher_email','block_module_info'));
-        $repeatarray[] = $mform->createElement('text', 'config_additional_teacher_location', get_string('config_additional_teacher_location','block_module_info'));
-        $repeatarray[] = $mform->createElement('text', 'config_additional_teacher_office_hours', get_string('config_additional_teacher_office_hours','block_module_info'));
-        $repeatarray[] = $mform->createElement('hidden', 'additionalteacherid', 0);
+        $teacherarray = array();
+        $teacherarray[] = $mform->createElement('header', '', get_string('config_additional_teacher','block_module_info').' {no}');
+        $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_name', get_string('config_additional_teacher_name','block_module_info'));
+        $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_email', get_string('config_additional_teacher_email','block_module_info'));
+        $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_location', get_string('config_additional_teacher_location','block_module_info'));
+        $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_office_hours', get_string('config_additional_teacher_office_hours','block_module_info'));
+        $teacherarray[] = $mform->createElement('hidden', 'additionalteacherid', 0);
         
         if ($this->_instance) {
-            $repeatno = $DB->count_records('moduleinfo_teachers', array('moduleinfoid'=>$this->_instance));
-            $repeatno += 1;
+            $teacherno = $DB->count_records('moduleinfo_teachers', array('moduleinfoid'=>$this->_instance));
+            $teacherno += 1;
         } else {
-            $repeatno = 1;
+            $teacherno = 1;
         }
         
         // No settings options specified for now...
@@ -100,8 +100,8 @@ class block_module_info_edit_form extends block_edit_form {
         
         $mform->setType('additionalteacherid', PARAM_INT);
         
-        $this->repeat_elements($repeatarray, $repeatno,
-                $repeateloptions, 'option_repeats', 'option_add_fields', 1);
+        $this->repeat_elements($teacherarray, $teacherno,
+                $repeateloptions, 'teacher_repeats', 'option_add_fields', 1);
         
         // Schedule
         $mform->addElement('header', 'configheader', get_string('schedule_header', 'block_module_info'));
@@ -132,7 +132,7 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->setType('additionalsessionid', PARAM_INT);
         
         $this->repeat_elements($sessionarray, $sessionno,
-                $repeateloptions, 'option_repeats', 'option_add_fields', 1);
+                $repeateloptions, 'session_repeats', 'option_add_fields', 1);
         
         
         // Legacy
@@ -154,4 +154,46 @@ class block_module_info_edit_form extends block_edit_form {
         //$mform->addElement('html', html_writer::link($link, get_string('reset', 'block_module_info')));
 
     }
+    
+    function get_data() {
+        $data = parent::get_data();
+        
+        if($data != NULL) {
+            // We need to save it to the DB
+        }
+        
+        return $data;
+    }
+    
+    function set_data($default_values) {
+        
+        parent::set_data($default_values);
+        
+        global $DB;
+    
+        if (!empty($this->block->instance->id) && ($teacherrecords = $DB->get_records('moduleinfo_teachers',array('moduleinfoid'=>$this->instance->block->instance->id), 'id', 'id,name,email,location,officehours')) ) {
+            $teacherids=array_keys($teacherrecords);
+            $teachers=array_values($teacherrecords);
+        
+            $idx = 0;
+            foreach (array_keys($teachers) as $key){
+                 
+                $default_values['config_additional_teacher_name['.$key.']'] = '?';
+                $default_values['config_additional_teacher_email['.$key.']'] = '?';
+                $default_values['config_additional_teacher_location['.$key.']'] = '?';
+                $default_values['config_additional_teacher_office_hours['.$key.']'] = '?';
+                 
+                $default_values['additionalteacherid['.$key.']'] = $teacherids[$key];
+    
+                $idx++;
+            }
+        }
+    }
+    
+    function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+    
+        return $errors;
+    }
+    
 }
