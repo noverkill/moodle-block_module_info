@@ -49,6 +49,10 @@ class block_module_info_edit_form extends block_edit_form {
         // Teaching
         $mform->addElement('header', 'configheader', get_string('teaching_header', 'block_module_info'));
         
+        // Module owner heading
+        $headings = explode("\r\n", get_config('block_module_info', 'convenor_role_name_options'));
+        $mform->addElement('select', 'config_module_owner_heading', get_string('config_module_owner_heading', 'block_module_info'), $headings);
+        
         // Module owner name
         $mform->addElement('advcheckbox', 'config_display_convenor_name', get_string('config_display_convenor_name', 'block_module_info'));
         $mform->setDefault('config_display_convenor_name', 1);
