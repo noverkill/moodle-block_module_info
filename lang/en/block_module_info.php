@@ -32,8 +32,8 @@
 	//Config Defaults
 	$string[ 'default' ]                        =   'Defaults';
 	
-	$string[ 'convenor_roll_name_options' ]    =    'Valid alternative names for module owner';
-	$string[ 'convenor_roll_name_options_desc']=    'Possible names for the module owner are \'Convenor\' or \'Organiser\'. Write each option on a new line.';
+	$string[ 'convenor_role_name_options' ]    =    'Module owner names';
+	$string[ 'convenor_role_name_options_desc']=    'Possible valid alternative names for the module owner are \'Convenor\' or \'Module Organiser\', for instance. Write each option on a new line.';
 	$string[ 'defaulthtml' ]                    =   'Default HTML';
 
     //Customisations
@@ -54,6 +54,7 @@
     // Teaching
     $string[ 'teaching_header']                 =   'Teaching';
     
+    $string[ 'config_module_owner_heading' ]    =   'Module Owner heading';
     $string[ 'config_display_convenor_name' ]   =   'Display Module Owner name';
     $string[ 'config_convenor_name_override' ]  =   'Module Owner name override';
     $string[ 'config_display_convenor_email']   =    'Display Module Owner email';
