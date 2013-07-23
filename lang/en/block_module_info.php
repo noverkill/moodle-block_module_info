@@ -31,6 +31,9 @@
 	
 	//Config Defaults
 	$string[ 'default' ]                        =   'Defaults';
+	
+	$string[ 'convenor_roll_name_options' ]    =    'Valid alternative names for module owner';
+	$string[ 'convenor_roll_name_options_desc']=    'Possible names for the module owner are \'Convenor\' or \'Organiser\'. Write each option on a new line.';
 	$string[ 'defaulthtml' ]                    =   'Default HTML';
 
     //Customisations
