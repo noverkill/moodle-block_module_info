@@ -96,8 +96,8 @@ $settings->add($default);
 
 // Default settings
 
-$convenor_roll_name_options = new admin_setting_configtextarea('block_module_info/convenor_roll_name_options', get_string('convenor_roll_name_options', 'block_module_info'), get_string('convenor_roll_name_options_desc', 'block_module_info'), '', 'wrap="virtual" rows="10" cols="65"');
-$settings->add($convenor_roll_name_options);
+$convenor_role_name_options = new admin_setting_configtextarea('block_module_info/convenor_role_name_options', get_string('convenor_role_name_options', 'block_module_info'), get_string('convenor_role_name_options_desc', 'block_module_info'), '', PARAM_RAW, '65', '10');
+$settings->add($convenor_role_name_options);
 
 $defaulthtml =	new admin_setting_confightmleditor('block_module_info/defaulthtml',get_string( 'defaulthtml', 'block_module_info' ), get_string( 'defaulthtml', 'block_module_info' ),'');
 $settings->add($defaulthtml);
