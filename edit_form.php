@@ -88,12 +88,8 @@ class block_module_info_edit_form extends block_edit_form {
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_office_hours', get_string('config_additional_teacher_office_hours','block_module_info'));
         $teacherarray[] = $mform->createElement('hidden', 'additionalteacherid', 0);
         
-        if ($this->_instance) {
-            $teacherno = $DB->count_records('moduleinfo_teachers', array('moduleinfoid'=>$this->_instance));
-            $teacherno += 1;
-        } else {
-            $teacherno = 1;
-        }
+        $teacherno = sizeof($this->block->config->additional_teacher_name); 
+        $teacherno += 1;
         
         // No settings options specified for now...
         $repeateloptions = array();
@@ -156,11 +152,8 @@ class block_module_info_edit_form extends block_edit_form {
     }
     
     function get_data() {
-        $data = parent::get_data();
         
-        if($data != NULL) {
-            // We need to save it to the DB
-        }
+        $data = parent::get_data();
         
         return $data;
     }
@@ -169,29 +162,12 @@ class block_module_info_edit_form extends block_edit_form {
         
         parent::set_data($default_values);
         
-        global $DB;
-    
-        if (!empty($this->block->instance->id) && ($teacherrecords = $DB->get_records('moduleinfo_teachers',array('moduleinfoid'=>$this->instance->block->instance->id), 'id', 'id,name,email,location,officehours')) ) {
-            $teacherids=array_keys($teacherrecords);
-            $teachers=array_values($teacherrecords);
-        
-            $idx = 0;
-            foreach (array_keys($teachers) as $key){
-                 
-                $default_values['config_additional_teacher_name['.$key.']'] = '?';
-                $default_values['config_additional_teacher_email['.$key.']'] = '?';
-                $default_values['config_additional_teacher_location['.$key.']'] = '?';
-                $default_values['config_additional_teacher_office_hours['.$key.']'] = '?';
-                 
-                $default_values['additionalteacherid['.$key.']'] = $teacherids[$key];
-    
-                $idx++;
-            }
-        }
     }
     
     function validation($data, $files) {
         $errors = parent::validation($data, $files);
+        
+        // If an additional teacher's name is blank then remove this element from the array
     
         return $errors;
     }
