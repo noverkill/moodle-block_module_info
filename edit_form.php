@@ -115,12 +115,8 @@ class block_module_info_edit_form extends block_edit_form {
         $sessionarray[] = $mform->createElement('text', 'config_additional_session_location', get_string('config_additional_session_location','block_module_info'));
         $sessionarray[] = $mform->createElement('hidden', 'additionalsessionid', 0);
         
-        if ($this->_instance) {
-            $sessionno = $DB->count_records('moduleinfo_sessions', array('moduleinfoid'=>$this->_instance));
-            $sessionno += 1;
-        } else {
-            $sessionno = 1;
-        }
+        $sessionno = sizeof($this->block->config->additional_session_subheading); 
+        $sessionno += 1;
         
         // No settings options specified for now...
         $repeateloptions = array();
@@ -155,6 +151,31 @@ class block_module_info_edit_form extends block_edit_form {
         
         $data = parent::get_data();
         
+        if($data != null) {
+            // If an additional teacher's name is blank then remove this element from the array
+            $names = $data->config_additional_teacher_name;
+            foreach($names as $key=>$value) {
+                if(strlen($value) == 0 || $value == NULL) {
+                    unset($data->config_additional_teacher_name[$key]);
+                    unset($data->config_additional_teacher_email[$key]);
+                    unset($data->config_additional_teacher_location[$key]);
+                    unset($data->config_additional_teacher_office_hours[$key]);
+                    $data->teacher_repeats=$data->teacher_repeats-1;
+                }
+            }
+            
+            // Any empty additional teaching sessions also need to be removed
+            $names = $data->config_additional_session_subheading;
+            foreach($names as $key=>$value) {
+                if(strlen($value) == 0 || $value == NULL) {
+                    unset($data->config_additional_session_subheading[$key]);
+                    unset($data->config_additional_session_day[$key]);
+                    unset($data->config_additional_session_time[$key]);
+                    unset($data->config_additional_session_location[$key]);
+                    $data->session_repeats=$data->session_repeats-1;
+                }
+            }
+        }
         return $data;
     }
     
@@ -166,9 +187,7 @@ class block_module_info_edit_form extends block_edit_form {
     
     function validation($data, $files) {
         $errors = parent::validation($data, $files);
-        
-        // If an additional teacher's name is blank then remove this element from the array
-    
+          
         return $errors;
     }
     
