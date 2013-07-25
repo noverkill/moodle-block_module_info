@@ -3,6 +3,8 @@
 class block_module_info_edit_form extends block_edit_form {
  
     protected function specific_definition($mform) {
+    	
+    	global $DB;
 
         $defaulthtml = get_config('block_module_info', 'defaulthtml');
 
@@ -50,44 +52,107 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('header', 'configheader', get_string('teaching_header', 'block_module_info'));
         
         // Module owner heading
-        $headings = explode("\r\n", get_config('block_module_info', 'convenor_role_name_options'));
-        $mform->addElement('select', 'config_module_owner_heading', get_string('config_module_owner_heading', 'block_module_info'), $headings);
+        $headings_options = array(get_string('teacher_headings_options_not_configured', 'block_module_info'));
+        $headings = get_config('block_module_info', 'convenor_role_name_options');
+        if(!empty($headings) && strlen($headings) > 0) {
+        	$headings_options = explode("\r\n", $headings);
+        }
+        $mform->addElement('select', 'config_module_owner_heading', get_string('config_module_owner_heading', 'block_module_info'), $headings_options);
         
+        // Module owner property display options
+        // What to display
+        $display_options = array('name'=>get_string('fullname'));
+        $display_options = array_merge($display_options, array('profilepic'=>get_string('profilepic', 'block_module_info')));
+        $display_options = array_merge($display_options, array('email'=>get_string('email')));
+        $display_options = array_merge($display_options, array('location'=>get_string('location', 'block_module_info')));
+        $display_options = array_merge($display_options, array('officehours'=>get_string('officehours', 'block_module_info')));
+        $display_options = array_merge($display_options, array('url'=>get_string('webpage')));
+        $display_options = array_merge($display_options, array('icq'=>get_string('icqnumber')));
+        $display_options = array_merge($display_options, array('skype'=>get_string('skypeid')));
+        $display_options = array_merge($display_options, array('aim'=>get_string('aimid')));
+        $display_options = array_merge($display_options, array('yahoo'=>get_string('yahooid')));
+        $display_options = array_merge($display_options, array('msn'=>get_string('msnid')));
+        $display_options = array_merge($display_options, array('idnumber'=>get_string('idnumber')));
+        $display_options = array_merge($display_options, array('institution'=>get_string('institution')));
+        $display_options = array_merge($display_options, array('department'=>get_string('department')));
+        $display_options = array_merge($display_options, array('phone1'=>get_string('phone')));
+        $display_options = array_merge($display_options, array('phone2'=>get_string('phone2')));
+        $display_options = array_merge($display_options, array('address'=>get_string('address')));
+        
+        // Add custom profile fields to display options
+        if ($fields = $DB->get_records('user_info_field')) {
+        	foreach ($fields as $field) {
+        		$display_options = array_merge($display_options, array(format_string($field->name)=>format_string($field->name)));
+        	}
+        }
+        
+        $attributes = array('size'=>'7'); 
+        $select = $mform->addElement('select', 'config_display_convenor_options', get_string('config_display_convenor_options', 'block_module_info'), $display_options, $attributes);
+        $select->setMultiple(true);
+        $mform->setDefault('config_display_convenor_options', array('name', 'profilepic', 'email', 'location', 'officehours'));
+        
+        // Overrides
         // Module owner name
-        $mform->addElement('advcheckbox', 'config_display_convenor_name', get_string('config_display_convenor_name', 'block_module_info'));
-        $mform->setDefault('config_display_convenor_name', 1);
         $mform->addElement('text', 'config_convenor_name_override', get_string('config_convenor_name_override', 'block_module_info'));
         
+        // Module owner profile picture size
+        $sizeoptions = array('small'=>get_string('small', 'block_module_info'), 'large'=>get_string('large', 'block_module_info'));
+        $mform->addElement('select', 'config_convenor_profilepic_size', get_string('profilepic_size', 'block_module_info'), $sizeoptions);
+        $mform->setDefault('config_convenor_profilepic_size', 'small');
+        
         // Module owner email
-        $mform->addElement('advcheckbox', 'config_display_convenor_email', get_string('config_display_convenor_email', 'block_module_info'));
-        $mform->setDefault('config_display_convenor_email', 1);
         $mform->addElement('text', 'config_convenor_email_override', get_string('config_convenor_email_override', 'block_module_info'));
         $mform->setType('config_convenor_email_override', PARAM_EMAIL);
         
         // Module owner location
-        $mform->addElement('advcheckbox', 'config_display_convenor_location', get_string('config_display_convenor_location', 'block_module_info'));
-        $mform->setDefault('config_display_convenor_location', 1);
         $mform->addElement('text', 'config_convenor_location_override', get_string('config_convenor_location_override', 'block_module_info'));
         
         // Module owner office hours
-        $mform->addElement('advcheckbox', 'config_display_convenor_office_hours', get_string('config_display_convenor_office_hours', 'block_module_info'));
-        $mform->setDefault('config_display_convenor_office_hours', 1);
-        $mform->addElement('text', 'config_convenor_office_hours_override', get_string('config_convenor_office_hours_override', 'block_module_info'));
-        
-        // Personal web page
-        $mform->addElement('advcheckbox', 'config_display_convenor_personal_webpage', get_string('config_display_convenor_personal_webpage', 'block_module_info'));
-        $mform->setDefault('config_display_convenor_personal_webpage', 1);
+        $mform->addElement('text', 'config_convenor_office_hours_override', get_string('config_convenor_office_hours_override', 'block_module_info'));  
         
         // Additional teachers
         $mform->addElement('header', 'configheader', get_string('additional_teachers_header', 'block_module_info'));
         
-        $mform->addElement('text', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'));
-        $mform->setDefault('config_additional_teachers_heading', get_string('config_additional_teachers_heading_default', 'block_module_info'));
+        // Additional teachers heading
+        $headings_options = array(get_string('teacher_headings_options_not_configured', 'block_module_info'));
+        $headings = get_config('block_module_info', 'additional_teacher_role_name_options');
+        if(!empty($headings) && strlen($headings) > 0) {
+        	$headings_options = explode("\r\n", $headings);
+        }
+        $mform->addElement('select', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'), $headings_options);
         
         $teacherarray = array();
         $teacherarray[] = $mform->createElement('header', '', get_string('config_additional_teacher','block_module_info').' {no}');
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_name', get_string('config_additional_teacher_name','block_module_info'));
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_email', get_string('config_additional_teacher_email','block_module_info'));
+        
+        // Additional teacher property display options
+        // What to display
+        $display_options = array('profilepic'=>get_string('profilepic', 'block_module_info'));
+        $display_options = array_merge($display_options, array('url'=>get_string('webpage')));
+        $display_options = array_merge($display_options, array('icq'=>get_string('icqnumber')));
+        $display_options = array_merge($display_options, array('skype'=>get_string('skypeid')));
+        $display_options = array_merge($display_options, array('aim'=>get_string('aimid')));
+        $display_options = array_merge($display_options, array('yahoo'=>get_string('yahooid')));
+        $display_options = array_merge($display_options, array('msn'=>get_string('msnid')));
+        $display_options = array_merge($display_options, array('idnumber'=>get_string('idnumber')));
+        $display_options = array_merge($display_options, array('institution'=>get_string('institution')));
+        $display_options = array_merge($display_options, array('department'=>get_string('department')));
+        $display_options = array_merge($display_options, array('phone1'=>get_string('phone')));
+        $display_options = array_merge($display_options, array('phone2'=>get_string('phone2')));
+        $display_options = array_merge($display_options, array('address'=>get_string('address')));
+        
+        // Add custom profile fields to display options
+        if ($fields = $DB->get_records('user_info_field')) {
+        	foreach ($fields as $field) {
+        		$display_options = array_merge($display_options, array(format_string($field->name)=>format_string($field->name)));
+        	}
+        }
+        $attributes = array('size'=>'7');
+        $select = $mform->createElement('select', 'config_display_additional_teacher_options', get_string('config_display_additional_teacher_options', 'block_module_info'), $display_options, $attributes);
+        $select->setMultiple(true);
+        $teacherarray[] = $select;
+        
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_location', get_string('config_additional_teacher_location','block_module_info'));
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_office_hours', get_string('config_additional_teacher_office_hours','block_module_info'));
         $teacherarray[] = $mform->createElement('hidden', 'additionalteacherid', 0);
@@ -101,7 +166,7 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->setType('additionalteacherid', PARAM_INT);
         
         $this->repeat_elements($teacherarray, $teacherno,
-                $repeateloptions, 'teacher_repeats', 'option_add_fields', 1);
+                $repeateloptions, 'teacher_repeats', 'option_add_fields', 1, null, false);
         
         // Schedule
         $mform->addElement('header', 'configheader', get_string('schedule_header', 'block_module_info'));
@@ -128,8 +193,14 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->setType('additionalsessionid', PARAM_INT);
         
         $this->repeat_elements($sessionarray, $sessionno,
-                $repeateloptions, 'session_repeats', 'option_add_fields', 1);
+                $repeateloptions, 'session_repeats', 'option_add_fields', 1, null, false);
         
+        // Documents
+        
+        $mform->addElement('header', 'configheader', get_string('documents_header', 'block_module_info'));
+        
+        $attachmentoptions = array('subdirs'=>false, 'maxfiles'=>$maxfiles, 'maxbytes'=>$maxbytes);
+        $mform->addElement('filemanager', 'attachment_filemanager', get_string('files'), null, $attachmentoptions);
         
         // Legacy
         $mform->addElement('header', 'configheader', get_string('legacy_header', 'block_module_info'));
