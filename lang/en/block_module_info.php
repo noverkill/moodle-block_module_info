@@ -34,6 +34,9 @@
 	
 	$string[ 'convenor_role_name_options' ]    =    'Module owner names';
 	$string[ 'convenor_role_name_options_desc']=    'Possible valid alternative names for the module owner are \'Convenor\' or \'Module Organiser\', for instance. Write each option on a new line.';
+	$string[ 'additional_teacher_role_name_options' ]    =    'Additional teacher names';
+	$string[ 'additional_teacher_role_name_options_desc']=    'Possible valid alternative names for additional teachers are \'Additional teachers\' or \'Teaching assistants\', for example. Write each option on a new line.';
+	
 	$string[ 'defaulthtml' ]                    =   'Default HTML';
 
     //Customisations
@@ -54,12 +57,18 @@
     // Teaching
     $string[ 'teaching_header']                 =   'Teaching';
     
+    $string[ 'teacher_headings_options_not_configured' ] = 'Headings options not configured';
+    
+    $string[ 'location' ] = 'Location';
+    $string[ 'officehours' ] = 'Office hours';
+    $string[ 'profilepic' ] = 'Profile picture';
+    $string[ 'profilepic_size' ] = 'Profile picture size';
+    $string[ 'small' ] = 'Small';
+    $string[ 'large' ] = 'Large';
     $string[ 'config_module_owner_heading' ]    =   'Module Owner heading';
-    $string[ 'config_display_convenor_name' ]   =   'Display Module Owner name';
+    $string[ 'config_display_convenor_options' ] =	'Module owner display options';
     $string[ 'config_convenor_name_override' ]  =   'Module Owner name override';
-    $string[ 'config_display_convenor_email']   =    'Display Module Owner email';
     $string[ 'config_convenor_email_override' ] = 'Module owner email override';
-    $string[ 'config_display_convenor_location' ] =   'Display module owner location';
     $string[ 'config_convenor_location_override' ]  =   'Module owner location override';
     $string[ 'config_display_convenor_office_hours']  =    'Display module owner office hours';
     $string[ 'config_convenor_office_hours_override' ] = 'Module owner email override';
@@ -70,6 +79,7 @@
     
     $string[ 'config_additional_teachers_heading' ] = 'Additional teachers heading';
     $string[ 'config_additional_teachers_heading_default' ] = 'e.g. GTAs, TAs';
+    $string[ 'config_display_additional_teacher_options' ] =	'Additional teacher display options';
     
     $string[ 'config_additional_teacher' ]     =    'Additional teacher';
     $string[ 'config_additional_teacher_name' ] =     'Name';
@@ -87,6 +97,9 @@
     $string[ 'config_additional_session_day' ] =     'Day';
     $string[ 'config_additional_session_time' ] =     'Time';
     $string[ 'config_additional_session_location' ] =     'Location';
+    
+    // Documents
+    $string[ 'documents_header' ]                = 'Documents';
     
     // Legacy
     $string[ 'legacy_header']                 =   'Legacy';
