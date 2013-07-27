@@ -205,7 +205,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $module = array('name'=>'block_module_info', 'fullpath'=>'/blocks/module_info/module.js', 'requires'=>array('yui2-treeview'));
         if (empty($dir['subdirs']) && empty($dir['files'])) {
-            $result = $this->output->box(get_string('nofilesavailable', 'repository'));
+            $result .= $this->output->box(get_string('nofilesavailable', 'repository'));
         } else {
             $htmlid = 'document_tree_'.uniqid();
             $this->page->requires->js_init_call('M.block_module_info.init_tree', array(false, $htmlid));
