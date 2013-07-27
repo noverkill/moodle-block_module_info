@@ -53,8 +53,6 @@ class block_module_info extends block_base {
         return true;
     }
     
-    
-    
     // The PHP tag and the curly bracket for the class definition 
     // will only be closed after there is another function added in the next section.
 	public function get_content() {
@@ -83,19 +81,18 @@ class block_module_info extends block_base {
             if (!empty($this->config->htmlcontent['text'])) {
                 // rewrite url
                 $this->config->htmlcontent['text'] = file_rewrite_pluginfile_urls($this->config->htmlcontent['text'], 'pluginfile.php', $this->context->id, 'block_module_info', 'content', NULL);
-                $this->content->text .= format_text($this->config->htmlcontent['text'], $this->config->htmlcontent['format'], $filteropt);
+                $output_buffer .= format_text($this->config->htmlcontent['text'], $this->config->htmlcontent['format'], $filteropt);
             } else {
-                $this->content->text .= get_config('block_module_info', 'defaulthtml');
+                $output_buffer .= get_config('block_module_info', 'defaulthtml');
             }// if (! empty($this->config->htmlcontent))
         }
         
         // Links to documents
-        $fs = get_file_storage();
-        $dir = $fs->get_area_tree($this->page->context->id, 'block_module_info', 'documents', $this->context->id);
-        
-        $this->content->footer = '';
+        $output_buffer .= $renderer->get_document_tree($this->context);
         
         $this->content->text = $output_buffer;
+        
+        $this->content->footer = '';
         
         // Return the result
         return $this->content;
