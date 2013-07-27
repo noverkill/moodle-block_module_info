@@ -1,7 +1,7 @@
 <?php
  
 class block_module_info_edit_form extends block_edit_form {
- 
+	
     protected function specific_definition($mform) {
     	
     	global $DB;
@@ -196,11 +196,27 @@ class block_module_info_edit_form extends block_edit_form {
                 $repeateloptions, 'session_repeats', 'option_add_fields', 1, null, false);
         
         // Documents
-        
         $mform->addElement('header', 'configheader', get_string('documents_header', 'block_module_info'));
         
-        $attachmentoptions = array('subdirs'=>false, 'maxfiles'=>$maxfiles, 'maxbytes'=>$maxbytes);
-        $mform->addElement('filemanager', 'attachment_filemanager', get_string('files'), null, $attachmentoptions);
+        global $COURSE;
+        
+        $fileoptions = array('subdirs'=>1,
+        		'maxbytes'=>$COURSE->maxbytes,
+        		'accepted_types'=>'*',
+        		'return_types'=>FILE_INTERNAL);
+        
+        global $USER;
+        $data = new stdClass();
+        file_prepare_standard_filemanager($data,
+        		'files',
+        		$fileoptions,
+        		$this->page->context,
+        		'block_module_info',
+        		'documents',
+        		$this->block->context->id);
+        
+        $mform->addElement('filemanager', 'files_filemanager', get_string('files'), null, $fileoptions);
+        $this->set_data($data);
         
         // Legacy
         $mform->addElement('header', 'configheader', get_string('legacy_header', 'block_module_info'));
@@ -257,7 +273,21 @@ class block_module_info_edit_form extends block_edit_form {
                     $data->session_repeats=$data->session_repeats-1;
                 }
             }
-        }
+            
+            global $COURSE;
+            $fileoptions = array('subdirs'=>1,
+            		'maxbytes'=>$COURSE->maxbytes,
+            		'accepted_types'=>'*',
+            		'return_types'=>FILE_INTERNAL);
+            
+            file_postupdate_standard_filemanager($data,
+            		'files',
+            		$fileoptions,
+            		$this->page->context,
+            		'block_module_info',
+            		'documents',
+            		$this->block->context->id);
+        } 
         return $data;
     }
     
