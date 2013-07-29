@@ -67,17 +67,27 @@ class block_module_info_edit_form extends block_edit_form {
         $display_options = array_merge($display_options, array('location'=>get_string('location', 'block_module_info')));
         $display_options = array_merge($display_options, array('officehours'=>get_string('officehours', 'block_module_info')));
         $display_options = array_merge($display_options, array('url'=>get_string('webpage')));
-        $display_options = array_merge($display_options, array('icq'=>get_string('icqnumber')));
-        $display_options = array_merge($display_options, array('skype'=>get_string('skypeid')));
-        $display_options = array_merge($display_options, array('aim'=>get_string('aimid')));
-        $display_options = array_merge($display_options, array('yahoo'=>get_string('yahooid')));
-        $display_options = array_merge($display_options, array('msn'=>get_string('msnid')));
-        $display_options = array_merge($display_options, array('idnumber'=>get_string('idnumber')));
-        $display_options = array_merge($display_options, array('institution'=>get_string('institution')));
-        $display_options = array_merge($display_options, array('department'=>get_string('department')));
-        $display_options = array_merge($display_options, array('phone1'=>get_string('phone')));
-        $display_options = array_merge($display_options, array('phone2'=>get_string('phone2')));
-        $display_options = array_merge($display_options, array('address'=>get_string('address')));
+        
+        $possible_options = array('icq'=>get_string('icqnumber'));
+        $possible_options = array_merge($possible_options, array('skype'=>get_string('skypeid')));
+        $possible_options = array_merge($possible_options, array('aim'=>get_string('aimid')));
+        $possible_options = array_merge($possible_options, array('yahoo'=>get_string('yahooid')));
+        $possible_options = array_merge($possible_options, array('msn'=>get_string('msnid')));
+        $possible_options = array_merge($possible_options, array('idnumber'=>get_string('idnumber')));
+        $possible_options = array_merge($possible_options, array('institution'=>get_string('institution')));
+        $possible_options = array_merge($possible_options, array('department'=>get_string('department')));
+        $possible_options = array_merge($possible_options, array('phone1'=>get_string('phone')));
+        $possible_options = array_merge($possible_options, array('phone2'=>get_string('phone2')));
+        $possible_options = array_merge($possible_options, array('address'=>get_string('address')));
+        
+        // Additional person display options are configured globally
+        $additional_display_options = explode(',', get_config('block_module_info', 'additional_person_display_options'));
+        foreach($additional_display_options as $option) {
+            if(array_key_exists($option, $possible_options)) {
+                $new_option = array($option=>$possible_options[$option]);
+                $display_options = array_merge($display_options, $new_option);
+            }
+        }
         
         // Add custom profile fields to display options
         if ($fields = $DB->get_records('user_info_field')) {
@@ -130,17 +140,15 @@ class block_module_info_edit_form extends block_edit_form {
         // What to display
         $display_options = array('profilepic'=>get_string('profilepic', 'block_module_info'));
         $display_options = array_merge($display_options, array('url'=>get_string('webpage')));
-        $display_options = array_merge($display_options, array('icq'=>get_string('icqnumber')));
-        $display_options = array_merge($display_options, array('skype'=>get_string('skypeid')));
-        $display_options = array_merge($display_options, array('aim'=>get_string('aimid')));
-        $display_options = array_merge($display_options, array('yahoo'=>get_string('yahooid')));
-        $display_options = array_merge($display_options, array('msn'=>get_string('msnid')));
-        $display_options = array_merge($display_options, array('idnumber'=>get_string('idnumber')));
-        $display_options = array_merge($display_options, array('institution'=>get_string('institution')));
-        $display_options = array_merge($display_options, array('department'=>get_string('department')));
-        $display_options = array_merge($display_options, array('phone1'=>get_string('phone')));
-        $display_options = array_merge($display_options, array('phone2'=>get_string('phone2')));
-        $display_options = array_merge($display_options, array('address'=>get_string('address')));
+        
+        // Additional person display options are configured globally
+        $additional_display_options = explode(',', get_config('block_module_info', 'additional_person_display_options'));
+        foreach($additional_display_options as $option) {
+            if(array_key_exists($option, $possible_options)) {
+                $new_option = array($option=>$possible_options[$option]);
+                $display_options = array_merge($display_options, $new_option);
+            }
+        }
         
         // Add custom profile fields to display options
         if ($fields = $DB->get_records('user_info_field')) {
@@ -152,6 +160,11 @@ class block_module_info_edit_form extends block_edit_form {
         $select = $mform->createElement('select', 'config_display_additional_teacher_options', get_string('config_display_additional_teacher_options', 'block_module_info'), $display_options, $attributes);
         $select->setMultiple(true);
         $teacherarray[] = $select;
+        
+        // Additional teacher profile picture size
+        $profile_size = $mform->createElement('select', 'config_additional_teacher_profilepic_size', get_string('profilepic_size', 'block_module_info'), $sizeoptions);
+        $mform->setDefault('config_additional_teacher_profilepic_size', 'small');
+        $teacherarray[] = $profile_size;
         
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_location', get_string('config_additional_teacher_location','block_module_info'));
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_office_hours', get_string('config_additional_teacher_office_hours','block_module_info'));
