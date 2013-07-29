@@ -54,6 +54,10 @@
     $string[ 'config_module_semester' ]         =   'Display Module Semester';
     $string[ 'config_module_semester_override' ] =   'Override Semester';
     
+    // Person display options
+    $string[ 'additional_person_display_options' ] = 'Global profile display options';
+    $string[ 'additional_person_display_options_desc' ] = 'Course owners can choose to display the profile fields selected here.';
+    
     // Teaching
     $string[ 'teaching_header']                 =   'Teaching';
     
