@@ -102,6 +102,19 @@ $settings->add($convenor_role_name_options);
 $additional_role_name_options = new admin_setting_configtextarea('block_module_info/additional_teacher_role_name_options', get_string('additional_teacher_role_name_options', 'block_module_info'), get_string('additional_teacher_role_name_options_desc', 'block_module_info'), '', PARAM_RAW, '65', '10');
 $settings->add($additional_role_name_options);
 
+$additional_profile_fields = array('icq'=>get_string('icqnumber'));
+$additional_profile_fields = array_merge($additional_profile_fields, array('skype'=>get_string('skypeid')));
+$additional_profile_fields = array_merge($additional_profile_fields, array('aim'=>get_string('aimid')));
+$additional_profile_fields = array_merge($additional_profile_fields, array('yahoo'=>get_string('yahooid')));
+$additional_profile_fields = array_merge($additional_profile_fields, array('msn'=>get_string('msnid')));
+$additional_profile_fields = array_merge($additional_profile_fields, array('idnumber'=>get_string('idnumber')));
+$additional_profile_fields = array_merge($additional_profile_fields, array('institution'=>get_string('institution')));
+$additional_profile_fields = array_merge($additional_profile_fields, array('department'=>get_string('department')));
+$additional_profile_fields = array_merge($additional_profile_fields, array('phone1'=>get_string('phone')));
+$additional_profile_fields = array_merge($additional_profile_fields, array('phone2'=>get_string('phone2')));
+$additional_profile_fields = array_merge($additional_profile_fields, array('address'=>get_string('address')));
+$additional_person_display_options = new admin_setting_configmultiselect('block_module_info/additional_person_display_options', get_string('additional_person_display_options', 'block_module_info'), get_string('additional_person_display_options_desc', 'block_module_info'), '', $additional_profile_fields);
+$settings->add($additional_person_display_options);
 
 $defaulthtml =	new admin_setting_confightmleditor('block_module_info/defaulthtml',get_string( 'defaulthtml', 'block_module_info' ), get_string( 'defaulthtml', 'block_module_info' ),'');
 $settings->add($defaulthtml);
