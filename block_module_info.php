@@ -65,10 +65,20 @@ class block_module_info extends block_base {
         
         $renderer = $this->page->get_renderer('block_module_info');
         
-        $info = $this->get_data();
-        $output_buffer .= $renderer->get_output($info, $this->config, $this->context->id);
+        $renderer->initialise($this);
         
-        // Legacy HTML
+        // Display module info
+        $output_buffer .= $renderer->get_moduleinfo_output();
+        
+        // Display convenor info
+        $output_buffer .= $renderer->get_convenorinfo_output();
+        
+        // Display additional teacher info
+        
+        // Links to documents
+        $output_buffer .= $renderer->get_documentinfo_output();
+        
+        // Display legacy HTML
         $filteropt = new stdClass;
         $filteropt->overflowdiv = true;
         if ($this->content_is_trusted()) {
@@ -87,9 +97,7 @@ class block_module_info extends block_base {
             }// if (! empty($this->config->htmlcontent))
         }
         
-        // Links to documents
-        $output_buffer .= $renderer->get_document_tree($this->context);
-        
+        // The output buffer is now complete so copy this to the content
         $this->content->text = $output_buffer;
         
         $this->content->footer = '';
@@ -98,46 +106,7 @@ class block_module_info extends block_base {
         return $this->content;
     }
 
-    protected function get_data() {
-        global $CFG,$COURSE;
-        require_once( $CFG->dirroot . '/blocks/module_info/lib.php' );
-        $dbc = new module_info_data_connection();
-        $table = get_config('block_module_info','dbtable');
-        //create the key that will be used in sql query
-        $keyfields = array(get_config('block_module_info','extcourseid') => array('=' => "'$COURSE->idnumber'"));
-        
-        // add fields dynamically as SEMESTER isn't there at the moment
-        $module_code_field = get_config('block_module_info','module_code');
-        $module_level_field = get_config('block_module_info','module_level');
-        $module_credit_field = get_config('block_module_info','module_credit');
-        $module_semester_field = get_config('block_module_info','module_semester');
-        $convenor_name_field = get_config('block_module_info','convenor_name');
-        $convenor_field = get_config('block_module_info','convenor');
-        
-        $fields = array();
-        if(! empty ($module_code_field)) {
-        	$fields[] = $module_code_field;
-        }
-        if(! empty ($module_level_field)) {
-        	$fields[] = $module_level_field;
-        }
-        if(! empty ($module_credit_field)) {
-        	$fields[] = $module_credit_field;
-        }
-        if(! empty ($module_semester_field)) {
-        	$fields[] = $module_semester_field;
-        }
-        if(! empty ($convenor_name_field)) {
-        	$fields[] = $convenor_name_field;
-        }
-        if(! empty ($convenor_field)) {
-        	$fields[] = $convenor_field;
-        }
-        //$fields = array('MODULE_CODE', 'MODULE_LEVEL', 'MODULE_CREDITS', 'CONVENOR', 'CONVENOR_EMAIL');
-        $values = $dbc->return_table_values($table, $keyfields, $fields);
-
-        return $values;
-    }
+    
 
     function content_is_trusted() {
         global $SCRIPT;
