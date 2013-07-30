@@ -66,9 +66,9 @@ class block_module_info_edit_form extends block_edit_form {
         $display_options = array_merge($display_options, array('email'=>get_string('email')));
         $display_options = array_merge($display_options, array('location'=>get_string('location', 'block_module_info')));
         $display_options = array_merge($display_options, array('officehours'=>get_string('officehours', 'block_module_info')));
-        $display_options = array_merge($display_options, array('url'=>get_string('webpage')));
         
         $possible_options = array('icq'=>get_string('icqnumber'));
+        $possible_options = array_merge($possible_options, array('url'=>get_string('webpage')));
         $possible_options = array_merge($possible_options, array('skype'=>get_string('skypeid')));
         $possible_options = array_merge($possible_options, array('aim'=>get_string('aimid')));
         $possible_options = array_merge($possible_options, array('yahoo'=>get_string('yahooid')));
@@ -91,9 +91,11 @@ class block_module_info_edit_form extends block_edit_form {
         
         // Add custom profile fields to display options
         if ($fields = $DB->get_records('user_info_field')) {
-        	foreach ($fields as $field) {
-        		$display_options = array_merge($display_options, array(format_string($field->name)=>format_string($field->name)));
-        	}
+            foreach ($fields as $field) {
+                if(in_array($field->shortname, $additional_display_options)) {
+                    $display_options = array_merge($display_options, array(format_string($field->shortname)=>format_string($field->name)));
+                }
+            }
         }
         
         $attributes = array('size'=>'7'); 
@@ -152,10 +154,13 @@ class block_module_info_edit_form extends block_edit_form {
         
         // Add custom profile fields to display options
         if ($fields = $DB->get_records('user_info_field')) {
-        	foreach ($fields as $field) {
-        		$display_options = array_merge($display_options, array(format_string($field->name)=>format_string($field->name)));
-        	}
+            foreach ($fields as $field) {
+                if(in_array($field->shortname, $additional_display_options)) {
+                    $display_options = array_merge($display_options, array(format_string($field->shortname)=>format_string($field->name)));
+                }
+            }
         }
+        
         $attributes = array('size'=>'7');
         $select = $mform->createElement('select', 'config_display_additional_teacher_options', get_string('config_display_additional_teacher_options', 'block_module_info'), $display_options, $attributes);
         $select->setMultiple(true);
