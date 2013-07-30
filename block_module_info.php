@@ -74,6 +74,7 @@ class block_module_info extends block_base {
         $output_buffer .= $renderer->get_convenorinfo_output();
         
         // Display additional teacher info
+        $output_buffer .= $renderer->get_additionteacherinfo_output();
         
         // Links to documents
         $output_buffer .= $renderer->get_documentinfo_output();
