@@ -148,7 +148,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $result = '';
 
-        // Output module convenor information#
+        // Output module convenor information
         // Mug shot:
         if (! empty($this->data->block_config->display_convenor) && ! empty ($this->data->module_convenor_email)) {
             
@@ -161,7 +161,7 @@ class block_module_info_renderer extends plugin_renderer_base {
             }
             
             $result .= html_writer::tag('h2', $headings_options[$this->data->block_config->module_owner_heading],
-                    array('class'=>'convenor'));
+                    array('class'=>'convenor_heading'));
              
             // NOTE: the following logic assumes that users can't change their email addresses...
             if($thisconvenor = $DB->get_record('user', array('email' => $this->data->module_convenor_email))) {
@@ -184,6 +184,57 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $result .= html_writer::tag('strong', $this->data->module_convenor_email.get_string( 'convenor_not_found', 'block_module_info' ));
                 $result .= html_writer::end_tag('p');
         
+            }
+            $result .= html_writer::end_tag('div');
+        }
+        
+        return $result;
+    }
+    
+    public function get_additionteacherinfo_output() {
+        global $DB, $OUTPUT;
+        
+        $result = '';
+        
+        // First, check to see if there is any additional teacher information
+        if (! empty($this->data->block_config->additional_teacher_email) ) {
+        
+            $result .= html_writer::start_tag('div', array('id' => 'additional-teachers'));
+        
+            // Display section heading
+            $headings_options = array(get_string('teacher_headings_options_not_configured', 'block_module_info'));
+            $headings = get_config('block_module_info', 'additional_teacher_role_name_options');
+            if(!empty($headings) && strlen($headings) > 0) {
+                $headings_options = explode("\r\n", $headings);
+            }
+        
+            $result .= html_writer::tag('h2', $headings_options[$this->data->block_config->additional_teachers_heading],
+                    array('class'=>'additional-teachers-heading'));
+             
+            // Display each additional teacher
+            foreach($this->data->block_config->additional_teacher_email as $key=>$value) {
+                // NOTE: the following logic assumes that users can't change their email addresses...
+                if($thisteacher = $DB->get_record('user', array('email' => $value))) {
+                    // Mugshot
+                    $size = ($this->data->block_config->addition_teacher_profilepic_size=='small')?'50':'64';
+                    $result .= $OUTPUT->user_picture($thisteacher, array('size' => $size, 'class'=>'profile-pic'));
+            
+                    // Name:
+                    $result .= html_writer::start_tag('p');
+                    /*$this->content->text .= html_writer::tag('span', get_string( 'convenor_name', 'block_module_info' ).': ',
+                     array('class'=>'module_info_title'));*/
+                    $result .= html_writer::tag('strong', fullname($thisteacher, true));
+                    $result .= html_writer::end_tag('p');
+                     
+                    // Email address:
+                    $result .= html_writer::link('mailto:'.$thisteacher->email, $thisteacher->email);
+            
+                } else {
+                    $result .= html_writer::start_tag('p');
+                    $result .= html_writer::tag('strong', $value.get_string( 'convenor_not_found', 'block_module_info' ));
+                    $result .= html_writer::end_tag('p');
+            
+                }
             }
             $result .= html_writer::end_tag('div');
         }
