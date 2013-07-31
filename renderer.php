@@ -164,20 +164,83 @@ class block_module_info_renderer extends plugin_renderer_base {
                     array('class'=>'convenor_heading'));
              
             // NOTE: the following logic assumes that users can't change their email addresses...
-            if($thisconvenor = $DB->get_record('user', array('email' => $this->data->module_convenor_email))) {
-                // Mugshot
-                $size = ($this->data->block_config->convenor_profilepic_size=='small')?'50':'64';
-                $result .= $OUTPUT->user_picture($thisconvenor, array('size' => $size, 'class'=>'profile-pic'));
-        
-                // Name:
-                $result .= html_writer::start_tag('p');
-                /*$this->content->text .= html_writer::tag('span', get_string( 'convenor_name', 'block_module_info' ).': ',
-                 array('class'=>'module_info_title'));*/
-                $result .= html_writer::tag('strong', fullname($thisconvenor, true));
-                $result .= html_writer::end_tag('p');
-                 
-                // Email address:
-                $result .= html_writer::link('mailto:'.$thisconvenor->email, $thisconvenor->email);
+            if($convenor = $DB->get_record('user', array('email' => $this->data->module_convenor_email))) {
+            $display_options = array_values($this->data->block_config->display_convenor_options);
+                    // Profile picture - if needed
+                    if(in_array('profilepic', $display_options)) {
+                        $pic_size = $this->data->block_config->convenor_profilepic_size;
+                        $size = (strcmp($pic_size,'small')==0)?'50':'64';
+                        $result .= $OUTPUT->user_picture($convenor, array('size' => $size, 'class'=>'convenor-profile-pic'));
+                    }
+            
+                    // Name: 
+                    if(in_array('name', $display_options)) {      
+                        $result .= html_writer::tag('div', fullname($convenor, true), array('class'=>'convenor-name'));
+                    }
+             
+                    // Email address:
+                    if(in_array('name', $display_options)) {
+                        $result .= html_writer::start_tag('div', array('class'=>'convenor-email'));
+                        $result .= obfuscate_mailto($convenor->email, '');
+                        $result .= html_writer::end_tag('div');
+                    }
+            
+                    // Location:
+                    
+                    // Office hours:
+                    
+                    // Standard fields:
+                    if(in_array('icq', $display_options) && $convenor->icq) {
+                        $result .= html_writer::tag('div', get_string('icqnumber').': <a href=\"http://web.icq.com/wwp?uin=\"'.urlencode($convenor->icq).'\">'.s($thisteacher->icq).' <img src=\"http://web.icq.com/whitepages/online?icq=\"'.urlencode($convenor->icq).'&amp;img=5\" alt=\"\" /></a>', array('class'=>'convenor-icq'));
+                    }
+                    if(in_array('skype', $display_options) && $convenor->skype) {
+                        $result .= get_string('skypeid').': '.'<a href="callto:'.urlencode($convenor->skype).'">'.s($convenor->skype).
+                                ' <img src="http://mystatus.skype.com/smallicon/'.urlencode($convenor->skype).'" alt="'.get_string('status').'" '.
+                                ' /></a>';
+                    }
+                    if(in_array('aim', $display_options) && $convenor->aim) {
+                        $result .= html_writer::tag('div', '<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($convenor->yahoo).'&amp;.src=pg">'.s($convenor->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($convenor->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'convenor-aim'));
+                    }
+                    if(in_array('yahoo', $display_options) && $convenor->yahooid) {
+                        $result .= html_writer::tag('div', get_string('yahooid').': '.'<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($convenor->yahoo).'&amp;.src=pg">'.s($convenor->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($convenor->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'additional-teacher-convenor'));
+                    }
+                    if(in_array('msn', $display_options) && $convenor->msnid) {
+                        $result .= html_writer::tag('div', get_string('msnid').': '.s($convenor->msn), array('class'=>'convenor-msn'));
+                    }
+                    if(in_array('idnumber', $display_options) && $convenor->idnumber) {
+                        $result .= html_writer::tag('div', get_string('idnumber').': '.s($convenor->idnumber), array('class'=>'convenor-idnumber'));
+                    }
+                    if(in_array('institution', $display_options) && $convenor->institution) {
+                        $result .= html_writer::tag('div', get_string('institution').': '.s($convenor->institution), array('class'=>'convenor-institution'));
+                    }
+                    if(in_array('department', $display_options) && $convenor->department) {
+                        $result .= html_writer::tag('div', get_string('department').': '.s($convenor->department), array('class'=>'convenor-department'));
+                    }
+                    if(in_array('phone1', $display_options) && $convenor->phone1) {
+                        $result .= html_writer::tag('div', get_string('phone').': '.s($convenor->phone), array('class'=>'convenor-phone'));
+                    }
+                    if(in_array('phone2', $display_options) && $convenor->phone2) {
+                        $result .= html_writer::tag('div', get_string('phone2').': '.s($convenor->phone2), array('class'=>'convenor-phone2'));
+                    }
+                    if(in_array('address', $display_options) && $convenor->address) {
+                        $result .= html_writer::tag('div', get_string('address').': '.s($convenor->address), array('class'=>'convenor-address'));
+                    }
+                    
+                    // Custom fields:
+                    if ($fields = $DB->get_records('user_info_field')) {
+                        foreach ($fields as $field) {
+                            if(in_array($field->shortname, $display_options)) {
+                                require_once($CFG->dirroot.'/user/profile/lib.php');
+                                require_once($CFG->dirroot.'/user/profile/field/'.$field->datatype.'/field.class.php');
+                                $newfield = 'profile_field_'.$field->datatype;
+                                $formfield = new $newfield($field->id, $convenor->id);
+                                if ($formfield->is_visible() and !$formfield->is_empty()) {
+                                    $result .= html_writer::tag('div', format_string($formfield->field->name.': ').$formfield->display_data(), array('class'=>'convenor-custom'));
+                                }
+                            }
+                        }
+                    }
+            
         
             } else {
                 $result .= html_writer::start_tag('p');
