@@ -169,92 +169,90 @@ class block_module_info_renderer extends plugin_renderer_base {
              
             // NOTE: the following logic assumes that users can't change their email addresses...
             if($convenor = $DB->get_record('user', array('email' => $this->data->module_convenor_email))) {
-            $display_options = array_values($this->data->block_config->display_convenor_options);
-                    // Profile picture - if needed
-                    if(in_array('profilepic', $display_options)) {
-                        $pic_size = $this->data->block_config->convenor_profilepic_size;
-                        $size = (strcmp($pic_size,'small')==0)?'50':'64';
-                        $result .= $OUTPUT->user_picture($convenor, array('size' => $size, 'class'=>'convenor-profile-pic'));
-                    }
-            
-                    // Name: 
-                    if(in_array('name', $display_options)) {      
-                        $result .= html_writer::tag('div', fullname($convenor, true), array('class'=>'convenor-name'));
-                    }
-             
-                    // Email address:
-                    if(in_array('name', $display_options)) {
-                        $result .= html_writer::start_tag('div', array('class'=>'convenor-email'));
-                        $result .= obfuscate_mailto($convenor->email, '');
-                        $result .= html_writer::end_tag('div');
-                    }
-            
-                    // Location:
-                    if(in_array('location', $display_options) && $this->data->convenor_location) {
-                        $result .= html_writer::start_tag('div', array('class'=>'convenor-location'));
-                        $result .= get_string('location', 'block_module_info').': '.s($this->data->convenor_location);
-                        $result .= html_writer::end_tag('div');
-                    }
-                    // Office hours:
-                    if(in_array('officehours', $display_options) && $this->data->convenor_office_hours) {
-                        $result .= html_writer::start_tag('div', array('class'=>'convenor-office-hours'));
-                        $result .= get_string('officehours', 'block_module_info').': '.s($this->data->convenor_office_hours);
-                        $result .= html_writer::end_tag('div');
-                    }
-                    
-                    // Standard fields:
-                    if(in_array('icq', $display_options) && $convenor->icq) {
-                        $result .= html_writer::tag('div', get_string('icqnumber').': <a href=\"http://web.icq.com/wwp?uin=\"'.urlencode($convenor->icq).'\">'.s($thisteacher->icq).' <img src=\"http://web.icq.com/whitepages/online?icq=\"'.urlencode($convenor->icq).'&amp;img=5\" alt=\"\" /></a>', array('class'=>'convenor-icq'));
-                    }
-                    if(in_array('skype', $display_options) && $convenor->skype) {
-                        $result .= get_string('skypeid').': '.'<a href="callto:'.urlencode($convenor->skype).'">'.s($convenor->skype).
-                                ' <img src="http://mystatus.skype.com/smallicon/'.urlencode($convenor->skype).'" alt="'.get_string('status').'" '.
-                                ' /></a>';
-                    }
-                    if(in_array('aim', $display_options) && $convenor->aim) {
-                        $result .= html_writer::tag('div', '<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($convenor->yahoo).'&amp;.src=pg">'.s($convenor->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($convenor->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'convenor-aim'));
-                    }
-                    if(in_array('yahoo', $display_options) && $convenor->yahooid) {
-                        $result .= html_writer::tag('div', get_string('yahooid').': '.'<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($convenor->yahoo).'&amp;.src=pg">'.s($convenor->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($convenor->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'additional-teacher-convenor'));
-                    }
-                    if(in_array('msn', $display_options) && $convenor->msnid) {
-                        $result .= html_writer::tag('div', get_string('msnid').': '.s($convenor->msn), array('class'=>'convenor-msn'));
-                    }
-                    if(in_array('idnumber', $display_options) && $convenor->idnumber) {
-                        $result .= html_writer::tag('div', get_string('idnumber').': '.s($convenor->idnumber), array('class'=>'convenor-idnumber'));
-                    }
-                    if(in_array('institution', $display_options) && $convenor->institution) {
-                        $result .= html_writer::tag('div', get_string('institution').': '.s($convenor->institution), array('class'=>'convenor-institution'));
-                    }
-                    if(in_array('department', $display_options) && $convenor->department) {
-                        $result .= html_writer::tag('div', get_string('department').': '.s($convenor->department), array('class'=>'convenor-department'));
-                    }
-                    if(in_array('phone1', $display_options) && $convenor->phone1) {
-                        $result .= html_writer::tag('div', get_string('phone').': '.s($convenor->phone), array('class'=>'convenor-phone'));
-                    }
-                    if(in_array('phone2', $display_options) && $convenor->phone2) {
-                        $result .= html_writer::tag('div', get_string('phone2').': '.s($convenor->phone2), array('class'=>'convenor-phone2'));
-                    }
-                    if(in_array('address', $display_options) && $convenor->address) {
-                        $result .= html_writer::tag('div', get_string('address').': '.s($convenor->address), array('class'=>'convenor-address'));
-                    }
-                    
-                    // Custom fields:
-                    if ($fields = $DB->get_records('user_info_field')) {
-                        foreach ($fields as $field) {
-                            if(in_array($field->shortname, $display_options)) {
-                                require_once($CFG->dirroot.'/user/profile/lib.php');
-                                require_once($CFG->dirroot.'/user/profile/field/'.$field->datatype.'/field.class.php');
-                                $newfield = 'profile_field_'.$field->datatype;
-                                $formfield = new $newfield($field->id, $convenor->id);
-                                if ($formfield->is_visible() and !$formfield->is_empty()) {
-                                    $result .= html_writer::tag('div', format_string($formfield->field->name.': ').$formfield->display_data(), array('class'=>'convenor-custom'));
-                                }
+                $display_options = array_values($this->data->block_config->display_convenor_options);
+                // Profile picture - if needed
+                if(in_array('profilepic', $display_options)) {
+                    $pic_size = $this->data->block_config->convenor_profilepic_size;
+                    $size = (strcmp($pic_size,'small')==0)?'50':'64';
+                    $result .= $OUTPUT->user_picture($convenor, array('size' => $size, 'class'=>'convenor-profile-pic'));
+                }
+        
+                // Name: 
+                if(in_array('name', $display_options)) {      
+                    $result .= html_writer::tag('div', fullname($convenor, true), array('class'=>'convenor-name'));
+                }
+         
+                // Email address:
+                if(in_array('name', $display_options)) {
+                    $result .= html_writer::start_tag('div', array('class'=>'convenor-email'));
+                    $result .= obfuscate_mailto($convenor->email, '');
+                    $result .= html_writer::end_tag('div');
+                }
+        
+                // Location:
+                if(in_array('location', $display_options) && $this->data->convenor_location) {
+                    $result .= html_writer::start_tag('div', array('class'=>'convenor-location'));
+                    $result .= get_string('location', 'block_module_info').': '.s($this->data->convenor_location);
+                    $result .= html_writer::end_tag('div');
+                }
+                // Office hours:
+                if(in_array('officehours', $display_options) && $this->data->convenor_office_hours) {
+                    $result .= html_writer::start_tag('div', array('class'=>'convenor-office-hours'));
+                    $result .= get_string('officehours', 'block_module_info').': '.s($this->data->convenor_office_hours);
+                    $result .= html_writer::end_tag('div');
+                }
+                
+                // Standard fields:
+                if(in_array('icq', $display_options) && $convenor->icq) {
+                    $result .= html_writer::tag('div', get_string('icqnumber').': <a href=\"http://web.icq.com/wwp?uin=\"'.urlencode($convenor->icq).'\">'.s($thisteacher->icq).' <img src=\"http://web.icq.com/whitepages/online?icq=\"'.urlencode($convenor->icq).'&amp;img=5\" alt=\"\" /></a>', array('class'=>'convenor-icq'));
+                }
+                if(in_array('skype', $display_options) && $convenor->skype) {
+                    $result .= get_string('skypeid').': '.'<a href="callto:'.urlencode($convenor->skype).'">'.s($convenor->skype).
+                            ' <img src="http://mystatus.skype.com/smallicon/'.urlencode($convenor->skype).'" alt="'.get_string('status').'" '.
+                            ' /></a>';
+                }
+                if(in_array('aim', $display_options) && $convenor->aim) {
+                    $result .= html_writer::tag('div', '<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($convenor->yahoo).'&amp;.src=pg">'.s($convenor->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($convenor->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'convenor-aim'));
+                }
+                if(in_array('yahoo', $display_options) && $convenor->yahooid) {
+                    $result .= html_writer::tag('div', get_string('yahooid').': '.'<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($convenor->yahoo).'&amp;.src=pg">'.s($convenor->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($convenor->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'additional-teacher-convenor'));
+                }
+                if(in_array('msn', $display_options) && $convenor->msnid) {
+                    $result .= html_writer::tag('div', get_string('msnid').': '.s($convenor->msn), array('class'=>'convenor-msn'));
+                }
+                if(in_array('idnumber', $display_options) && $convenor->idnumber) {
+                    $result .= html_writer::tag('div', get_string('idnumber').': '.s($convenor->idnumber), array('class'=>'convenor-idnumber'));
+                }
+                if(in_array('institution', $display_options) && $convenor->institution) {
+                    $result .= html_writer::tag('div', get_string('institution').': '.s($convenor->institution), array('class'=>'convenor-institution'));
+                }
+                if(in_array('department', $display_options) && $convenor->department) {
+                    $result .= html_writer::tag('div', get_string('department').': '.s($convenor->department), array('class'=>'convenor-department'));
+                }
+                if(in_array('phone1', $display_options) && $convenor->phone1) {
+                    $result .= html_writer::tag('div', get_string('phone').': '.s($convenor->phone), array('class'=>'convenor-phone'));
+                }
+                if(in_array('phone2', $display_options) && $convenor->phone2) {
+                    $result .= html_writer::tag('div', get_string('phone2').': '.s($convenor->phone2), array('class'=>'convenor-phone2'));
+                }
+                if(in_array('address', $display_options) && $convenor->address) {
+                    $result .= html_writer::tag('div', get_string('address').': '.s($convenor->address), array('class'=>'convenor-address'));
+                }
+                
+                // Custom fields:
+                if ($fields = $DB->get_records('user_info_field')) {
+                    foreach ($fields as $field) {
+                        if(in_array($field->shortname, $display_options)) {
+                            require_once($CFG->dirroot.'/user/profile/lib.php');
+                            require_once($CFG->dirroot.'/user/profile/field/'.$field->datatype.'/field.class.php');
+                            $newfield = 'profile_field_'.$field->datatype;
+                            $formfield = new $newfield($field->id, $convenor->id);
+                            if ($formfield->is_visible() and !$formfield->is_empty()) {
+                                $result .= html_writer::tag('div', format_string($formfield->field->name.': ').$formfield->display_data(), array('class'=>'convenor-custom'));
                             }
                         }
                     }
-            
-        
+                }
             } else {
                 $result .= html_writer::start_tag('p');
                 $result .= html_writer::tag('strong', $this->data->module_convenor_email.get_string( 'convenor_not_found', 'block_module_info' ));
@@ -290,94 +288,92 @@ class block_module_info_renderer extends plugin_renderer_base {
             // Display each additional teacher
             foreach($this->data->block_config->additional_teacher_email as $key=>$value) {
                 // NOTE: the following logic assumes that users can't change their email addresses...
-                if(!empty($value)) {
-                    if($thisteacher = $DB->get_record('user', array('email' => $value))) {
-                        $display_options = array_values($this->data->block_config->display_additional_teacher_options[$key]);
-                        // Profile picture - if needed
-                        if(in_array('profilepic', $display_options)) {
-                            $pic_size = $this->data->block_config->additional_teacher_profilepic_size[$key];
-                            $size = (strcmp($pic_size,'small')==0)?'50':'64';
-                            $result .= $OUTPUT->user_picture($thisteacher, array('size' => $size, 'class'=>'additional-teacher-profile-pic'));
-                        }
-                
-                        // Name:       
-                        $result .= html_writer::tag('div', fullname($thisteacher, true), array('class'=>'additional-teacher-name'));
-                 
-                        // Email address:
-                        $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-email'));
-                        $result .= obfuscate_mailto($thisteacher->email, '');
+                if($thisteacher = $DB->get_record('user', array('email' => $value))) {
+                    $display_options = array_values($this->data->block_config->display_additional_teacher_options[$key]);
+                    // Profile picture - if needed
+                    if(in_array('profilepic', $display_options)) {
+                        $pic_size = $this->data->block_config->additional_teacher_profilepic_size[$key];
+                        $size = (strcmp($pic_size,'small')==0)?'50':'64';
+                        $result .= $OUTPUT->user_picture($thisteacher, array('size' => $size, 'class'=>'additional-teacher-profile-pic'));
+                    }
+            
+                    // Name:       
+                    $result .= html_writer::tag('div', fullname($thisteacher, true), array('class'=>'additional-teacher-name'));
+             
+                    // Email address:
+                    $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-email'));
+                    $result .= obfuscate_mailto($thisteacher->email, '');
+                    $result .= html_writer::end_tag('div');
+            
+                    // Location:
+                    if($this->data->block_config->additional_teacher_location[$key]) {
+                        $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-location'));
+                        $result .= get_string('location', 'block_module_info').': '.s($this->data->block_config->additional_teacher_location[$key]);
                         $result .= html_writer::end_tag('div');
-                
-                        // Location:
-                        if($this->data->block_config->additional_teacher_location[$key]) {
-                            $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-location'));
-                            $result .= get_string('location', 'block_module_info').': '.s($this->data->block_config->additional_teacher_location[$key]);
-                            $result .= html_writer::end_tag('div');
-                        }
-                        
-                        // Office hours:
-                        if($this->data->block_config->additional_teacher_office_hours[$key]) {
-                            $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-office-hours'));
-                            $result .= get_string('officehours', 'block_module_info').': '.s($this->data->block_config->additional_teacher_office_hours[$key]);
-                            $result .= html_writer::end_tag('div');
-                        }
-                        
-                        // Standard fields:
-                        if(in_array('icq', $display_options) && $thisteacher->icq) {
-                            $result .= html_writer::tag('div', get_string('icqnumber').': <a href=\"http://web.icq.com/wwp?uin=\"'.urlencode($thisteacher->icq).'\">'.s($thisteacher->icq).' <img src=\"http://web.icq.com/whitepages/online?icq=\"'.urlencode($thisteacher->icq).'&amp;img=5\" alt=\"\" /></a>', array('class'=>'additional-teacher-icq'));
-                        }
-                        if(in_array('skype', $display_options) && $thisteacher->skype) {
-                            $result .= get_string('skypeid').': '.'<a href="callto:'.urlencode($thisteacher->skype).'">'.s($thisteacher->skype).
-                                    ' <img src="http://mystatus.skype.com/smallicon/'.urlencode($thisteacher->skype).'" alt="'.get_string('status').'" '.
-                                    ' /></a>';
-                        }
-                        if(in_array('aim', $display_options) && $thisteacher->aim) {
-                            $result .= html_writer::tag('div', '<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($thisteacher->yahoo).'&amp;.src=pg">'.s($thisteacher->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($thisteacher->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'additional-teacher-aim'));
-                        }
-                        if(in_array('yahoo', $display_options) && $thisteacher->yahooid) {
-                            $result .= html_writer::tag('div', get_string('yahooid').': '.'<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($thisteacher->yahoo).'&amp;.src=pg">'.s($thisteacher->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($thisteacher->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'additional-teacher-yahoo'));
-                        }
-                        if(in_array('msn', $display_options) && $thisteacher->msnid) {
-                            $result .= html_writer::tag('div', get_string('msnid').': '.s($thisteacher->msn), array('class'=>'additional-teacher-msn'));
-                        }
-                        if(in_array('idnumber', $display_options) && $thisteacher->idnumber) {
-                            $result .= html_writer::tag('div', get_string('idnumber').': '.s($thisteacher->idnumber), array('class'=>'additional-teacher-idnumber'));
-                        }
-                        if(in_array('institution', $display_options) && $thisteacher->institution) {
-                            $result .= html_writer::tag('div', get_string('institution').': '.s($thisteacher->institution), array('class'=>'additional-teacher-institution'));
-                        }
-                        if(in_array('department', $display_options) && $thisteacher->department) {
-                            $result .= html_writer::tag('div', get_string('department').': '.s($thisteacher->department), array('class'=>'additional-teacher-department'));
-                        }
-                        if(in_array('phone1', $display_options) && $thisteacher->phone1) {
-                            $result .= html_writer::tag('div', get_string('phone').': '.s($thisteacher->phone), array('class'=>'additional-teacher-phone'));
-                        }
-                        if(in_array('phone2', $display_options) && $thisteacher->phone2) {
-                            $result .= html_writer::tag('div', get_string('phone2').': '.s($thisteacher->phone2), array('class'=>'additional-teacher-phone2'));
-                        }
-                        if(in_array('address', $display_options) && $thisteacher->address) {
-                            $result .= html_writer::tag('div', get_string('address').': '.s($thisteacher->address), array('class'=>'additional-teacher-address'));
-                        }
-                        
-                        // Custom fields:
-                        if ($fields = $DB->get_records('user_info_field')) {
-                            foreach ($fields as $field) {
-                                if(in_array($field->shortname, $display_options)) {
-                                    require_once($CFG->dirroot.'/user/profile/lib.php');
-                                    require_once($CFG->dirroot.'/user/profile/field/'.$field->datatype.'/field.class.php');
-                                    $newfield = 'profile_field_'.$field->datatype;
-                                    $formfield = new $newfield($field->id, $thisteacher->id);
-                                    if ($formfield->is_visible() and !$formfield->is_empty()) {
-                                        $result .= html_writer::tag('div', format_string($formfield->field->name.': ').$formfield->display_data(), array('class'=>'additional-teacher-custom'));
-                                    }
+                    }
+                    
+                    // Office hours:
+                    if($this->data->block_config->additional_teacher_office_hours[$key]) {
+                        $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-office-hours'));
+                        $result .= get_string('officehours', 'block_module_info').': '.s($this->data->block_config->additional_teacher_office_hours[$key]);
+                        $result .= html_writer::end_tag('div');
+                    }
+                    
+                    // Standard fields:
+                    if(in_array('icq', $display_options) && $thisteacher->icq) {
+                        $result .= html_writer::tag('div', get_string('icqnumber').': <a href=\"http://web.icq.com/wwp?uin=\"'.urlencode($thisteacher->icq).'\">'.s($thisteacher->icq).' <img src=\"http://web.icq.com/whitepages/online?icq=\"'.urlencode($thisteacher->icq).'&amp;img=5\" alt=\"\" /></a>', array('class'=>'additional-teacher-icq'));
+                    }
+                    if(in_array('skype', $display_options) && $thisteacher->skype) {
+                        $result .= get_string('skypeid').': '.'<a href="callto:'.urlencode($thisteacher->skype).'">'.s($thisteacher->skype).
+                                ' <img src="http://mystatus.skype.com/smallicon/'.urlencode($thisteacher->skype).'" alt="'.get_string('status').'" '.
+                                ' /></a>';
+                    }
+                    if(in_array('aim', $display_options) && $thisteacher->aim) {
+                        $result .= html_writer::tag('div', '<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($thisteacher->yahoo).'&amp;.src=pg">'.s($thisteacher->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($thisteacher->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'additional-teacher-aim'));
+                    }
+                    if(in_array('yahoo', $display_options) && $thisteacher->yahooid) {
+                        $result .= html_writer::tag('div', get_string('yahooid').': '.'<a href="http://edit.yahoo.com/config/send_webmesg?.target='.urlencode($thisteacher->yahoo).'&amp;.src=pg">'.s($thisteacher->yahoo)." <img src=\"http://opi.yahoo.com/online?u=".urlencode($thisteacher->yahoo)."&m=g&t=0\" alt=\"\"></a>", array('class'=>'additional-teacher-yahoo'));
+                    }
+                    if(in_array('msn', $display_options) && $thisteacher->msnid) {
+                        $result .= html_writer::tag('div', get_string('msnid').': '.s($thisteacher->msn), array('class'=>'additional-teacher-msn'));
+                    }
+                    if(in_array('idnumber', $display_options) && $thisteacher->idnumber) {
+                        $result .= html_writer::tag('div', get_string('idnumber').': '.s($thisteacher->idnumber), array('class'=>'additional-teacher-idnumber'));
+                    }
+                    if(in_array('institution', $display_options) && $thisteacher->institution) {
+                        $result .= html_writer::tag('div', get_string('institution').': '.s($thisteacher->institution), array('class'=>'additional-teacher-institution'));
+                    }
+                    if(in_array('department', $display_options) && $thisteacher->department) {
+                        $result .= html_writer::tag('div', get_string('department').': '.s($thisteacher->department), array('class'=>'additional-teacher-department'));
+                    }
+                    if(in_array('phone1', $display_options) && $thisteacher->phone1) {
+                        $result .= html_writer::tag('div', get_string('phone').': '.s($thisteacher->phone), array('class'=>'additional-teacher-phone'));
+                    }
+                    if(in_array('phone2', $display_options) && $thisteacher->phone2) {
+                        $result .= html_writer::tag('div', get_string('phone2').': '.s($thisteacher->phone2), array('class'=>'additional-teacher-phone2'));
+                    }
+                    if(in_array('address', $display_options) && $thisteacher->address) {
+                        $result .= html_writer::tag('div', get_string('address').': '.s($thisteacher->address), array('class'=>'additional-teacher-address'));
+                    }
+                    
+                    // Custom fields:
+                    if ($fields = $DB->get_records('user_info_field')) {
+                        foreach ($fields as $field) {
+                            if(in_array($field->shortname, $display_options)) {
+                                require_once($CFG->dirroot.'/user/profile/lib.php');
+                                require_once($CFG->dirroot.'/user/profile/field/'.$field->datatype.'/field.class.php');
+                                $newfield = 'profile_field_'.$field->datatype;
+                                $formfield = new $newfield($field->id, $thisteacher->id);
+                                if ($formfield->is_visible() and !$formfield->is_empty()) {
+                                    $result .= html_writer::tag('div', format_string($formfield->field->name.': ').$formfield->display_data(), array('class'=>'additional-teacher-custom'));
                                 }
                             }
                         }
-                    } else {
-                        $result .= html_writer::start_tag('p');
-                        $result .= html_writer::tag('strong', $value.get_string( 'convenor_not_found', 'block_module_info' ));
-                        $result .= html_writer::end_tag('p');
                     }
+                } else {
+                    $result .= html_writer::start_tag('p');
+                    $result .= html_writer::tag('strong', $value.get_string( 'convenor_not_found', 'block_module_info' ));
+                    $result .= html_writer::end_tag('p');
                 }
             }
             $result .= html_writer::end_tag('div');
