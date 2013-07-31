@@ -308,8 +308,18 @@ class block_module_info_renderer extends plugin_renderer_base {
                     $result .= html_writer::end_tag('div');
             
                     // Location:
+                    if($this->data->block_config->additional_teacher_location[$key]) {
+                        $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-location'));
+                        $result .= get_string('location', 'block_module_info').': '.s($this->data->block_config->additional_teacher_location[$key]);
+                        $result .= html_writer::end_tag('div');
+                    }
                     
                     // Office hours:
+                    if($this->data->block_config->additional_teacher_office_hours[$key]) {
+                        $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-office-hours'));
+                        $result .= get_string('officehours', 'block_module_info').': '.s($this->data->block_config->additional_teacher_office_hours[$key]);
+                        $result .= html_writer::end_tag('div');
+                    }
                     
                     // Standard fields:
                     if(in_array('icq', $display_options) && $thisteacher->icq) {
