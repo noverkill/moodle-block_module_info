@@ -75,7 +75,7 @@
     $string[ 'config_convenor_email_override' ] = 'Module owner email override';
     $string[ 'config_convenor_location_override' ]  =   'Module owner location override';
     $string[ 'config_display_convenor_office_hours']  =    'Display module owner office hours';
-    $string[ 'config_convenor_office_hours_override' ] = 'Module owner email override';
+    $string[ 'config_convenor_office_hours_override' ] = 'Module owner office hours override';
     $string[ 'config_display_convenor_personal_webpage' ] = 'Display personal webpage';
     
     // Additional teachers
