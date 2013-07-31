@@ -138,6 +138,10 @@ class block_module_info_renderer extends plugin_renderer_base {
             $this->data->module_convenor_email = $this->data->block_config->module_convenor_override;
         }
         
+        // Override location and Office hours
+        $this->data->convenor_location = $this->data->block_config->convenor_location_override;
+        $this->data->convenor_office_hours = $this->data->block_config->convenor_office_hours_override; 
+        
         $result = true;
         
         return $result;
@@ -186,8 +190,17 @@ class block_module_info_renderer extends plugin_renderer_base {
                     }
             
                     // Location:
-                    
+                    if(in_array('location', $display_options) && $this->data->convenor_location) {
+                        $result .= html_writer::start_tag('div', array('class'=>'convenor-location'));
+                        $result .= get_string('location', 'block_module_info').': '.s($this->data->convenor_location);
+                        $result .= html_writer::end_tag('div');
+                    }
                     // Office hours:
+                    if(in_array('officehours', $display_options) && $this->data->convenor_office_hours) {
+                        $result .= html_writer::start_tag('div', array('class'=>'convenor-office-hours'));
+                        $result .= get_string('officehours', 'block_module_info').': '.s($this->data->convenor_office_hours);
+                        $result .= html_writer::end_tag('div');
+                    }
                     
                     // Standard fields:
                     if(in_array('icq', $display_options) && $convenor->icq) {
