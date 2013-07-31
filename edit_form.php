@@ -272,25 +272,31 @@ class block_module_info_edit_form extends block_edit_form {
             $names = $data->config_additional_teacher_name;
             foreach($names as $key=>$value) {
                 if(strlen($value) == 0 || $value == NULL) {
-                    $data->config_additional_teacher_name = $this->deleteArrayElement($data->config_additional_teacher_name, $key);
-                    $data->config_additional_teacher_email = $this->deleteArrayElement($data->config_additional_teacher_email, $key);
-                    $data->config_additional_teacher_location = $this->deleteArrayElement($data->config_additional_teacher_location, $key);
-                    $data->config_additional_teacher_office_hours = $this->deleteArrayElement($data->config_additional_teacher_office_hours, $key);
-                    $data->teacher_repeats=$data->teacher_repeats-1;
+                    unset($data->config_additional_teacher_name[$key]);
+                    unset($data->config_additional_teacher_email[$key]);
+                    unset($data->config_additional_teacher_location[$key]);
+                    unset($data->config_additional_teacher_office_hours[$key]);
                 }
             }
+            $data->config_additional_teacher_name = array_values($data->config_additional_teacher_name);
+            $data->config_additional_teacher_email = array_values($data->config_additional_teacher_email);
+            $data->config_additional_teacher_location = array_values($data->config_additional_teacher_location);
+            $data->config_additional_teacher_office_hours = array_values($data->config_additional_teacher_office_hours);
             
             // Any empty additional teaching sessions also need to be removed
             $names = $data->config_additional_session_subheading;
             foreach($names as $key=>$value) {
                 if(strlen($value) == 0 || $value == NULL) {
-                    $data->config_additional_session_subheading = $this->deleteArrayElement($data->config_additional_session_subheading, $key);
-                    $data->config_additional_session_day = $this->deleteArrayElement($data->config_additional_session_day, $key);
-                    $data->config_additional_session_time = $this->deleteArrayElement($data->config_additional_session_time, $key);
-                    $data->config_additional_session_location = $this->deleteArrayElement($data->config_additional_session_location, $key);
-                    $data->session_repeats=$data->session_repeats-1;
-                }
+                    unset($data->config_additional_session_subheading[$key]);
+                    unset($data->config_additional_session_day[$key]);
+                    unset($data->config_additional_session_time[$key]);
+                    unset($data->config_additional_session_location[$key]);
+                } 
             }
+            $data->config_additional_session_subheading = array_values($data->config_additional_session_subheading);
+            $data->config_additional_session_day = array_values($data->config_additional_session_day);
+            $data->config_additional_session_time = array_values($data->config_additional_session_time);
+            $data->config_additional_session_location = array_values($data->config_additional_session_location);
             
             global $COURSE;
             $fileoptions = array('subdirs'=>1,
