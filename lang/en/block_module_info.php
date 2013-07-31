@@ -102,6 +102,8 @@
     $string[ 'config_additional_session_time' ] =     'Time';
     $string[ 'config_additional_session_location' ] =     'Location';
     
+    $string[ 'session_details' ] = '{$a->day} {$a->time} in {$a->location}';
+    
     // Documents
     $string[ 'documents_header' ]                = 'Documents';
     
