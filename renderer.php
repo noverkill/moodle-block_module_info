@@ -282,9 +282,10 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $headings_options = explode("\r\n", $headings);
             }
         
-            $result .= html_writer::tag('h2', $headings_options[$this->data->block_config->additional_teachers_heading],
-                    array('class'=>'additional-teachers-heading'));
-             
+            $span = html_writer::tag('span', $headings_options[$this->data->block_config->additional_teachers_heading], array('class'=>'expanded'));
+            $result .= html_writer::tag('h2', $span, array('id'=>'additional-teachers-heading'));
+        
+            $result .= html_writer::start_tag('div', array('id'=>'additional_teachers_pane'));
             // Display each additional teacher
             foreach($this->data->block_config->additional_teacher_email as $key=>$value) {
                 // NOTE: the following logic assumes that users can't change their email addresses...
@@ -377,6 +378,8 @@ class block_module_info_renderer extends plugin_renderer_base {
                 }
             }
             $result .= html_writer::end_tag('div');
+            $result .= html_writer::end_tag('div');
+            
         }
         
         return $result;
@@ -389,13 +392,15 @@ class block_module_info_renderer extends plugin_renderer_base {
         // First, check to see if there is any session information
         if (! empty($this->data->block_config->additional_session_subheading) ) {
     
-            $result .= html_writer::start_tag('div', array('id' => 'sessions'));
+            $result .= html_writer::start_tag('div', array('id' => 'schedule'));
     
             // Display section heading
             
-            $result .= html_writer::tag('h2', get_String('schedule_header', 'block_module_info'),
-                    array('class'=>'sessions-heading'));
-             
+            $span = html_writer::tag('span', get_String('schedule_header', 'block_module_info'), array('class'=>'expanded'));
+            $result .= html_writer::tag('h2', $span, array('id'=>'schedule-heading'));
+            
+            $result .= html_writer::start_tag('div', array('id'=>'schedule_pane'));
+            
             // Display each session
             foreach($this->data->block_config->additional_session_subheading as $key=>$value) {
                 // Session title:
@@ -409,6 +414,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $result .= html_writer::tag('div', get_string('session_details', 'block_module_info', $a));
             }
             
+            $result .= html_writer::end_tag('div');
             $result .= html_writer::end_tag('div');
         }
     
@@ -510,24 +516,31 @@ class block_module_info_renderer extends plugin_renderer_base {
     public function get_documentinfo_output() {
         global $USER;
         
-        $result = html_writer::tag('h2', get_string( 'documents_header', 'block_module_info' ),
-                array('class'=>'documents'));
+        $result = html_writer::start_tag('div', array('id'=>'documents'));
+        
+        $span = html_writer::tag('span', get_string( 'documents_header', 'block_module_info' ), array('class'=>'expanded'));
+        $result .= html_writer::tag('h2', $span, array('id'=>'documents-heading'));
         
         // Get the stored files
         $fs = get_file_storage();
         $dir = $fs->get_area_tree($this->page->context->id, 'block_module_info', 'documents', $this->data->context->id);
         
         $module = array('name'=>'block_module_info', 'fullpath'=>'/blocks/module_info/module.js', 'requires'=>array('yui2-treeview'));
+        
+        $result .= html_writer::start_tag('div', array('id'=>'documents-pane'));
+        
         if (empty($dir['subdirs']) && empty($dir['files'])) {
             $result .= $this->output->box(get_string('nofilesavailable', 'repository'));
         } else {
             $htmlid = 'document_tree_'.uniqid();
-            $this->page->requires->js_init_call('M.block_module_info.init_tree', array(false, $htmlid));
+            $this->page->requires->js_init_call('M.block_module_info.init_document_tree', array(false, $htmlid));
             $result .= '<div id="'.$htmlid.'">';
             $result .= $this->htmllize_document_tree($this->page->context, $this->data->context, $dir);
             $result .= '</div>';
         }
         
+        $result .= html_writer::end_tag('div');
+        $result .= html_writer::end_tag('div');
         return $result;
     }
 
