@@ -1,0 +1,25 @@
+/** General display rules **/
+.block_module_info h2 {
+	cursor: pointer;
+}
+
+/** Expanded and collapsed rules **/
+.block_module_info h2 span.expanded {
+	padding-left:20px;
+	background: url([[pix:t/expanded]]) no-repeat left center;
+}
+
+.block_module_info h2 span.collapsed {
+	padding-left:20px;
+	background: url([[pix:t/collapsed]]) no-repeat left center;
+}
+
+
+/** JavaScript state rules **/
+/**
+.jsenabled .block_navigation.dock_on_load,
+.block_navigation .block_tree_box .requiresjs {display:none;}
+.jsenabled .block_navigation .block_tree_box .requiresjs {display:inline;}
+**/
+
+
