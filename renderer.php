@@ -276,15 +276,15 @@ class block_module_info_renderer extends plugin_renderer_base {
             $result .= html_writer::start_tag('div', array('id' => 'additional-teachers'));
         
             // Display section heading
+            
             $headings_options = array(get_string('teacher_headings_options_not_configured', 'block_module_info'));
             $headings = get_config('block_module_info', 'additional_teacher_role_name_options');
             if(!empty($headings) && strlen($headings) > 0) {
                 $headings_options = explode("\r\n", $headings);
             }
         
-            $span = html_writer::tag('span', $headings_options[$this->data->block_config->additional_teachers_heading], array('class'=>'expanded'));
-            $result .= html_writer::tag('h2', $span, array('id'=>'additional-teachers-heading'));
-        
+            $result .= print_collapsible_region_start('additional-teachers-heading', 'modinfo-viewlet-additional-teachers', $headings_options[$this->data->block_config->additional_teachers_heading], 'modinfo-teachers', false, true);
+            
             $result .= html_writer::start_tag('div', array('id'=>'additional_teachers_pane'));
             // Display each additional teacher
             foreach($this->data->block_config->additional_teacher_email as $key=>$value) {
@@ -380,6 +380,8 @@ class block_module_info_renderer extends plugin_renderer_base {
             $result .= html_writer::end_tag('div');
             $result .= html_writer::end_tag('div');
             
+            $result .= print_collapsible_region_end(true);
+            
         }
         
         return $result;
@@ -396,8 +398,7 @@ class block_module_info_renderer extends plugin_renderer_base {
     
             // Display section heading
             
-            $span = html_writer::tag('span', get_String('schedule_header', 'block_module_info'), array('class'=>'expanded'));
-            $result .= html_writer::tag('h2', $span, array('id'=>'schedule-heading'));
+            $result .= print_collapsible_region_start('schedule-heading', 'modinfo-viewlet-schedule', get_string('schedule_header', 'block_module_info'), 'modinfo-schedule', false, true);
             
             $result .= html_writer::start_tag('div', array('id'=>'schedule_pane'));
             
@@ -416,6 +417,8 @@ class block_module_info_renderer extends plugin_renderer_base {
             
             $result .= html_writer::end_tag('div');
             $result .= html_writer::end_tag('div');
+            
+            $result .= print_collapsible_region_end(true);
         }
     
         return $result;
@@ -518,8 +521,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $result = html_writer::start_tag('div', array('id'=>'documents'));
         
-        $span = html_writer::tag('span', get_string( 'documents_header', 'block_module_info' ), array('class'=>'expanded'));
-        $result .= html_writer::tag('h2', $span, array('id'=>'documents-heading'));
+        $result .= print_collapsible_region_start('documents-heading', 'modinfo-viewlet-documents', get_string('documents_header', 'block_module_info'), 'modinfo-documents', false, true);
         
         // Get the stored files
         $fs = get_file_storage();
@@ -541,6 +543,8 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $result .= html_writer::end_tag('div');
         $result .= html_writer::end_tag('div');
+        
+        $result .= print_collapsible_region_end(true);
         return $result;
     }
 
