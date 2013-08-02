@@ -103,7 +103,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         $convenor_name_field = get_config('block_module_info','convenor_name');
         $convenor_field = get_config('block_module_info','convenor');
         
-        foreach($this->data->info as $field) {
+        foreach((array)$this->data->info as $field) {
             if (! empty($field[$module_code_field])) {
                 $this->data->module_code = $field[$module_code_field];
             }
