@@ -1,6 +1,9 @@
 <?php
- 
+require_once($CFG->dirroot.'/repository/lib.php');
+
 class block_module_info_edit_form extends block_edit_form {
+	
+	private $file_manager_data = null;
 	
     protected function specific_definition($mform) {
     	
@@ -224,8 +227,8 @@ class block_module_info_edit_form extends block_edit_form {
         		'return_types'=>FILE_INTERNAL);
         
         global $USER;
-        $data = new stdClass();
-        file_prepare_standard_filemanager($data,
+        $this->file_manager_data = new stdClass();
+        file_prepare_standard_filemanager($this->file_manager_data,
         		'files',
         		$fileoptions,
         		$this->page->context,
@@ -234,7 +237,6 @@ class block_module_info_edit_form extends block_edit_form {
         		$this->block->context->id);
         
         $mform->addElement('filemanager', 'files_filemanager', get_string('files'), null, $fileoptions);
-        $this->set_data($data);
         
         // Legacy
         $mform->addElement('header', 'configheader', get_string('legacy_header', 'block_module_info'));
@@ -316,9 +318,9 @@ class block_module_info_edit_form extends block_edit_form {
     }
     
     function set_data($default_values) {
-        
         parent::set_data($default_values);
-        
+        $default_values->files_filemanager = $this->file_manager_data->files_filemanager;
+        parent::set_data($default_values);
     }
     
     function validation($data, $files) {
