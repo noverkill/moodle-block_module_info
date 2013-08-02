@@ -533,7 +533,7 @@ class block_module_info_renderer extends plugin_renderer_base {
             $result .= $this->output->box(get_string('nofilesavailable', 'repository'));
         } else {
             $htmlid = 'document_tree_'.uniqid();
-            $this->page->requires->js_init_call('M.block_module_info.init_document_tree', array(false, $htmlid));
+            $this->page->requires->js_init_call('M.block_module_info.init', array(false, $htmlid));
             $result .= '<div id="'.$htmlid.'">';
             $result .= $this->htmllize_document_tree($this->page->context, $this->data->context, $dir);
             $result .= '</div>';
