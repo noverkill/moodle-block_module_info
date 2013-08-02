@@ -102,6 +102,8 @@ class block_module_info extends block_base {
         }
         
         // The output buffer is now complete so copy this to the content
+        $this->content = new stdClass();
+        
         $this->content->text = $output_buffer;
         
         $this->content->footer = '';
@@ -109,8 +111,6 @@ class block_module_info extends block_base {
         // Return the result
         return $this->content;
     }
-
-    
 
     function content_is_trusted() {
         global $SCRIPT;
