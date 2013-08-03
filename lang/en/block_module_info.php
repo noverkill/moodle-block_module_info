@@ -43,10 +43,10 @@
     
 	// Core info
 	$string[ 'core_info_header']                =   'Core info';
-	
+	$string[ 'override_setting' ]              =    'Enter custom setting here';
     $string[ 'config_title' ]                   =   'Title';
     $string[ 'config_module_code' ]             =   'Display Module Code';
-    $string[ 'config_module_code_override']     =   'Override Code';
+    $string[ 'config_module_code_override']     =   'Custom Code';
     $string[ 'config_module_level' ]            =   'Display Module Level';
     $string[ 'config_module_level_override']    =   'Override Level';
     $string[ 'config_module_credit' ]           =   'Display Module Credits';
@@ -80,6 +80,8 @@
     
     // Additional teachers
     $string[ 'additional_teachers_header' ]     = 'Additional teachers';
+    $string[ 'hide_additional_teachers_heading'] = 'None';
+    $string[ 'noadditionalteachersavailable' ]            = 'No additonal teachers configured';
     
     $string[ 'config_additional_teachers_heading' ] = 'Additional teachers heading';
     $string[ 'config_additional_teachers_heading_default' ] = 'e.g. GTAs, TAs';
@@ -93,8 +95,8 @@
     
     // Schedule
     $string[ 'schedule_header' ]                = 'Schedule';
-    $string[ 'config_enable_personal_timetable_link' ] = 'Enable personal timetable link (SMART)';
-    $string[ 'config_enable_module_timetable_link' ] = 'Enable module timetable link (SMART)';
+    $string[ 'config_enable_personal_timetable_link' ] = 'Display personal timetable link (SMART)';
+    $string[ 'config_enable_module_timetable_link' ] = 'Display module timetable link (SMART)';
     
     $string[ 'config_additional_session' ]     =    'Additional teaching session';
     $string[ 'config_additional_session_subheading' ] =     'Teaching subheading';
@@ -103,10 +105,11 @@
     $string[ 'config_additional_session_location' ] =     'Location';
     
     $string[ 'session_details' ] = '{$a->day} {$a->time} in {$a->location}';
+    $string[ 'nosessionsavailable' ]            = 'No extra sessions configured';
     
     // Documents
     $string[ 'documents_header' ]                = 'Documents';
-    
+   
     // Legacy
     $string[ 'legacy_header']                 =   'Legacy';
     
