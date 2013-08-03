@@ -408,12 +408,76 @@ class block_module_info_renderer extends plugin_renderer_base {
         return $result;
     }
     
-    private function get_personal_timetable() {
+    private function get_personal_timetable_html() {
+        global $USER;
         
+        $result = '';
+        
+        $config = get_config('block_module_info');
+        $params = array();
+        if (!empty($config->week)) {
+            $params['week'] = $config->week;
+        }
+        if (!empty($config->day)) {
+            $params['day'] = $config->day;
+        }
+        if (!empty($config->period)) {
+            $params['period'] = $config->period;
+        }
+        $params['identifier'] = $USER->idnumber;
+        $params['style'] = $config->style;
+        $params['template'] = $config->template;
+        
+        $linkstring = get_string('default_personal_smart_link', 'block_module_info');
+        
+        $html = html_writer::start_tag('div', array('class' => 'smart personal-timetable'));
+        if (strlen($USER->idnumber) == 9) {
+            $params['objectclass'] = 'student+set';
+            $linkstring = get_string('student_personal_smart_link', 'block_module_info');
+        } elseif (strlen($USER->idnumber) == 6) {
+            $params['objectclass'] = 'staff';
+            $linkstring = get_string('staff_personal_smart_link', 'block_module_info');
+        }
+
+        $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
+        $result = html_writer::tag('div', $result, array('class'=>'smart'));
+        return $result;
     }
     
-    private function get_module_timetable() {
-    
+    private function get_module_timetable_html() {
+        global $USER;
+        
+        $result = '';
+        
+        $config = get_config('block_module_info');
+        $params = array();
+        if (!empty($config->week)) {
+            $params['week'] = $config->week;
+        }
+        if (!empty($config->day)) {
+            $params['day'] = $config->day;
+        }
+        if (!empty($config->period)) {
+            $params['period'] = $config->period;
+        }
+        $params['identifier'] = $USER->idnumber;
+        $params['style'] = $config->style;
+        $params['template'] = $config->template;
+        
+        $linkstring = get_string('default_module_smart_link', 'block_module_info');
+        
+        $html = html_writer::start_tag('div', array('class' => 'smart module-timetable'));
+        if (strlen($USER->idnumber) == 9) {
+            $params['objectclass'] = 'module';
+            $linkstring = get_string('student_module_smart_link', 'block_module_info');
+        } elseif (strlen($USER->idnumber) == 6) {
+            $params['objectclass'] = 'staff';
+            $linkstring = get_string('staff_module_smart_link', 'block_module_info');
+        }
+
+        $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
+        $result = html_writer::tag('div', $result, array('class'=>'smart'));
+        return $result;
     }
     
     public function get_sessioninfo_output() {
@@ -430,10 +494,14 @@ class block_module_info_renderer extends plugin_renderer_base {
             $result .= html_writer::start_tag('div', array('id' => 'schedule'));
             
             // Personal timetable link
-            
+            if($this->data->block_config->enable_personal_timetable_link) {
+                $result .= $this->get_personal_timetable_html();
+            }
             
             // Module timetable link
-            
+            if($this->data->block_config->enable_module_timetable_link) {
+                $result .= $this->get_module_timetable_html();
+            }
             
             // Display each session
             foreach($this->data->block_config->additional_session_subheading as $key=>$value) {
