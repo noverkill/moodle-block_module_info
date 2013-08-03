@@ -31,25 +31,39 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->setDefault('config_title', get_string('module_info', 'block_module_info'));
         $mform->setType('config_title', PARAM_MULTILANG);
 
-        $mform->addElement('advcheckbox', 'config_module_code', get_string('config_module_code', 'block_module_info'));
-        $mform->setDefault('config_module_code', 1);
-        $mform->addElement('text', 'config_module_code_override', get_string('config_module_code_override', 'block_module_info'));
+        $module_code = array();
+        $module_code[] = & $mform->createElement('advcheckbox', 'config_module_code', get_string('config_module_code', 'block_module_info'), null, array('group'=>1));
+        $module_code[] = & $mform->createElement('text', 'config_module_code_override', get_string('config_module_code_override', 'block_module_info'));
+        $mform->addGroup($module_code, 'module_code', get_string('config_module_code', 'block_module_info'), array(' '), false);
         $mform->setType('config_module_code_override', PARAM_MULTILANG);
+        $mform->disabledIf('config_module_code_override','config_module_code');
+        $mform->setDefault('config_module_code', 1);
         
-        $mform->addElement('advcheckbox', 'config_module_level', get_string('config_module_level', 'block_module_info'));
-        $mform->setDefault('config_module_level', 1);
-        $mform->addElement('text', 'config_module_level_override', get_string('config_module_level_override', 'block_module_info'));
+        $module_level = array();
+        $module_level[] = & $mform->createElement('advcheckbox', 'config_module_level', get_string('config_module_level', 'block_module_info'), null, array('group'=>1));
+        $module_level[] = & $mform->createElement('text', 'config_module_level_override', get_string('config_module_level_override', 'block_module_info'));
+        $mform->addGroup($module_level, 'module_level', get_string('config_module_level', 'block_module_info'), array(' '), false);
         $mform->setType('config_module_level_override', PARAM_MULTILANG);
+        $mform->disabledIf('config_module_level_override','config_module_level');
+        $mform->setDefault('config_module_level', 1);
         
-        $mform->addElement('advcheckbox', 'config_module_credit', get_string('config_module_credit', 'block_module_info'));
-        $mform->setDefault('config_module_credit', 1);
-        $mform->addElement('text', 'config_module_credit_override', get_string('config_module_credit_override', 'block_module_info'));
+        $module_credits = array();
+        $module_credits[] = & $mform->createElement('advcheckbox', 'config_module_credit', get_string('config_module_credit', 'block_module_info'), null, array('group'=>1));
+        $module_credits[] = & $mform->createElement('text', 'config_module_credit_override', get_string('config_module_credit_override', 'block_module_info'));
+        $mform->addGroup($module_credits, 'module_credits', get_string('config_module_credit', 'block_module_info'), array(' '), false);
         $mform->setType('config_module_credit_override', PARAM_MULTILANG);
+        $mform->disabledIf('config_module_credit_override','config_module_credit');
+        $mform->setDefault('config_module_credit', 1);
         
-        $mform->addElement('advcheckbox', 'config_module_semester', get_string('config_module_semester', 'block_module_info'));
-        $mform->setDefault('config_module_semester', 1);
-        $mform->addElement('text', 'config_module_semester_override', get_string('config_module_semester_override', 'block_module_info'));
+        $module_semester = array();
+        $module_semester[] = & $mform->createElement('advcheckbox', 'config_module_semester', get_string('config_module_semester', 'block_module_info'), null, array('group'=>1));
+        $module_semester[] = & $mform->createElement('text', 'config_module_semester_override', get_string('config_module_semester_override', 'block_module_info'));
+        $mform->addGroup($module_semester, 'module_semester', get_string('config_module_semester', 'block_module_info'), array(' '), false);
         $mform->setType('config_module_semester_override', PARAM_MULTILANG);
+        $mform->disabledIf('config_module_semester_override','config_module_semester');
+        $mform->setDefault('config_module_semester', 1);
+        
+        $this->add_checkbox_controller(1);
         
         // Teaching
         $mform->addElement('header', 'configheader', get_string('teaching_header', 'block_module_info'));
@@ -129,11 +143,15 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('header', 'configheader', get_string('additional_teachers_header', 'block_module_info'));
         
         // Additional teachers heading
-        $headings_options = array(get_string('teacher_headings_options_not_configured', 'block_module_info'));
+        $headings_options = array();
         $headings = get_config('block_module_info', 'additional_teacher_role_name_options');
+        
         if(!empty($headings) && strlen($headings) > 0) {
         	$headings_options = explode("\r\n", $headings);
-        }
+        } 
+        
+        array_unshift($headings_options, get_string('hide_additional_teachers_heading', 'block_module_info'));
+        
         $mform->addElement('select', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'), $headings_options);
         
         $teacherarray = array();
