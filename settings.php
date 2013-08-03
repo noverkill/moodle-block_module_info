@@ -25,8 +25,7 @@
  
 global $DB;
 
-$mis_settings 	= new admin_setting_heading('block_module_info/mis_connection', get_string('mis_connection', 'block_module_info'), '');
-$settings->add($mis_settings);
+$settings->add(new admin_setting_heading('block_module_info/mis_connection', get_string('mis_connection', 'block_module_info'), get_string('mis_connection_desc', 'block_module_info')));
 
 $options = array(
     ' '     => get_string('noconnection','block_module_info'),
@@ -42,44 +41,31 @@ $settings->add( $mis_connection );
 /*
 */
 
-$dbname			=	new admin_setting_configtext('block_module_info/dbname',get_string( 'db_name', 'block_module_info' ),get_string( 'set_db_name', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($dbname);
+$settings->add(new admin_setting_configtext('block_module_info/dbname',get_string( 'db_name', 'block_module_info' ),get_string( 'set_db_name', 'block_module_info' ),'',PARAM_RAW));
 
-$dbprefix			=	new admin_setting_configtext('block_module_info/dbprefix',get_string( 'db_prefix', 'block_module_info' ),get_string( 'prefix_for_tablenames', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($dbprefix);
+$settings->add(new admin_setting_configtext('block_module_info/dbprefix',get_string( 'db_prefix', 'block_module_info' ),get_string( 'prefix_for_tablenames', 'block_module_info' ),'',PARAM_RAW));
 
-$dbhost			=	new admin_setting_configtext('block_module_info/dbhost',get_string( 'db_host', 'block_module_info' ), get_string( 'host_name_or_ip', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($dbhost);
+$settings->add(new admin_setting_configtext('block_module_info/dbhost',get_string( 'db_host', 'block_module_info' ), get_string( 'host_name_or_ip', 'block_module_info' ),'',PARAM_RAW));
 
-$dbtable			=	new admin_setting_configtext('block_module_info/dbtable',get_string( 'db_table', 'block_module_info' ), get_string( 'db_table', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($dbtable);
+$settings->add(new admin_setting_configtext('block_module_info/dbtable',get_string( 'db_table', 'block_module_info' ), get_string( 'db_table', 'block_module_info' ),'',PARAM_RAW));
 
-$dbuser			=	new admin_setting_configtext('block_module_info/dbuser',get_string( 'db_user', 'block_module_info' ), get_string( 'db_user', 'block_module_info' ),'',PARAM_RAW);
-$settings->add( $dbuser );
+$settings->add(new admin_setting_configtext('block_module_info/dbuser',get_string( 'db_user', 'block_module_info' ), get_string( 'db_user', 'block_module_info' ),'',PARAM_RAW));
 
-$dbpass			=	new admin_setting_configtext('block_module_info/dbpass',get_string( 'db_pass', 'block_module_info' ), get_string( 'db_pass', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($dbpass);
+$settings->add(new admin_setting_configtext('block_module_info/dbpass',get_string( 'db_pass', 'block_module_info' ), get_string( 'db_pass', 'block_module_info' ),'',PARAM_RAW));
 
-$data_mapping 	= new admin_setting_heading('block_module_info/data_mapping', get_string('data_mapping', 'block_module_info'), '');
-$settings->add($data_mapping);
+$settings->add(new admin_setting_heading('block_module_info/data_mapping', get_string('data_mapping', 'block_module_info'), get_string('data_mapping_desc', 'block_module_info')));
 
-$extcourseid = new admin_setting_configtext('block_module_info/extcourseid',get_string('extcourseid', 'block_module_info'),get_string('extcourseiddesc', 'block_module_info'),'',PARAM_RAW);
-$settings->add($extcourseid);
+$settings->add(new admin_setting_configtext('block_module_info/extcourseid',get_string('extcourseid', 'block_module_info'),get_string('extcourseiddesc', 'block_module_info'),'',PARAM_RAW));
 
-$module_code		=	new admin_setting_configtext('block_module_info/module_code',get_string( 'module_code', 'block_module_info' ), get_string( 'module_code', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($module_code);
+$settings->add(new admin_setting_configtext('block_module_info/module_code',get_string( 'module_code', 'block_module_info' ), get_string( 'module_code', 'block_module_info' ),'',PARAM_RAW));
 
-$module_level		=	new admin_setting_configtext('block_module_info/module_level',get_string( 'module_level', 'block_module_info' ), get_string( 'module_level', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($module_level);
+$settings->add(new admin_setting_configtext('block_module_info/module_level',get_string( 'module_level', 'block_module_info' ), get_string( 'module_level', 'block_module_info' ),'',PARAM_RAW));
 
-$module_credit		=	new admin_setting_configtext('block_module_info/module_credit',get_string( 'module_credit', 'block_module_info' ), get_string( 'module_credit', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($module_credit);
+$settings->add(new admin_setting_configtext('block_module_info/module_credit',get_string( 'module_credit', 'block_module_info' ), get_string( 'module_credit', 'block_module_info' ),'',PARAM_RAW));
 
-$module_semester	=	new admin_setting_configtext('block_module_info/module_semester',get_string( 'module_semester', 'block_module_info' ), get_string( 'module_semester', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($module_semester);
+$settings->add(new admin_setting_configtext('block_module_info/module_semester',get_string( 'module_semester', 'block_module_info' ), get_string( 'module_semester', 'block_module_info' ),'',PARAM_RAW));
 
-$convenor_name		=	new admin_setting_configtext('block_module_info/convenor_name',get_string( 'convenor_name', 'block_module_info' ), get_string( 'convenor_name', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($convenor_name);
+$settings->add(new admin_setting_configtext('block_module_info/convenor_name',get_string( 'convenor_name', 'block_module_info' ), get_string( 'convenor_name', 'block_module_info' ),'',PARAM_RAW));
 
 // Allow display of an extra profile field (e.g. candidate number or idnumber).
 $profile_fields = array('none' => get_string('noid', 'block_module_info'),
@@ -87,22 +73,37 @@ $profile_fields = array('none' => get_string('noid', 'block_module_info'),
 						'idnumber' => get_string('idnumber'),
 						'email' => get_string('email'));
 
-$convenorid = new admin_setting_configselect('block_module_info/convenorid',get_string('convenorid', 'block_module_info'),get_string('convenorid', 'block_module_info'),'none', $profile_fields);
-$settings->add($convenorid);
+$settings->add(new admin_setting_configselect('block_module_info/convenorid',get_string('convenorid', 'block_module_info'),get_string('convenorid', 'block_module_info'),'none', $profile_fields));
 
-$convenor =	new admin_setting_configtext('block_module_info/convenor',get_string( 'convenor', 'block_module_info' ), get_string( 'convenor', 'block_module_info' ),'',PARAM_RAW);
-$settings->add($convenor);
+$settings->add(new admin_setting_configtext('block_module_info/convenor',get_string( 'convenor', 'block_module_info' ), get_string( 'convenor', 'block_module_info' ),'',PARAM_RAW));
 
-$default 	= new admin_setting_heading('block_module_info/default', get_string('default', 'block_module_info'), '');
-$settings->add($default);
+$settings->add(new admin_setting_heading('block_module_info/smart', get_string('setting_header_smart', 'block_module_info'), get_string('setting_header_smart_desc', 'block_module_info')));
+
+$settings->add(new admin_setting_configtext('block_module_info/baseurl', get_string('setting_baseurl', 'block_module_info'),
+        get_string('setting_baseurl_desc', 'block_module_info'), 'http://dev.timetables.qmul.ac.uk/dEVSCI1314SWS/timetable.asp', PARAM_RAW));
+
+$settings->add(new admin_setting_configtext('block_module_info/day', get_string('setting_dayrange', 'block_module_info'),
+        get_string('setting_dayrange_desc', 'block_module_info'), '1-5', PARAM_RAW));
+
+$settings->add(new admin_setting_configtext('block_module_info/week', get_string('setting_weekrange', 'block_module_info'),
+        get_string('setting_weekrange_desc', 'block_module_info'), '1-52', PARAM_RAW));
+
+$settings->add(new admin_setting_configtext('block_module_info/period', get_string('setting_periodrange', 'block_module_info'),
+        get_string('setting_periodrange_desc', 'block_module_info'), '1-2', PARAM_RAW));
+
+$settings->add(new admin_setting_configtext('block_module_info/style', get_string('setting_style', 'block_module_info'),
+        get_string('setting_style_desc', 'block_module_info'), 'individual', PARAM_RAW));
+
+$settings->add(new admin_setting_configtext('block_module_info/template', get_string('setting_template', 'block_module_info'),
+        get_string('setting_template_desc', 'block_module_info'), 'swsnet+object+individual', PARAM_RAW));
+
+$settings->add(new admin_setting_heading('block_module_info/default', get_string('default', 'block_module_info'), get_string('default_desc', 'block_module_info')));
 
 // Default settings
 
-$convenor_role_name_options = new admin_setting_configtextarea('block_module_info/convenor_role_name_options', get_string('convenor_role_name_options', 'block_module_info'), get_string('convenor_role_name_options_desc', 'block_module_info'), '', PARAM_RAW, '65', '10');
-$settings->add($convenor_role_name_options);
+$settings->add(new admin_setting_configtextarea('block_module_info/convenor_role_name_options', get_string('convenor_role_name_options', 'block_module_info'), get_string('convenor_role_name_options_desc', 'block_module_info'), '', PARAM_RAW, '65', '10'));
 
-$additional_role_name_options = new admin_setting_configtextarea('block_module_info/additional_teacher_role_name_options', get_string('additional_teacher_role_name_options', 'block_module_info'), get_string('additional_teacher_role_name_options_desc', 'block_module_info'), '', PARAM_RAW, '65', '10');
-$settings->add($additional_role_name_options);
+$settings->add(new admin_setting_configtextarea('block_module_info/additional_teacher_role_name_options', get_string('additional_teacher_role_name_options', 'block_module_info'), get_string('additional_teacher_role_name_options_desc', 'block_module_info'), '', PARAM_RAW, '65', '10'));
 
 $additional_profile_fields = array('url'=>get_string('url'));
 $additional_profile_fields = array_merge($additional_profile_fields, array('icq'=>get_string('icqnumber')));
@@ -124,8 +125,6 @@ if ($fields = $DB->get_records('user_info_field')) {
     }
 }
 
-$additional_person_display_options = new admin_setting_configmultiselect('block_module_info/additional_person_display_options', get_string('additional_person_display_options', 'block_module_info'), get_string('additional_person_display_options_desc', 'block_module_info'), '', $additional_profile_fields);
-$settings->add($additional_person_display_options);
+$settings->add(new admin_setting_configmultiselect('block_module_info/additional_person_display_options', get_string('additional_person_display_options', 'block_module_info'), get_string('additional_person_display_options_desc', 'block_module_info'), array(), $additional_profile_fields));
 
-$defaulthtml =	new admin_setting_confightmleditor('block_module_info/defaulthtml',get_string( 'defaulthtml', 'block_module_info' ), get_string( 'defaulthtml', 'block_module_info' ),'');
-$settings->add($defaulthtml);
+$settings->add(new admin_setting_confightmleditor('block_module_info/defaulthtml',get_string( 'defaulthtml', 'block_module_info' ), get_string( 'defaulthtml', 'block_module_info' ),''));
