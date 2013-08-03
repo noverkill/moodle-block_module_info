@@ -1,13 +1,14 @@
 <?php
 /**
- * Class used to create a connection to a mis database and to perform subsequent queries needed to extract data
+ * Class used to create a connection to an external database and to perform subsequent queries needed to extract data
  *
- * @copyright &copy; 2011 University of London Computer Centre
- * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
+ * @copyright 2013 Queen Mary, University of London
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package ILP
- * @version 2.0
+ * @package block_module_info
+ * @version 1
  */
+
+global $CFG;
 
 /**
  * include the standard Adodb library
@@ -19,16 +20,15 @@ require_once( "$adodb_dir/adodb.inc.php" );
 require_once( "$adodb_dir/adodb-exceptions.inc.php" );
 require_once( "$adodb_dir/adodb-errorhandler.inc.php" );
 
-
 class module_info_data_connection{
 
     protected $db;
-    public 	$errorlist;                   //collect a list of errors
-    public	$prelimcalls;				  //calls to be executed before the sql is called
+    public $errorlist;    // Collect a list of errors.
+    public $prelimcalls;  // Calls to be executed before the sql is called.
 
     /**
      * Constructor function
-     * @param array $cparams arguments used to connect to a mis db. array keys:
+     * @param array $cparams arguments used to connect to a db. array keys:
      * 			type: the type of connection mssql, mysql etc
      * 			host: host connection string
      * 			user: the username used to connect to db
@@ -37,32 +37,50 @@ class module_info_data_connection{
      *
      * @return bool true if not errors encountered false if otherwise
      */
-    public function __construct( $cparams=array()){
-        global $CFG;
+    public function __construct( $cparams=array()) {
         $this->db = false;
         $this->errorlist = array();
-        $this->prelimcalls	=	array();
+        $this->prelimcalls = array();
 
-        $dbconnectiontype	=	(!empty($cparams['type'])) 	? $cparams['type']	: 	get_config( 'block_module_info', 'dbconnectiontype' );
+        $dbconnectiontype = $cparams['type'];
 
-        //if the dbconnection is empty return false
-        if (empty($dbconnectiontype)) return false;
+        // If the dbconnection is empty return false.
+        if (empty($dbconnectiontype)) {
+            return false;
+        }
 
-        $host	=	(!empty($cparams['host'])) 	? $cparams['host']	: 	get_config( 'block_module_info', 'dbhost' );
-        $user	=	(!empty($cparams['user'])) 	? $cparams['user']	: 	get_config( 'block_module_info', 'dbuser' );
-        $pass	=	(!empty($cparams['pass'])) 	? $cparams['pass']	: 	get_config( 'block_module_info', 'dbpass' );
-        $dbname	=	(!empty($cparams['dbname'])) 	? $cparams['dbname']	: 	get_config( 'block_module_info', 'dbname' );
+        $host   =   $cparams['host'];
+        $user   =   $cparams['user'];
+        $pass   =   $cparams['pass'];
+        $dbname =   $cparams['dbname'];
+        $debug  =   $cparams['debug'];
 
-        //build the connection
-        $connectioninfo = $this->get_mis_connection($dbconnectiontype,$host,$user,$pass,$dbname);
+        // Build the connection.
+        $connectioninfo = $this->get_mis_connection($dbconnectiontype, $host, $user, $pass, $dbname, $debug);
 
-        //return false if any errors have been found (we can display errors if wanted)
-        $this->errorlist = $connectioninfo[ 'errorlist' ] ;
-        if( !empty($this->errorlist))	return false;
+        // Return false if any errors have been found ( we can display errors if wanted ).
+        $this->errorlist = $connectioninfo[ 'errorlist' ];
+        if ( !empty($this->errorlist) ) {
+            return false;
+        }
 
-        //give the connection to the db var
+        // Give the connection to the db var.
         $this->db = $connectioninfo[ 'db' ];
         return true;
+    }
+
+    /*
+     * Returns true if connected, else returns false.
+     */
+    public function is_connected() {
+        return $this->db != null;
+    }
+
+    public function real_escape_string($text) {
+        if(!$this->is_connected()) {
+            return $text;
+        }
+        return $this->db->qstr($text);
     }
 
     /**
@@ -74,46 +92,45 @@ class module_info_data_connection{
      * @param string $pass the password used in conjunction with the username
      * @param string $dbname the name of the db that will be used
      */
-    public function get_mis_connection( $type, $host, $user, $pass, $dbname ){
+    public function get_mis_connection( $type, $host, $user, $pass, $dbname, $debug = false ) {
         $errorlist = array();
         $db = false;
 
-        //trim any space chars (which seem to pass empty tests) and if empty return false
-        $trimtype   =  trim($type);
-        if (empty($trimtype))  return false;
-
-        try{
-            $db = ADONewConnection( $type );
+        // Trim any space chars (which seem to pass empty tests) and if empty return false.
+        $trimtype = trim($type);
+        if (empty($trimtype)) {
+            return false;
         }
-        catch( exception $e ){
+
+        try {
+            $db = ADONewConnection( $type );
+        } catch ( exception $e ) {
             $errorlist[] = $e->getMessage();
         }
-        if( $db ){
-            try{
+        if ( $db ) {
+            try {
                 $db->SetFetchMode(ADODB_FETCH_ASSOC);
                 $db->Connect( $host, $user, $pass, $dbname );
-                //$db->debug = true;
-                $db->debug = false;
-            }
-            catch( exception $e ){
+                $db->debug = $debug;
+            } catch ( exception $e ) {
                 $errorlist[] = $e->getMessage();
             }
         }
-        return array(
+        return array (
             'errorlist' => $errorlist,
             'db' => $db
         );
     }
 
     /**
-     * take a result array and return a list of the values in a single field
+     * Take a result array and return a list of the values in a single field
      * @param array of arrays $a
      * @param string $fieldname
      * @return array of scalars
      */
-    protected function get_column_valuelist( $a, $fieldname ){
+    protected function get_column_valuelist( $a, $fieldname ) {
         $rtn = array();
-        foreach( $a as $row ){
+        foreach ($a as $row) {
             $rtn[] = $row[ $fieldname ];
         }
         return $rtn;
@@ -125,24 +142,25 @@ class module_info_data_connection{
      * @param array $paramarray the params that need to be converted to
      * a string
      */
-    function arraytostring($paramarray)	{
-        $str	=	'';
-        $and	=	'';
-        if (!empty($paramarray) && is_array($paramarray))
+    protected function arraytostring($paramarray) {
+        $str = '';
+        $and = '';
+        if (!empty($paramarray) && is_array($paramarray)) {
             foreach ($paramarray as $k => $v) {
-                $str	=	"{$str} {$and} ";
-                //$str	.=	(is_array($v)) ?	$k." ".$this->arraytostring($v) :	" $k $v";
-                //remove all ~ from fieldname - this is so that when a field is used twice in a query,
-                //you can use the ~ to make a unique array key, but still generate sql with the simple fieldname
-                //this will cause problems if the underlying database table has a fieldname with a ~ in it
-                $str	.=	(is_array($v)) ?	str_replace( '~' , '', $k ) ." ".$this->arraytostring($v) :	" $k $v";
-                $and	=	' AND ';
+                $str = "{$str} {$and} ";
+                // $str .= (is_array($v)) ? $k." ".$this->arraytostring($v) : " $k $v";
+                /*
+                 * Remove all ~ from fieldname - this is so that when a field is used twice in a query,
+                 * you can use the ~ to make a unique array key, but still generate sql with the simple fieldname
+                 * this will cause problems if the underlying database table has a fieldname with a ~ in it
+                 */
+                $str .= (is_array($v)) ? str_replace( '~' , '', $k ) ." ".$this->arraytostring($v) : " $k $v";
+                $and = ' AND ';
             }
+        }
 
         return $str;
     }
-
-
 
     /**
      * builds an sql query using the given parameter and returns the results of the query
@@ -158,45 +176,55 @@ class module_info_data_connection{
      * 				 'lowerlimit' lower limit of results
      * 				 'upperlimit' should be used in conjunction with lowerlimt to limit results
      */
-    function return_table_values($table,$whereparams=null,$fields='*',$addionalargs=null) {
+    public function return_table_values ($table, $whereparams=null, $fields='*', $addionalargs=null) {
+        // Check if the fields param is an array if it is implode.
+        $fields = (is_array($fields)) ? implode(', ', $fields) : $fields;
 
-        //check if the fields param is an array if it is implode
-        $fields 	=	(is_array($fields))		?	implode(', ',$fields)	:	$fields;
+        // Create the select statement.
+        $select = "SELECT {$fields} ";
 
-        //create the select statement
-        $select		=	"SELECT		{$fields} ";
+        // Create the from.
+        $from = "FROM {$table} ";
 
-        //create the from
-        $from		=	"FROM		{$table} ";
+        // Get the where.
+        $wheresql = $this->arraytostring($whereparams);
 
-        //get the
-        $wheresql		=	$this->arraytostring($whereparams);
+        $where = (!empty($wheresql)) ? "WHERE {$wheresql} " : "";
 
-        $where			=	(!empty($wheresql)) ? "WHERE {$wheresql} "	: 	"";
+        $sort = '';
+        if (isset($addionalargs['sort'])) {
+            $sort = (!empty($addionalargs['sort'])) ? "ORDER BY {$addionalargs['sort']} " : "";
+        }
 
-        $sort		=	'';
-        if (isset($addionalargs['sort']))	$sort		=	(!empty($addionalargs['sort']))	? "ORDER BY {$addionalargs['sort']} "	: "";
+        $group = '';
+        if (isset($addionalargs['group'])) {
+            $group = (!empty($addionalargs['group'])) ? "GROUP BY {$addionalargs['group']} " : "";
+        }
 
-        $group		=	'';
-        if (isset($addionalargs['group']))	$group		=	(!empty($addionalargs['group']))	? "GROUP BY {$addionalargs['group']} "	: "";
-
-        $limit		=	'';
-        if (isset($addionalargs['lowerlimt']))	$limit		=	(!empty($addionalargs['lowerlimit']))	? "LIMIT {$addionalargs['lowerlimit']} "	: "";
-
-        if (isset($addionalargs['upperlimt']))	{
+        $limit = '';
+        if (isset($addionalargs['lowerlimt'])) {
+            $limit = (!empty($addionalargs['lowerlimit'])) ? "LIMIT {$addionalargs['lowerlimit']} " : "";
+        }
+        if (isset($addionalargs['upperlimt'])) {
             if (empty($limit)) {
-                $limit		=	(!empty($addionalargs['upperlimt']))	? "LIMIT {$addionalargs['upperlimt']} "	: "";
+                $limit = (!empty($addionalargs['upperlimt'])) ? "LIMIT {$addionalargs['upperlimt']} " : "";
             } else {
-                $limit		.=	(!empty($addionalargs['upperlimt']))	? ", {$addionalargs['upperlimt']} "	: "";
+                $limit .= (!empty($addionalargs['upperlimt'])) ? ", {$addionalargs['upperlimt']} " : "";
             }
         }
 
-        $sql		=	$select.$from.$where.$sort.$group.$limit;
-        $result		= (!empty($this->db)) ? $this->execute($sql) : false;
-        return		(!empty($result->fields))	?	$result->getRows() :	false;
+        $sql = $select.$from.$where.$sort.$group.$limit;
+        $result = (!empty($this->db)) ? $this->execute($sql) : false;
+        return (!empty($result->fields)) ? $result->getRows() : false;
     }
 
-    function arraytovar($val) {
+    /**
+     * Recursive function to convert an array into a value
+     *
+     * @param $val
+     * @return mixed
+     */
+    protected function arraytovar($val) {
         if (is_array($val)) {
             if (!is_array(current($val))) {
                 return current($val);
@@ -208,47 +236,44 @@ class module_info_data_connection{
         return $val;
     }
 
-
     /**
-     *
-     * builds a stored procedure query using the arguments given and returns the result
+     * Builds a stored procedure query using the arguments given and returns the result
      * @param string $procedurename the name of the stored proceudre being called
      * @param mixed array or string $procedureargs variables passed to stored procedure
      *
      * @return mixed
      */
-    function return_stored_values($procedurename,$procedureargs='') {
+    public function return_stored_values($procedurename, $procedureargs='') {
 
         if (is_array($procedureargs)) {
-            $temp	=	array();
+            $temp = array();
             foreach ($procedureargs as $p) {
-                $val	=	$this->arraytovar($p);
+                $val = $this->arraytovar($p);
 
                 if (!empty($val)) {
-                    $temp[]	=	$val;
+                    $temp[] = $val;
                 }
             }
 
-            $args	=	implode(', ',$temp);
+            $args = implode(', ', $temp);
         } else {
-            $args	=	$procedureargs;
+            $args = $procedureargs;
         }
-        $sql	=	"EXECUTE {$procedurename} {$args}";
+        $sql = "EXECUTE {$procedurename} {$args}";
 
-        $result		= (!empty($this->db)) ? $this->execute($sql) : false;
-        return		(!empty($result->fields))	?	$result->getRows() :	false;
+        $result = (!empty($this->db)) ? $this->execute($sql) : false;
+        return (!empty($result->fields)) ? $result->getRows() : false;
     }
 
-
     /**
-     * step through an array of $key=>$value and assign them
+     * Step through an array of $key=>$value and assign them
      * to the class $params array
      * @param array $arrayvar the array that will hold the params
      * @param array $params the params that will be passed to $arrayvar
      * @return
      */
-    protected function set_params( &$arrayvar,$params ){
-        foreach( $params as $key=>$value ){
+    protected function set_params( &$arrayvar, $params ) {
+        foreach ($params as $key => $value) {
             $arrayvar[ $key ] = $value;
         }
     }
@@ -257,24 +282,63 @@ class module_info_data_connection{
      * This function makes any calls to the database that need to be made before the sql statement is run
      * The function uses the $prelimcalls var
      */
-    private function make_prelimcall()	{
-        if (!empty($this->prelimcalls))	{
-            foreach ($this->prelimcalls as $pc)	{
+    private function make_prelimcall() {
+        if (!empty($this->prelimcalls)) {
+            foreach ($this->prelimcalls as $pc) {
                 try {
                     $res = $this->db->Execute( $pc );
                 } catch (exception $e) {
-                    //we wont do anything if these calls fail
+                    // We wont do anything if these calls fail.
                 }
             }
         }
     }
 
     /**
-     * executes the given sql query
+     * Marks the start of a transaction. Note that this is not supported in all databases (e.g. in mysqli but not mysql)
+     * @return bool
+     */
+    public function begin_transaction() {
+        try {
+            $res = $this->db->BeginTrans();
+        } catch (exception $e) {
+            return false;
+        }
+        return $res;
+    }
+
+    /**
+     * Marks the end of a transaction. Any changes up to this point are committed.
+     * @return bool
+     */
+    public function commit_transaction() {
+        try {
+            $res = $this->db->CommitTrans();
+        } catch (exception $e) {
+            return false;
+        }
+        return $res;
+    }
+
+    /**
+     * Cancels all changes made since the last begin_transaction() method call, and ends the transaction.
+     * @return bool
+     */
+    public function rollback_transaction() {
+        try {
+            $res = $this->db->RollbackTrans();
+        } catch (exception $e) {
+            return false;
+        }
+        return $res;
+    }
+
+    /**
+     * Executes the given sql query
      * @param string $sql
      * @return array of arrays
      */
-    public function execute( $sql){
+    public function execute( $sql ) {
         $this->make_prelimcall();
         try {
             $res = $this->db->Execute( $sql );
@@ -285,54 +349,18 @@ class module_info_data_connection{
     }
 
     /**
-     * intended to return just the front item from an array of arrays (eg a recordset)
+     * Intended to return just the front item from an array of arrays (eg a recordset)
      * if just the array is sent, just the first row will be returned
      * if 2nd argument sent, then just the value of that field in the first row will be returned
      * @param array $a
      * @param string $fieldname
      * @return mixed (array or single value)
      */
-    public static function get_top_item( $a , $fieldname=false ){
+    public static function get_top_item( $a , $fieldname=false ) {
         $toprow = array_shift( $a );
-        if( $fieldname ){
+        if ( $fieldname ) {
             return $toprow[ $fieldname ];
         }
         return $toprow;
     }
-}
-
-/**
- * Serves the documents.
- *
- * @param object $course
- * @param object $cm
- * @param object $context
- * @param string $filearea
- * @param array $args
- * @param bool $forcedownload
- * @return bool false if file not found, does not return if found - justsend the file
- */
-function block_module_info_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
-    global $CFG, $DB;
-
-    if ($context->contextlevel != CONTEXT_COURSE) {
-        return false;
-    }
-
-    require_course_login($course, true, $cm);
-
-    $fileareas = array('documents');
-    if (!in_array($filearea, $fileareas)) {
-        return false;
-    }
-
-    $fs = get_file_storage();
-    $relativepath = implode('/', $args);
-    $fullpath = "/$context->id/block_module_info/$filearea/$relativepath";
-    if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
-        return false;
-    }
-
-    // finally send the file
-    send_stored_file($file, 0, 0, true); // download MUST be forced - security!
 }
