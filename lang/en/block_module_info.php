@@ -5,6 +5,8 @@
 	//Config Form DB Connection Section
 	$string['noconnection']						=	'No Connection';
     $string[ 'mis_connection' ]                 =   'MIS Connection';
+    $string[ 'mis_connection_desc' ] = 'Specify connection to the database containing course module data.';
+    
     $string[ 'db_connection' ]                  =   'DB Connection';
     $string[ 'db_name' ]                        =   'DB Name';
     $string[ 'set_db_name' ]                    =   'set the name of the DB';
@@ -18,6 +20,7 @@
 	
 	//Config Data Mapping Fields
 	$string[ 'data_mapping' ]                   =   'Data Mapping';
+	$string[ 'data_mapping_desc' ]            = 'The name of the field in the remote table that maps onto the given variable.';
     $string[ 'extcourseid' ]                    =   'Course ID';
     $string[ 'extcourseiddesc' ]                =   'This field should map to course->idnumber in Moodle';
 	$string[ 'module_code' ]                    =   'Code';
@@ -29,8 +32,34 @@
 	$string[ 'convenor_name' ]                  =   'Convenor Name';
 	$string[ 'noid' ] 							= 	'No ID';
 	
+	// SMART Timetabling
+	$string['setting_header_smart'] = "SMART Timtable Settings";
+	$string['setting_header_smart_desc'] = "QMplus settings for timetabling service Scientia Enterprise also know as SMART (Space Management and Room Timetabling). ";
+	
+	$string['setting_baseurl'] = 'Base Url';
+	$string['setting_baseurl_desc'] = 'the base Url for the service';
+	
+	$string['setting_title'] = 'Block Title';
+	$string['setting_title_desc'] = 'the block title';
+	
+	$string['setting_weekrange'] = 'Week Range';
+	$string['setting_weekrange_desc'] = 'The weeks to generate for the timetable. Can be a a single week (e.g. 1), a consecutive week range (e.g. 1-10) or set of non-consecutive weeks (e.g. 2;4;6). If omitted then the current week is displayed.';
+	
+	$string['setting_dayrange'] = 'Day Range';
+	$string['setting_dayrange_desc'] = 'The days to include in the timetable where 1 = Monday through to 7 = Sunday. Can be a single day (e.g. 1), consecutive day range (e.g. 1-5) or set of non-consecutive days (e.g. 1,5). If omitted then all days are displayed.';
+	
+	$string['setting_periodrange'] = 'Period Range';
+	$string['setting_periodrange_desc'] = 'A consecutive period range. You cannot have a single period or a non-consecutive period range. QMUL periods run from 08:00 – 23:00, so 09:00 would be period 3 and 18:00 would be period 20. If omitted then all periods are displayed.';
+	
+	$string['setting_template'] = 'Timetabling template';
+	$string['setting_template_desc'] = 'Timetabling template';
+	
+	$string['setting_style'] = 'Timetabling Style';
+	$string['setting_style_desc'] = 'Timetabling Style';
+	
 	//Config Defaults
 	$string[ 'default' ]                        =   'Defaults';
+	$string[ 'default_desc' ]                        =   'Block default configuration settings can be specified here.';
 	
 	$string[ 'convenor_role_name_options' ]    =    'Module owner names';
 	$string[ 'convenor_role_name_options_desc']=    'Possible valid alternative names for the module owner are \'Convenor\' or \'Module Organiser\', for instance. Write each option on a new line.';
