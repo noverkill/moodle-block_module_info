@@ -91,6 +91,12 @@
     $string['config_module_semester'] = 'Display Module Semester';
     $string['config_module_semester_override'] = 'Override Semester';
 
+    // Help buttons
+    $string['module_code_help'] = 'Enable this setting to display the module code. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
+    $string['module_level_help'] = 'Enable this setting to display the module level. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
+    $string['module_credit_help'] = 'Enable this setting to display the module credits. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
+    $string['module_semester_help'] = 'Enable this setting to display the semester. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
+    
     // Person display options
     $string['additional_person_display_options'] = 'Global profile display options';
     $string['additional_person_display_options_desc'] = 'Course owners can choose to display the profile fields selected here.';
