@@ -125,8 +125,6 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->setDefault('config_display_convenor_options', array('name', 'profilepic', 'email', 'location', 'officehours'));
         
         // Overrides
-        // Module owner name
-        $mform->addElement('text', 'config_convenor_name_override', get_string('config_convenor_name_override', 'block_module_info'));
         
         // Module owner profile picture size
         $sizeoptions = array('small'=>get_string('small', 'block_module_info'), 'large'=>get_string('large', 'block_module_info'));
