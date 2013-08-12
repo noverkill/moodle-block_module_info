@@ -102,6 +102,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         $this->data->module_credit = '';
         $this->data->module_convenor_email = '';
         
+        // What are the database field names for course code, semester, credit, &c. ? 
         $module_code_field = get_config('block_module_info','module_code');
         $module_level_field = get_config('block_module_info','module_level');
         $module_credit_field = get_config('block_module_info','module_credit');
@@ -109,43 +110,45 @@ class block_module_info_renderer extends plugin_renderer_base {
         $convenor_name_field = get_config('block_module_info','convenor_name');
         $convenor_field = get_config('block_module_info','convenor');
         
-        // Initially attempt to extract the semester from the course id
+        // Initially attempt to extract the semester from the course id.
         $after_hyphen = strchr($COURSE->idnumber, "-");
         if(!empty($after_hyphen) && strlen($after_hyphen) > 2) {
             $this->data->module_semester = substr($after_hyphen, 1, 1);
         }
         
+        // Get the data from the database, if it's specified.
         foreach((array)$this->data->info as $field) {
             if (! empty($field[$module_code_field])) {
                 $this->data->module_code = $field[$module_code_field];
             }
-            if (! empty($field[$module_level_field]) && ! empty($this->data->block_config->module_level)) {
+            if (! empty($field[$module_level_field])) {
                 $this->data->module_level = $field[$module_level_field];
             }
-            if (! empty($field[$module_credit_field]) && ! empty($this->data->block_config->module_credit)) {
+            if (! empty($field[$module_credit_field])) {
                 $this->data->module_credit = $field[$module_credit_field];
             }
-            if (! empty($field[$module_semester_field]) && ! empty($this->data->block_config->module_semester)) {
+            if (! empty($field[$module_semester_field])) {
                 $this->data->module_semester = $field[$module_semester_field];
             }
-            if (! empty($field[$convenor_field]) && ! empty($this->data->block_config->display_convenor)) {
+            if (! empty($field[$convenor_field])) {
                 $this->data->module_convenor_email = $field[$convenor_field];
             }
         }
         
         // override values out of the interim MIS if necessary
-        if(! empty($this->data->block_config->module_code_override)) {
+        if(! empty($this->data->block_config->module_code) && ! empty($this->data->block_config->module_code_override)) {
             $this->data->module_code = $this->data->block_config->module_code_override;
         }
-        if(! empty($this->data->block_config->module_level_override)) {
+        if(! empty($this->data->block_config->module_level) && ! empty($this->data->block_config->module_level_override)) {
             $this->data->module_level = $this->data->block_config->module_level_override;
         }
-        if(! empty($this->data->block_config->module_semester_override)) {
+        if(! empty($this->data->block_config->module_semester) && ! empty($this->data->block_config->module_semester_override)) {
             $this->data->module_semester = $this->data->block_config->module_semester_override;
         }
-        if(! empty($this->data->block_config->module_credit_override)) {
+        if(! empty($this->data->block_config->module_credit) && ! empty($this->data->block_config->module_credit_override)) {
             $this->data->module_credit = $this->data->block_config->module_credit_override;
         }
+        
         if(! empty($this->data->block_config->module_convenor_override)) {
             $this->data->module_convenor_email = $this->data->block_config->module_convenor_override;
         }
@@ -545,28 +548,28 @@ class block_module_info_renderer extends plugin_renderer_base {
 
         
         // Now build HTML
-        if (! empty($this->data->block_config->module_code) && ! empty ($this->data->module_code)) {
+        if (! empty ($this->data->module_code)) {
         	$result .= html_writer::start_tag('p');
         	$result .= html_writer::tag('span', get_string( 'module_code', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_code);
         	$result .= html_writer::end_tag('p');
         }
-        if (! empty($this->data->block_config->module_level) && ! empty ($this->data->module_level)) {
+        if (! empty ($this->data->module_level)) {
         	$result .= html_writer::start_tag('p');
         	$result .= html_writer::tag('span', get_string( 'module_level', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_level);
         	$result .= html_writer::end_tag('p');
         }
-        if (! empty($this->data->block_config->module_credit) && ! empty ($this->data->module_credit)) {
+        if (! empty ($this->data->module_credit)) {
         	$result .= html_writer::start_tag('p');
         	$result .= html_writer::tag('span', get_string( 'module_credit', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_credit);
         	$result .= html_writer::end_tag('p');
         }
-        if (! empty($this->data->block_config->module_semester) && ! empty ($this->data->module_semester)) {
+        if (! empty ($this->data->module_semester)) {
         	$result .= html_writer::start_tag('p');
         	$result .= html_writer::tag('span', get_string( 'module_semester', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
