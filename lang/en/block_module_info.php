@@ -82,20 +82,20 @@
 	$string['core_info_header'] = 'Core info';
 	$string['override_setting'] = 'Enter custom setting here';
     $string['config_title'] = 'Title';
-    $string['config_module_code'] = 'Display Module Code';
+    $string['config_module_code'] = 'Custom Module Code';
     $string['config_module_code_override'] = 'Custom Code';
-    $string['config_module_level'] = 'Display Module Level';
+    $string['config_module_level'] = 'Custom Module Level';
     $string['config_module_level_override'] = 'Override Level';
-    $string['config_module_credit'] = 'Display Module Credits';
+    $string['config_module_credit'] = 'Custom Module Credits';
     $string['config_module_credit_override'] = 'Override Credit Value';
-    $string['config_module_semester'] = 'Display Module Semester';
+    $string['config_module_semester'] = 'Custom Module Semester';
     $string['config_module_semester_override'] = 'Override Semester';
 
     // Help buttons
-    $string['module_code_help'] = 'Enable this setting to display the module code. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
-    $string['module_level_help'] = 'Enable this setting to display the module level. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
-    $string['module_credit_help'] = 'Enable this setting to display the module credits. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
-    $string['module_semester_help'] = 'Enable this setting to display the semester. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
+    $string['module_code_help'] = 'Enable this setting to override the module code. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
+    $string['module_level_help'] = 'Enable this setting to override the module level. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
+    $string['module_credit_help'] = 'Enable this setting to override the module credits. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
+    $string['module_semester_help'] = 'Enable this setting to override the semester. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
     
     // Person display options
     $string['additional_person_display_options'] = 'Global profile display options';
