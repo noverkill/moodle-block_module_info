@@ -98,8 +98,8 @@
     $string['module_semester_help'] = 'Enable this setting to override the semester. The code is taken automatically from information stored in SITS. However, this can be replaced by text entered into the text box on the right.';
     
     // Person display options
-    $string['additional_person_display_options'] = 'Global profile display options';
-    $string['additional_person_display_options_desc'] = 'Course owners can choose to display the profile fields selected here.';
+    $string['person_display_options'] = 'Global profile display options';
+    $string['person_display_options_desc'] = 'Course owners can choose to display the profile fields selected here.';
     
     // Teaching
     $string['teaching_header'] = 'Teaching';

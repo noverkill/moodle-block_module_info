@@ -82,13 +82,10 @@ class block_module_info_edit_form extends block_edit_form {
         
         // Module owner property display options
         // What to display
-        $display_options = array('name'=>get_string('fullname'));
-        $display_options = array_merge($display_options, array('profilepic'=>get_string('profilepic', 'block_module_info')));
-        $display_options = array_merge($display_options, array('email'=>get_string('email')));
-        $display_options = array_merge($display_options, array('location'=>get_string('location', 'block_module_info')));
-        $display_options = array_merge($display_options, array('officehours'=>get_string('officehours', 'block_module_info')));
-        
-        $possible_options = array('icq'=>get_string('icqnumber'));
+        $possible_options = array('name'=>get_string('fullname'));
+        $possible_options = array_merge($possible_options, array('profilepic'=>get_string('profilepic', 'block_module_info')));
+        $possible_options = array_merge($possible_options, array('email'=>get_string('email')));
+        $possible_options = array_merge($possible_options, array('icq'=>get_string('icqnumber')));
         $possible_options = array_merge($possible_options, array('url'=>get_string('webpage')));
         $possible_options = array_merge($possible_options, array('skype'=>get_string('skypeid')));
         $possible_options = array_merge($possible_options, array('aim'=>get_string('aimid')));
@@ -101,20 +98,20 @@ class block_module_info_edit_form extends block_edit_form {
         $possible_options = array_merge($possible_options, array('phone2'=>get_string('phone2')));
         $possible_options = array_merge($possible_options, array('address'=>get_string('address')));
         
-        // Additional person display options are configured globally
-        $additional_display_options = explode(',', get_config('block_module_info', 'additional_person_display_options'));
-        foreach($additional_display_options as $option) {
+        // Person display options are configured globally
+        $person_display_options = explode(',', get_config('block_module_info', 'person_display_options'));
+        foreach($person_display_options as $option) {
             if(array_key_exists($option, $possible_options)) {
                 $new_option = array($option=>$possible_options[$option]);
-                $display_options = array_merge($display_options, $new_option);
+                $person_display_options = array_merge($person_display_options, $new_option);
             }
         }
         
         // Add custom profile fields to display options
         if ($fields = $DB->get_records('user_info_field')) {
             foreach ($fields as $field) {
-                if(in_array($field->shortname, $additional_display_options)) {
-                    $display_options = array_merge($display_options, array(format_string($field->shortname)=>format_string($field->name)));
+                if(in_array($field->shortname, $person_display_options)) {
+                    $person_display_options = array_merge($person_display_options, array(format_string($field->shortname)=>format_string($field->name)));
                 }
             }
         }
@@ -161,31 +158,9 @@ class block_module_info_edit_form extends block_edit_form {
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_name', get_string('config_additional_teacher_name','block_module_info'));
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_email', get_string('config_additional_teacher_email','block_module_info'));
         
-        // Additional teacher property display options
-        // What to display
-        $display_options = array('profilepic'=>get_string('profilepic', 'block_module_info'));
-        $display_options = array_merge($display_options, array('url'=>get_string('webpage')));
-        
-        // Additional person display options are configured globally
-        $additional_display_options = explode(',', get_config('block_module_info', 'additional_person_display_options'));
-        foreach($additional_display_options as $option) {
-            if(array_key_exists($option, $possible_options)) {
-                $new_option = array($option=>$possible_options[$option]);
-                $display_options = array_merge($display_options, $new_option);
-            }
-        }
-        
-        // Add custom profile fields to display options
-        if ($fields = $DB->get_records('user_info_field')) {
-            foreach ($fields as $field) {
-                if(in_array($field->shortname, $additional_display_options)) {
-                    $display_options = array_merge($display_options, array(format_string($field->shortname)=>format_string($field->name)));
-                }
-            }
-        }
-        
+        // Additional teacher display options are the same as those for the module convenor
         $attributes = array('size'=>'7');
-        $select = $mform->createElement('select', 'config_display_additional_teacher_options', get_string('config_display_additional_teacher_options', 'block_module_info'), $display_options, $attributes);
+        $select = $mform->createElement('select', 'config_display_additional_teacher_options', get_string('config_display_additional_teacher_options', 'block_module_info'), $person_display_options, $attributes);
         $select->setMultiple(true);
         $teacherarray[] = $select;
         

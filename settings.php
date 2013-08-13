@@ -105,26 +105,29 @@ $settings->add(new admin_setting_configtextarea('block_module_info/convenor_role
 
 $settings->add(new admin_setting_configtextarea('block_module_info/additional_teacher_role_name_options', get_string('additional_teacher_role_name_options', 'block_module_info'), get_string('additional_teacher_role_name_options_desc', 'block_module_info'), '', PARAM_RAW, '65', '10'));
 
-$additional_profile_fields = array('url'=>get_string('url'));
-$additional_profile_fields = array_merge($additional_profile_fields, array('icq'=>get_string('icqnumber')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('skype'=>get_string('skypeid')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('aim'=>get_string('aimid')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('yahoo'=>get_string('yahooid')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('msn'=>get_string('msnid')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('idnumber'=>get_string('idnumber')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('institution'=>get_string('institution')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('department'=>get_string('department')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('phone1'=>get_string('phone')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('phone2'=>get_string('phone2')));
-$additional_profile_fields = array_merge($additional_profile_fields, array('address'=>get_string('address')));
+$profile_fields = array('name'=>get_string('fullname'));
+$profile_fields = array_merge($profile_fields, array('profilepic'=>get_string('profilepic', 'block_module_info')));
+$profile_fields = array_merge($profile_fields, array('email'=>get_string('email')));
+$profile_fields = array_merge($profile_fields, array('url'=>get_string('url')));
+$profile_fields = array_merge($profile_fields, array('icq'=>get_string('icqnumber')));
+$profile_fields = array_merge($profile_fields, array('skype'=>get_string('skypeid')));
+$profile_fields = array_merge($profile_fields, array('aim'=>get_string('aimid')));
+$profile_fields = array_merge($profile_fields, array('yahoo'=>get_string('yahooid')));
+$profile_fields = array_merge($profile_fields, array('msn'=>get_string('msnid')));
+$profile_fields = array_merge($profile_fields, array('idnumber'=>get_string('idnumber')));
+$profile_fields = array_merge($profile_fields, array('institution'=>get_string('institution')));
+$profile_fields = array_merge($profile_fields, array('department'=>get_string('department')));
+$profile_fields = array_merge($profile_fields, array('phone1'=>get_string('phone')));
+$profile_fields = array_merge($profile_fields, array('phone2'=>get_string('phone2')));
+$profile_fields = array_merge($profile_fields, array('address'=>get_string('address')));
 
 // Add custom profile fields to display options
 if ($fields = $DB->get_records('user_info_field')) {
     foreach ($fields as $field) {
-        $additional_profile_fields = array_merge($additional_profile_fields, array(format_string($field->shortname)=>format_string($field->name)));
+        $profile_fields = array_merge($profile_fields, array(format_string($field->shortname)=>format_string($field->name)));
     }
 }
 
-$settings->add(new admin_setting_configmultiselect('block_module_info/additional_person_display_options', get_string('additional_person_display_options', 'block_module_info'), get_string('additional_person_display_options_desc', 'block_module_info'), array(), $additional_profile_fields));
+$settings->add(new admin_setting_configmultiselect('block_module_info/person_display_options', get_string('person_display_options', 'block_module_info'), get_string('person_display_options_desc', 'block_module_info'), array(), $profile_fields));
 
 $settings->add(new admin_setting_confightmleditor('block_module_info/defaulthtml',get_string( 'defaulthtml', 'block_module_info' ), get_string( 'defaulthtml', 'block_module_info' ),''));
