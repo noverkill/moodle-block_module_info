@@ -98,12 +98,13 @@ class block_module_info_edit_form extends block_edit_form {
         $possible_options = array_merge($possible_options, array('phone2'=>get_string('phone2')));
         $possible_options = array_merge($possible_options, array('address'=>get_string('address')));
         
+        $display_options = array();
+        
         // Person display options are configured globally
         $person_display_options = explode(',', get_config('block_module_info', 'person_display_options'));
         foreach($person_display_options as $option) {
             if(array_key_exists($option, $possible_options)) {
-                $new_option = array($option=>$possible_options[$option]);
-                $person_display_options = array_merge($person_display_options, $new_option);
+                $display_options[$option] = $possible_options[$option];
             }
         }
         
@@ -111,7 +112,7 @@ class block_module_info_edit_form extends block_edit_form {
         if ($fields = $DB->get_records('user_info_field')) {
             foreach ($fields as $field) {
                 if(in_array($field->shortname, $person_display_options)) {
-                    $person_display_options = array_merge($person_display_options, array(format_string($field->shortname)=>format_string($field->name)));
+                    $display_options[format_string($field->shortname)] = format_string($field->name);
                 }
             }
         }
@@ -119,7 +120,7 @@ class block_module_info_edit_form extends block_edit_form {
         $attributes = array('size'=>'7'); 
         $select = $mform->addElement('select', 'config_display_convenor_options', get_string('config_display_convenor_options', 'block_module_info'), $display_options, $attributes);
         $select->setMultiple(true);
-        $mform->setDefault('config_display_convenor_options', array('name', 'profilepic', 'email', 'location', 'officehours'));
+        $mform->setDefault('config_display_convenor_options', array('name', 'profilepic', 'email'));
         
         // Overrides
         
@@ -131,12 +132,6 @@ class block_module_info_edit_form extends block_edit_form {
         // Module owner email
         $mform->addElement('text', 'config_convenor_email_override', get_string('config_convenor_email_override', 'block_module_info'));
         $mform->setType('config_convenor_email_override', PARAM_EMAIL);
-        
-        // Module owner location
-        $mform->addElement('text', 'config_convenor_location_override', get_string('config_convenor_location_override', 'block_module_info'));
-        
-        // Module owner office hours
-        $mform->addElement('text', 'config_convenor_office_hours_override', get_string('config_convenor_office_hours_override', 'block_module_info'));  
         
         // Additional teachers
         $mform->addElement('header', 'configheader', get_string('additional_teachers_header', 'block_module_info'));
@@ -160,7 +155,7 @@ class block_module_info_edit_form extends block_edit_form {
         
         // Additional teacher display options are the same as those for the module convenor
         $attributes = array('size'=>'7');
-        $select = $mform->createElement('select', 'config_display_additional_teacher_options', get_string('config_display_additional_teacher_options', 'block_module_info'), $person_display_options, $attributes);
+        $select = $mform->createElement('select', 'config_display_additional_teacher_options', get_string('config_display_additional_teacher_options', 'block_module_info'), $display_options, $attributes);
         $select->setMultiple(true);
         $teacherarray[] = $select;
         
@@ -169,8 +164,6 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->setDefault('config_additional_teacher_profilepic_size', 'small');
         $teacherarray[] = $profile_size;
         
-        $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_location', get_string('config_additional_teacher_location','block_module_info'));
-        $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_office_hours', get_string('config_additional_teacher_office_hours','block_module_info'));
         $teacherarray[] = $mform->createElement('hidden', 'additionalteacherid', 0);
         
         $teacherno = sizeof($this->block->config->additional_teacher_name); 
