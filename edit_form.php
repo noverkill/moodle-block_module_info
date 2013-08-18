@@ -73,12 +73,14 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('header', 'configheader', get_string('teaching_header', 'block_module_info'));
         
         // Module owner heading
-        $headings_options = array(get_string('teacher_headings_options_not_configured', 'block_module_info'));
+        $headings_options = array(get_string('custom_teacher_heading', 'block_module_info'));
         $headings = get_config('block_module_info', 'convenor_role_name_options');
         if(!empty($headings) && strlen($headings) > 0) {
-        	$headings_options = explode("\r\n", $headings);
+        	$headings_options = array_merge($headings_options, explode("\r\n", $headings));
         }
+        
         $mform->addElement('select', 'config_module_owner_heading', get_string('config_module_owner_heading', 'block_module_info'), $headings_options);
+        $mform->addElement('text', 'config_custom_teacher_heading', get_string('config_custom_teacher_heading', 'block_module_info'));
         
         // Module owner property display options
         // What to display
@@ -137,20 +139,19 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('header', 'configheader', get_string('additional_teachers_header', 'block_module_info'));
         
         // Additional teachers heading
-        $headings_options = array();
+        $headings_options = array(get_string('no_teacher_heading', 'block_module_info'), get_string('custom_teacher_heading', 'block_module_info'));;
         $headings = get_config('block_module_info', 'additional_teacher_role_name_options');
         
         if(!empty($headings) && strlen($headings) > 0) {
-        	$headings_options = explode("\r\n", $headings);
+        	$headings_options = array_merge($headings_options, explode("\r\n", $headings));
         } 
-        
-        array_unshift($headings_options, get_string('hide_additional_teachers_heading', 'block_module_info'));
         
         $mform->addElement('select', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'), $headings_options);
         
+        $mform->addElement('text', 'config_custom_additional_teachers_heading', get_string('config_custom_additional_teachers_heading','block_module_info'));
+        
         $teacherarray = array();
         $teacherarray[] = $mform->createElement('header', '', get_string('config_additional_teacher','block_module_info').' {no}');
-        $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_name', get_string('config_additional_teacher_name','block_module_info'));
         $teacherarray[] = $mform->createElement('text', 'config_additional_teacher_email', get_string('config_additional_teacher_email','block_module_info'));
         
         // Additional teacher display options are the same as those for the module convenor
@@ -166,7 +167,7 @@ class block_module_info_edit_form extends block_edit_form {
         
         $teacherarray[] = $mform->createElement('hidden', 'additionalteacherid', 0);
         
-        $teacherno = sizeof($this->block->config->additional_teacher_name); 
+        $teacherno = sizeof($this->block->config->additional_teacher_email); 
         $teacherno += 1;
         
         // No settings options specified for now...
@@ -238,7 +239,6 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->setDefault('config_htmlcontent',array('text'=>$defaulthtml, 'format'=>FORMAT_HTML));
         $mform->setType('config_htmlcontent', PARAM_RAW); // XSS is prevented when printing the block contents and serving files
 
-
         //$link = new moodle_url('/course/view.php', array('id' => $this->page->course->id, 'sesskey' => sesskey(),
         //    'bui_editid' => $this->block->instance->id, 'action' => 'reset'));
 
@@ -259,19 +259,15 @@ class block_module_info_edit_form extends block_edit_form {
         
         if($data != null) {
             // If an additional teacher's name is blank then remove this element from the array
-            $names = $data->config_additional_teacher_name;
+            $names = $data->config_additional_teacher_email;
             foreach($names as $key=>$value) {
                 if(strlen($value) == 0 || $value == NULL) {
-                    unset($data->config_additional_teacher_name[$key]);
                     unset($data->config_additional_teacher_email[$key]);
                     unset($data->config_additional_teacher_location[$key]);
                     unset($data->config_additional_teacher_office_hours[$key]);
                 }
             }
-            $data->config_additional_teacher_name = array_values($data->config_additional_teacher_name);
             $data->config_additional_teacher_email = array_values($data->config_additional_teacher_email);
-            $data->config_additional_teacher_location = array_values($data->config_additional_teacher_location);
-            $data->config_additional_teacher_office_hours = array_values($data->config_additional_teacher_office_hours);
             
             // Any empty additional teaching sessions also need to be removed
             $names = $data->config_additional_session_subheading;
