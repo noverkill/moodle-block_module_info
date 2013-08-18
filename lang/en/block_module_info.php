@@ -104,7 +104,9 @@
     // Teaching
     $string['teaching_header'] = 'Teaching';
     
-    $string['teacher_headings_options_not_configured'] = 'Headings options not configured';
+    $string['no_teacher_heading'] = 'None';
+    $string['custom_teacher_heading'] = 'Custom';
+    $string['config_custom_teacher_heading'] = 'Custom heading';
     
     $string['location'] = 'Location';
     $string['officehours'] = 'Office hours';
@@ -123,8 +125,8 @@
     
     // Additional teachers
     $string['additional_teachers_header'] = 'Additional teachers';
-    $string['hide_additional_teachers_heading'] = 'None';
-    $string['noadditionalteachersavailable'] = 'No additonal teachers configured';
+    
+    $string['config_custom_additional_teachers_heading'] = 'Custom heading';
 
     $string['config_additional_teachers_heading'] = 'Additional teachers heading';
     $string['config_additional_teachers_heading_default'] = 'e.g. GTAs, TAs';
