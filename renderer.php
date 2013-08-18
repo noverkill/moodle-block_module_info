@@ -173,10 +173,15 @@ class block_module_info_renderer extends plugin_renderer_base {
             
             $result .= html_writer::start_tag('div', array('id' => 'convenor'));
             
-            $headings_options = array(get_string('teacher_headings_options_not_configured', 'block_module_info'));
+            $headings_options = array(get_string('custom_teacher_heading', 'block_module_info'));
             $headings = get_config('block_module_info', 'convenor_role_name_options');
             if(!empty($headings) && strlen($headings) > 0) {
-                $headings_options = explode("\r\n", $headings);
+            	$headings_options = array_merge($headings_options, explode("\r\n", $headings));
+            }
+        
+            // Set the custom heading if there is one.
+            if(!empty($this->data->block_config->custom_teacher_heading)) {
+                $headings_options[0] = $this->data->block_config->custom_teacher_heading;
             }
             
             $result .= print_collapsible_region_start('convenor-heading', 'modinfo-viewlet-convenor', $headings_options[$this->data->block_config->module_owner_heading], 'modinfo-convenor', false, true);
@@ -209,6 +214,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                     $result .= get_string('location', 'block_module_info').': '.s($this->data->convenor_location);
                     $result .= html_writer::end_tag('div');
                 }
+                
                 // Office hours:
                 if(in_array('officehours', $display_options) && $this->data->convenor_office_hours) {
                     $result .= html_writer::start_tag('div', array('class'=>'convenor-office-hours'));
@@ -296,10 +302,17 @@ class block_module_info_renderer extends plugin_renderer_base {
         $display_additional_teachers_heading = ($this->data->block_config->additional_teachers_heading > 0); 
         
         if($display_additional_teachers_heading) {
+            $headings_options = array(get_string('no_teacher_heading', 'block_module_info'), get_string('custom_teacher_heading', 'block_module_info'));;
             $headings = get_config('block_module_info', 'additional_teacher_role_name_options');
+            
             if(!empty($headings) && strlen($headings) > 0) {
-                $headings_options = explode("\r\n", $headings);
-            }
+            	$headings_options = array_merge($headings_options, explode("\r\n", $headings));
+            	
+            	// Set the custom heading if there is one.
+            	if(!empty($this->data->block_config->custom_additional_teachers_heading)) {
+            	    $headings_options[1] = $this->data->block_config->custom_additional_teachers_heading;
+            	}
+            } 
             $result .= print_collapsible_region_start('additional-teachers-heading', 'modinfo-viewlet-additional-teachers', $headings_options[$this->data->block_config->additional_teachers_heading], 'modinfo-teachers', false, true);
         }
         
@@ -318,28 +331,18 @@ class block_module_info_renderer extends plugin_renderer_base {
                         $result .= $OUTPUT->user_picture($thisteacher, array('size' => $size, 'class'=>'additional-teacher-profile-pic'));
                     }
             
-                    // Name:       
-                    $result .= html_writer::tag('div', fullname($thisteacher, true), array('class'=>'additional-teacher-name'));
+                    // Name:
+                    if(in_array('name', $display_options) && $thisteacher->firstname && $thisteacher->lastname) {      
+                        $result .= html_writer::tag('div', fullname($thisteacher, true), array('class'=>'additional-teacher-name'));
+                    }
              
                     // Email address:
-                    $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-email'));
-                    $result .= obfuscate_mailto($thisteacher->email, '');
-                    $result .= html_writer::end_tag('div');
+                    if(in_array('email', $display_options) && $thisteacher->email) {
+                        $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-email'));
+                        $result .= obfuscate_mailto($thisteacher->email, '');
+                        $result .= html_writer::end_tag('div');
+                    }
             
-                    // Location:
-                    if($this->data->block_config->additional_teacher_location[$key]) {
-                        $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-location'));
-                        $result .= get_string('location', 'block_module_info').': '.s($this->data->block_config->additional_teacher_location[$key]);
-                        $result .= html_writer::end_tag('div');
-                    }
-                    
-                    // Office hours:
-                    if($this->data->block_config->additional_teacher_office_hours[$key]) {
-                        $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-office-hours'));
-                        $result .= get_string('officehours', 'block_module_info').': '.s($this->data->block_config->additional_teacher_office_hours[$key]);
-                        $result .= html_writer::end_tag('div');
-                    }
-                    
                     // Standard fields:
                     if(in_array('icq', $display_options) && $thisteacher->icq) {
                         $result .= html_writer::tag('div', get_string('icqnumber').': <a href=\"http://web.icq.com/wwp?uin=\"'.urlencode($thisteacher->icq).'\">'.s($thisteacher->icq).' <img src=\"http://web.icq.com/whitepages/online?icq=\"'.urlencode($thisteacher->icq).'&amp;img=5\" alt=\"\" /></a>', array('class'=>'additional-teacher-icq'));
