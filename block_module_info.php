@@ -50,7 +50,7 @@ class block_module_info extends block_base {
     }
 
     public function instance_allow_multiple() {
-        return true;
+        return false;
     }
     
     // The PHP tag and the curly bracket for the class definition 
