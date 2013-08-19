@@ -30,6 +30,7 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('text', 'config_title', get_string('config_title', 'block_module_info'));
         $mform->setDefault('config_title', get_string('module_info', 'block_module_info'));
         $mform->setType('config_title', PARAM_MULTILANG);
+        $mform->addHelpButton('config_title','config_title','block_module_info');
 
         $module_code = array();
         $module_code[] = & $mform->createElement('advcheckbox', 'config_module_code', get_string('config_module_code', 'block_module_info'), null, array('group'=>1));
@@ -80,9 +81,10 @@ class block_module_info_edit_form extends block_edit_form {
         }
         
         $mform->addElement('select', 'config_module_owner_heading', get_string('config_module_owner_heading', 'block_module_info'), $headings_options);
+        $mform->addHelpButton('config_module_owner_heading','config_module_owner_heading','block_module_info');
         $mform->addElement('text', 'config_custom_teacher_heading', get_string('config_custom_teacher_heading', 'block_module_info'));
         $mform->disabledIf('config_custom_teacher_heading','config_module_owner_heading','neq',0);
-        
+                
         // Module owner property display options
         // What to display
         $possible_options = array('name'=>get_string('fullname'));
@@ -148,7 +150,7 @@ class block_module_info_edit_form extends block_edit_form {
         } 
         
         $mform->addElement('select', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'), $headings_options);
-        
+        $mform->addHelpButton('config_additional_teachers_heading','config_additional_teachers_heading','block_module_info');
         $mform->addElement('text', 'config_custom_additional_teachers_heading', get_string('config_custom_additional_teachers_heading','block_module_info'));
         $mform->disabledIf('config_custom_additional_teachers_heading','config_additional_teachers_heading','neq',1);
         
