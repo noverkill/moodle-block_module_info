@@ -38,7 +38,6 @@ class block_module_info extends block_base {
         $defaulthtml = get_config('block_module_info', 'defaulthtml');
         $this->config->htmlcontent['text'] = $defaulthtml;
         $this->config->html = true;
-    
     }
 
     public function applicable_formats() {
@@ -82,7 +81,7 @@ class block_module_info extends block_base {
         // Links to documents
         $output_buffer .= $renderer->get_documentinfo_output();
         
-        // Display legacy HTML
+        // Display legacy HTML - don't move the code to the renderer as we want to remove it eventually.
         $filteropt = new stdClass;
         $filteropt->overflowdiv = true;
         if ($this->content_is_trusted()) {
@@ -90,8 +89,8 @@ class block_module_info extends block_base {
             $filteropt->noclean = true;
         }
         
-        if (! empty($this->config->html)) {
-             
+        if (!empty($this->config->html)) {
+            $output_buffer .= print_collapsible_region_start('legacyhtml-heading', 'modinfo-viewlet-legacyhtml', get_string('legacy_header', 'block_module_info'), 'modinfo-legacyhtml', true, true);
             if (!empty($this->config->htmlcontent['text'])) {
                 // rewrite url
                 $this->config->htmlcontent['text'] = file_rewrite_pluginfile_urls($this->config->htmlcontent['text'], 'pluginfile.php', $this->context->id, 'block_module_info', 'content', NULL);
@@ -99,6 +98,7 @@ class block_module_info extends block_base {
             } else {
                 $output_buffer .= get_config('block_module_info', 'defaulthtml');
             }// if (! empty($this->config->htmlcontent))
+            $output_buffer .= print_collapsible_region_end(true);
         }
         
         // The output buffer is now complete so copy this to the content
