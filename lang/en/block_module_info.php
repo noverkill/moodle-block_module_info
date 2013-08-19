@@ -81,7 +81,8 @@
 	// Core info
 	$string['core_info_header'] = 'Core info';
 	$string['override_setting'] = 'Enter custom setting here';
-    $string['config_title'] = 'Title';
+    $string['config_title'] = 'Block title';
+    $string['config_title_help'] = 'This is the title that will appear at the top of the block.';
     $string['config_module_code'] = 'Custom Module Code';
     $string['config_module_code_override'] = 'Custom Code';
     $string['config_module_level'] = 'Custom Module Level';
@@ -115,6 +116,7 @@
     $string['small'] = 'Small';
     $string['large'] = 'Large';
     $string['config_module_owner_heading'] = 'Module Owner heading';
+    $string['config_module_owner_heading_help'] = 'Schools and faculties have their own name to describe the module owner. Select from the predefined options or select \'Custom\' to enter your own.';
     $string['config_display_convenor_options'] = 'Module owner display options';
     $string['config_convenor_name_override'] = 'Module Owner name override';
     $string['config_convenor_email_override'] = 'Module owner email override';
@@ -126,9 +128,10 @@
     // Additional teachers
     $string['additional_teachers_header'] = 'Additional teachers';
     
-    $string['config_custom_additional_teachers_heading'] = 'Custom heading';
-
     $string['config_additional_teachers_heading'] = 'Additional teachers heading';
+    $string['config_additional_teachers_heading_help'] = 'Schools and faculties have their own name to describe additional teachers. Select from the predefined options or select \'Custom\' to enter your own.';
+    $string['config_custom_additional_teachers_heading'] = 'Custom heading';
+    
     $string['config_additional_teachers_heading_default'] = 'e.g. GTAs, TAs';
     $string['config_display_additional_teacher_options'] = 'Additional teacher display options';
     
