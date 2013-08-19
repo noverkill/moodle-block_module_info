@@ -548,7 +548,6 @@ class block_module_info_renderer extends plugin_renderer_base {
         require_once($CFG->libdir . '/filelib.php');
  
         $result = '';
-
         
         // Now build HTML
         if (! empty ($this->data->module_code)) {
