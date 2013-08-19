@@ -81,6 +81,7 @@ class block_module_info_edit_form extends block_edit_form {
         
         $mform->addElement('select', 'config_module_owner_heading', get_string('config_module_owner_heading', 'block_module_info'), $headings_options);
         $mform->addElement('text', 'config_custom_teacher_heading', get_string('config_custom_teacher_heading', 'block_module_info'));
+        $mform->disabledIf('config_custom_teacher_heading','config_module_owner_heading','neq',0);
         
         // Module owner property display options
         // What to display
@@ -149,6 +150,7 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('select', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'), $headings_options);
         
         $mform->addElement('text', 'config_custom_additional_teachers_heading', get_string('config_custom_additional_teachers_heading','block_module_info'));
+        $mform->disabledIf('config_custom_additional_teachers_heading','config_additional_teachers_heading','neq',1);
         
         $teacherarray = array();
         $teacherarray[] = $mform->createElement('header', '', get_string('config_additional_teacher','block_module_info').' {no}');
