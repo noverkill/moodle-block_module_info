@@ -156,7 +156,7 @@
     $string['documents_header'] = 'Documents';
    
     // Legacy
-    $string['legacy_header'] = 'Legacy';
+    $string['legacy_header'] = 'Legacy HTML!';
     
     $string['convenor_not_found'] = ' not found in QMplus database';
     
