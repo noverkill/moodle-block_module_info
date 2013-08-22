@@ -214,7 +214,7 @@ class block_module_info_edit_form extends block_edit_form {
         
         global $COURSE;
         
-        $fileoptions = array('subdirs'=>1,
+        $fileoptions = array('subdirs'=>0,
         		'maxbytes'=>$COURSE->maxbytes,
         		'accepted_types'=>'*',
         		'return_types'=>FILE_INTERNAL);
