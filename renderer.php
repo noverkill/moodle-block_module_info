@@ -153,9 +153,29 @@ class block_module_info_renderer extends plugin_renderer_base {
             $this->data->module_convenor_email = $this->data->block_config->module_convenor_override;
         }
         
-        // Override location and Office hours
-        $this->data->convenor_location = $this->data->block_config->convenor_location_override;
-        $this->data->convenor_office_hours = $this->data->block_config->convenor_office_hours_override; 
+        if(empty($this->data->block_config->module_owner_heading)) {
+            $this->data->block_config->module_owner_heading = 0;
+        }
+        
+        if(empty($this->data->block_config->display_convenor_options)) {
+            $this->data->block_config->display_convenor_options = array();
+        }
+        
+        if(empty($this->data->block_config->additional_teachers_heading)) {
+            $this->data->block_config->additional_teachers_heading = 0;
+        }
+        
+        if(empty($this->data->block_config->enable_personal_timetable_link)) {
+            $this->data->block_config->enable_personal_timetable_link = true;
+        }
+        
+        if(empty($this->data->block_config->enable_module_timetable_link)) {
+            $this->data->block_config->enable_module_timetable_link = true;
+        }
+        
+        if(empty($this->data->block_config->additional_session_subheading)) {
+            $this->data->block_config->additional_session_subheading = array();
+        }
         
         $result = true;
         
