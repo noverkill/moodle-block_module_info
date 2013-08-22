@@ -158,7 +158,11 @@ class block_module_info_renderer extends plugin_renderer_base {
         }
         
         if(empty($this->data->block_config->display_convenor_options)) {
-            $this->data->block_config->display_convenor_options = array();
+            $this->data->block_config->display_convenor_options = array('name','profilepic','email');
+        }
+        
+        if(empty($this->data->block_config->convenor_profilepic_size)) {
+            $this->data->block_config->convenor_profilepic_size = 'small';
         }
         
         if(empty($this->data->block_config->additional_teachers_heading)) {
@@ -222,7 +226,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                 }
          
                 // Email address:
-                if(in_array('name', $display_options)) {
+                if(in_array('email', $display_options)) {
                     $result .= html_writer::start_tag('div', array('class'=>'convenor-email'));
                     $result .= obfuscate_mailto($convenor->email, '');
                     $result .= html_writer::end_tag('div');
