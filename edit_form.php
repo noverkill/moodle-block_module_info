@@ -171,8 +171,12 @@ class block_module_info_edit_form extends block_edit_form {
         
         $teacherarray[] = $mform->createElement('hidden', 'additionalteacherid', 0);
         
-        $teacherno = sizeof($this->block->config->additional_teacher_email); 
-        $teacherno += 1;
+        $teacherno = 1;
+        
+        if(!empty($this->block->config->additional_teacher_email)) {
+            $teacherno = sizeof($this->block->config->additional_teacher_email); 
+            $teacherno += 1;
+        }
         
         // No settings options specified for now...
         $repeateloptions = array();
@@ -198,8 +202,12 @@ class block_module_info_edit_form extends block_edit_form {
         $sessionarray[] = $mform->createElement('text', 'config_additional_session_location', get_string('config_additional_session_location','block_module_info'));
         $sessionarray[] = $mform->createElement('hidden', 'additionalsessionid', 0);
         
-        $sessionno = sizeof($this->block->config->additional_session_subheading); 
-        $sessionno += 1;
+        $sessionno = 1;
+        
+        if(!empty($this->block->config->additional_session_subheading)) {
+            $sessionno = sizeof($this->block->config->additional_session_subheading); 
+            $sessionno += 1;
+        }
         
         // No settings options specified for now...
         $repeateloptions = array();
