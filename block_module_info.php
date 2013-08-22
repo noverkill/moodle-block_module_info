@@ -91,7 +91,7 @@ class block_module_info extends block_base {
         
         if (!empty($this->config->html)) {
             $output_buffer .= print_collapsible_region_start('legacyhtml-heading', 'modinfo-viewlet-legacyhtml', get_string('legacy_header', 'block_module_info'), 'modinfo-legacyhtml', true, true);
-            if (!empty($this->config->htmlcontent['text'])) {
+            if (!empty($this->config->htmlcontent['text']) && !empty($this->config->htmlcontent['format'])) {
                 // rewrite url
                 $this->config->htmlcontent['text'] = file_rewrite_pluginfile_urls($this->config->htmlcontent['text'], 'pluginfile.php', $this->context->id, 'block_module_info', 'content', NULL);
                 $output_buffer .= format_text($this->config->htmlcontent['text'], $this->config->htmlcontent['format'], $filteropt);
