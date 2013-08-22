@@ -364,3 +364,40 @@ class module_info_data_connection{
         return $toprow;
     }
 }
+
+ 
+/**
+ * Serves the documents.
+ *
+ * @param object $course
+ * @param object $cm
+ * @param object $context
+ * @param string $filearea
+ * @param array $args
+ * @param bool $forcedownload
+ * @return bool false if file not found, does not return if found - justsend the file
+ */
+function block_module_info_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
+    global $CFG, $DB;
+
+    if ($context->contextlevel != CONTEXT_COURSE) {
+        return false;
+    }
+
+    require_course_login($course, true, $cm);
+
+    $fileareas = array('documents');
+    if (!in_array($filearea, $fileareas)) {
+        return false;
+    }
+
+    $fs = get_file_storage();
+    $relativepath = implode('/', $args);
+    $fullpath = "/$context->id/block_module_info/$filearea/$relativepath";
+    if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
+        return false;
+    }
+ 
+   // finally send the file
+   send_stored_file($file, 0, 0, true); // download MUST be forced - security!
+}
