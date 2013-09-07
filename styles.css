@@ -1,0 +1,21 @@
+/** General display rules **/
+.block_module_info #modinfo-viewlet-additional-teachers_caption,#modinfo-viewlet-schedule_caption,#modinfo-viewlet-documents_caption,#modinfo-viewlet-convenor_caption {
+	font-weight: bold;
+	font-size: 123.1%;
+	padding-top: 7px;
+	padding-bottom: 5px;	
+}
+
+.block_module_info #modinfo-viewlet-legacyhtml_caption {
+	font-weight: bold;
+	font-size: 123.1%;
+    padding-top: 7px;
+    padding-bottom: 5px;
+    color: #FF0000;
+}
+
+
+
+
+
+
