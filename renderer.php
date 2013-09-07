@@ -304,10 +304,8 @@ class block_module_info_renderer extends plugin_renderer_base {
         
             }
             
-            // Display section heading if necessary
-            if($this->data->block_config->additional_teachers_heading > 0) {
-                $result .= print_collapsible_region_end(true);
-            }
+            // Close collapisble heading DIV
+            $result .= print_collapsible_region_end(true);
             
             $result .= html_writer::end_tag('div');
         }
@@ -433,7 +431,10 @@ class block_module_info_renderer extends plugin_renderer_base {
         }
         
         $result .= html_writer::end_tag('div');
-        $result .= print_collapsible_region_end(true);
+        
+        if($display_additional_teachers_heading) {
+            $result .= print_collapsible_region_end(true);
+        }
         
         return $result;
     }
