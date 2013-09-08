@@ -4,7 +4,8 @@ General display rules
 
 .block_module_info .collapsibleregioncaption img {
 	margin-right: 5px;
-	margin-left: 5px;}
+	margin-left: 5px;
+}
 
 .block_module_info div.collapsibleregion {border-bottom: 1px solid white;}
 
@@ -14,6 +15,7 @@ Module code, level, &c.
 .block_module_info p.module_specific {
 	padding-bottom: 2px;
 	border-bottom: 1px solid #dad0e1;
+	margin-bottom: 5px;
 }
 
 /**********************************
@@ -29,6 +31,10 @@ Section headings
 
 .block_module_info .collapsibleregioncaption a {
 	color: #FFFFFF;
+}
+
+.block_module_info .collapsibleregioncaption img {
+	vertical-align: 0;
 }
 
 /**********************************
