@@ -69,11 +69,8 @@ class block_module_info extends block_base {
         // Display module info
         $output_buffer .= $renderer->get_moduleinfo_output();
         
-        // Display convenor info
-        $output_buffer .= $renderer->get_convenorinfo_output();
-        
-        // Display additional teacher info
-        $output_buffer .= $renderer->get_additionteacherinfo_output();
+        // Display Teaching info
+        $output_buffer .= $renderer->get_teaching_output();
         
         // Display Schedule info
         $output_buffer .= $renderer->get_sessioninfo_output();

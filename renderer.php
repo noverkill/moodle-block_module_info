@@ -186,6 +186,20 @@ class block_module_info_renderer extends plugin_renderer_base {
         return $result;
     }
     
+    public function get_teaching_output() {
+        $result = '';
+        
+        $result .= mod_info_collapsible_region_start('teaching-heading', 'modinfo-viewlet-teaching', get_string('teaching_header', 'block_module_info'), false, false, true);
+        
+        $result .= $this->get_convenorinfo_output();
+        
+        $result .= $this->get_additionteacherinfo_output();
+        
+        $result .= mod_info_collapsible_region_end(true);
+        
+        return $result;
+    }
+    
     public function get_convenorinfo_output() {
         global $DB, $OUTPUT;
         
@@ -195,7 +209,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         // Mug shot:
         if (! empty($this->data->block_config->display_convenor) && ! empty ($this->data->module_convenor_email)) {
             
-            $result .= html_writer::start_tag('div', array('id' => 'convenor'));
+            $result .= html_writer::start_tag('div', array('id' => 'convenor-pane'));
             
             $headings_options = array(get_string('custom_teacher_heading', 'block_module_info'));
             $headings = get_config('block_module_info', 'convenor_role_name_options');
@@ -208,7 +222,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $headings_options[0] = $this->data->block_config->custom_teacher_heading;
             }
             
-            $result .= mod_info_collapsible_region_start('convenor-heading', 'modinfo-viewlet-convenor', $headings_options[$this->data->block_config->module_owner_heading], 'modinfo-convenor', false, true);
+            $result .= html_writer::tag('h2', $headings_options[$this->data->block_config->module_owner_heading], array('class'=>'convenor-heading'));
              
             // NOTE: the following logic assumes that users can't change their email addresses...
             if($convenor = $DB->get_record('user', array('email' => $this->data->module_convenor_email))) {
@@ -304,9 +318,6 @@ class block_module_info_renderer extends plugin_renderer_base {
         
             }
             
-            // Close collapisble heading DIV
-            $result .= mod_info_collapsible_region_end(true);
-            
             $result .= html_writer::end_tag('div');
         }
         
@@ -335,7 +346,7 @@ class block_module_info_renderer extends plugin_renderer_base {
             	    $headings_options[1] = $this->data->block_config->custom_additional_teachers_heading;
             	}
             } 
-            $result .= mod_info_collapsible_region_start('additional-teachers-heading', 'modinfo-viewlet-additional-teachers', $headings_options[$this->data->block_config->additional_teachers_heading], 'modinfo-teachers', false, true);
+            $result .= html_writer::tag('h2', $headings_options[$this->data->block_config->additional_teachers_heading], array('class'=>'additional-teachers-heading'));     
         }
         
         // First, check to see if there is any additional teacher information
@@ -431,10 +442,6 @@ class block_module_info_renderer extends plugin_renderer_base {
         }
         
         $result .= html_writer::end_tag('div');
-        
-        if($display_additional_teachers_heading) {
-            $result .= mod_info_collapsible_region_end(true);
-        }
         
         return $result;
     }
