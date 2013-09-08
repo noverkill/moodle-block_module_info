@@ -14,10 +14,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Init private files treeview
+ * Init document area treeview
  *
- * @package    block_private_files
- * @copyright  2009 Petr Skoda (http://skodak.org)
+ * @package    block_module_info
+ * @copyright  2013 Queen Mary, University of London
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
