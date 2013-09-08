@@ -65,6 +65,10 @@ Teaching sections
 	padding-top: 5px;
 }
 
+.block_module_info img.additional-teacher-profile-pic {
+	border: 5px solid #fff;
+}
+
 /* 
 IDW 08/09/2013
 Don't do anything special with the legacy HTML heading for now...
