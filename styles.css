@@ -22,7 +22,7 @@ Module code, level, &c.
 Section headings
 **********************************/
 .block_module_info .collapsibleregioncaption {
-	background-color:#444;
+	background-color: #444;
 	font-weight: bold;
     font-size: 123.1%;
     padding-top: 7px;
@@ -40,8 +40,8 @@ Section headings
 /**********************************
 Section contents
 **********************************/
-.block_module_info div#schedule-pane, div#documents-pane, div#modinfo-viewlet-convenor_inner, div#additional-teachers-pane {
-    background-color:#FFFFFF;
+.block_module_info div#schedule-pane, div#documents-pane, div#modinfo-viewlet-teaching_inner {
+    background-color: #FFFFFF;
     padding-left: 5px;    
 }
 
@@ -49,6 +49,21 @@ Section contents
 	border: 0px;
 }
 
+/**********************************
+Teaching sections
+**********************************/
+.block_module_info h2.convenor-heading, h2.additional-teachers-heading {
+    background-color: #cbc0d9;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 5px;
+    padding: 4px 0px 4px 3px;
+}
+
+.block_module_info div#convenor-pane, div#additional-teachers {
+	padding-top: 5px;
+}
 
 /* 
 IDW 08/09/2013
