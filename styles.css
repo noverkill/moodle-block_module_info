@@ -1,19 +1,31 @@
-/** General display rules **/
-.block_module_info #modinfo-viewlet-additional-teachers_caption,#modinfo-viewlet-schedule_caption,#modinfo-viewlet-documents_caption,#modinfo-viewlet-convenor_caption {
+/**********************************
+General display rules
+**********************************/
+
+.block_module_info .collapsibleregioncaption img {
+	margin-right: 5px;
+	margin-left: 5px;}
+
+.block_module_info div.collapsibleregion {border-bottom: 1px solid white;}
+
+/**********************************
+Section headings
+**********************************/
+.block_module_info .collapsibleregioncaption {
+	background-color:#444;
 	font-weight: bold;
-	font-size: 123.1%;
-	padding-top: 7px;
-	padding-bottom: 5px;	
+    font-size: 123.1%;
+    padding-top: 7px;
+    padding-bottom: 5px;    
 }
 
-.block_module_info #modinfo-viewlet-legacyhtml_caption {
-	font-weight: bold;
-	font-size: 123.1%;
-    padding-top: 7px;
-    padding-bottom: 5px;
+.block_module_info .collapsibleregioncaption a {
+	color: #FFFFFF;
+}
+
+.block_module_info #modinfo-viewlet-legacyhtml_caption_anchor {
     color: #FF0000;
 }
-
 
 
 

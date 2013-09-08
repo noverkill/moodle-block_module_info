@@ -365,6 +365,66 @@ class module_info_data_connection{
     }
 }
 
+/**
+ * Print (or return) the start of a collapsible region, that has a caption that can
+ * be clicked to expand or collapse the region. If JavaScript is off, then the region
+ * will always be expanded.
+ *
+ * @param string $classes class names added to the div that is output.
+ * @param string $id id added to the div that is output. Must not be blank.
+ * @param string $caption text displayed at the top. Clicking on this will cause the region to expand or contract.
+ * @param string $userpref the name of the user preference that stores the user's preferred default state.
+ *      (May be blank if you do not wish the state to be persisted.
+ * @param boolean $default Initial collapsed state to use if the user_preference it not set.
+ * @param boolean $return if true, return the HTML as a string, rather than printing it.
+ * @return string|void if $return is false, returns nothing, otherwise returns a string of HTML.
+ */
+function mod_info_collapsible_region_start($classes, $id, $caption, $userpref = '', $default = false, $return = false) {
+    global $CFG, $PAGE, $OUTPUT;
+
+    // Work out the initial state.
+    if (!empty($userpref) and is_string($userpref)) {
+        user_preference_allow_ajax_update($userpref, PARAM_BOOL);
+        $collapsed = get_user_preferences($userpref, $default);
+    } else {
+        $collapsed = $default;
+        $userpref = false;
+    }
+
+    if ($collapsed) {
+        $classes .= ' collapsed';
+    }
+
+    $output = '';
+    $output .= '<div id="' . $id . '" class="collapsibleregion ' . $classes . '">';
+    $output .= '<div id="' . $id . '_sizer">';
+    $output .= '<div id="' . $id . '_caption" class="collapsibleregioncaption">';
+    $output .= '<a href="#" id="' . $id . '_caption_anchor">' . $caption . '</a>';
+    $output .= '</div><div id="' . $id . '_inner" class="collapsibleregioninner">';
+    $PAGE->requires->js_init_call('M.block_module_info.init_collapsible_region', array($id, $userpref, get_string('clicktohideshow')));
+
+    if ($return) {
+        return $output;
+    } else {
+        echo $output;
+    }
+}
+
+/**
+ * Close a region started with print_collapsible_region_start.
+ *
+ * @param boolean $return if true, return the HTML as a string, rather than printing it.
+ * @return string|void if $return is false, returns nothing, otherwise returns a string of HTML.
+ */
+function mod_info_collapsible_region_end($return = false) {
+    $output = '</div></div></div>';
+
+    if ($return) {
+        return $output;
+    } else {
+        echo $output;
+    }
+}
  
 /**
  * Serves the documents.

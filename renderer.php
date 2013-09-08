@@ -208,7 +208,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $headings_options[0] = $this->data->block_config->custom_teacher_heading;
             }
             
-            $result .= print_collapsible_region_start('convenor-heading', 'modinfo-viewlet-convenor', $headings_options[$this->data->block_config->module_owner_heading], 'modinfo-convenor', false, true);
+            $result .= mod_info_collapsible_region_start('convenor-heading', 'modinfo-viewlet-convenor', $headings_options[$this->data->block_config->module_owner_heading], 'modinfo-convenor', false, true);
              
             // NOTE: the following logic assumes that users can't change their email addresses...
             if($convenor = $DB->get_record('user', array('email' => $this->data->module_convenor_email))) {
@@ -304,10 +304,8 @@ class block_module_info_renderer extends plugin_renderer_base {
         
             }
             
-            // Display section heading if necessary
-            if($this->data->block_config->additional_teachers_heading > 0) {
-                $result .= print_collapsible_region_end(true);
-            }
+            // Close collapisble heading DIV
+            $result .= mod_info_collapsible_region_end(true);
             
             $result .= html_writer::end_tag('div');
         }
@@ -337,7 +335,7 @@ class block_module_info_renderer extends plugin_renderer_base {
             	    $headings_options[1] = $this->data->block_config->custom_additional_teachers_heading;
             	}
             } 
-            $result .= print_collapsible_region_start('additional-teachers-heading', 'modinfo-viewlet-additional-teachers', $headings_options[$this->data->block_config->additional_teachers_heading], 'modinfo-teachers', false, true);
+            $result .= mod_info_collapsible_region_start('additional-teachers-heading', 'modinfo-viewlet-additional-teachers', $headings_options[$this->data->block_config->additional_teachers_heading], 'modinfo-teachers', false, true);
         }
         
         // First, check to see if there is any additional teacher information
@@ -433,7 +431,10 @@ class block_module_info_renderer extends plugin_renderer_base {
         }
         
         $result .= html_writer::end_tag('div');
-        $result .= print_collapsible_region_end(true);
+        
+        if($display_additional_teachers_heading) {
+            $result .= mod_info_collapsible_region_end(true);
+        }
         
         return $result;
     }
@@ -515,7 +516,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         $result = '';
         
         // Display section heading
-        $result .= print_collapsible_region_start('schedule-heading', 'modinfo-viewlet-schedule', get_string('schedule_header', 'block_module_info'), 'modinfo-schedule', false, true);
+        $result .= mod_info_collapsible_region_start('schedule-heading', 'modinfo-viewlet-schedule', get_string('schedule_header', 'block_module_info'), 'modinfo-schedule', false, true);
         $result .= html_writer::start_tag('div', array('id'=>'schedule_pane'));
         
         // First check to see if there is any session information
@@ -553,7 +554,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         }
         
         $result .= html_writer::end_tag('div');
-        $result .= print_collapsible_region_end(true);
+        $result .= mod_info_collapsible_region_end(true);
     
         return $result;
     }
@@ -654,7 +655,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $result = html_writer::start_tag('div', array('id'=>'documents'));
         
-        $result .= print_collapsible_region_start('documents-heading', 'modinfo-viewlet-documents', get_string('documents_header', 'block_module_info'), 'modinfo-documents', false, true);
+        $result .= mod_info_collapsible_region_start('documents-heading', 'modinfo-viewlet-documents', get_string('documents_header', 'block_module_info'), 'modinfo-documents', false, true);
         
         // Get the stored files
         $fs = get_file_storage();
@@ -677,7 +678,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         $result .= html_writer::end_tag('div');
         $result .= html_writer::end_tag('div');
         
-        $result .= print_collapsible_region_end(true);
+        $result .= mod_info_collapsible_region_end(true);
         return $result;
     }
 
