@@ -166,3 +166,7 @@
     $string['config_html'] = 'Display HTML';
     $string['config_htmlcontent'] = 'HTML Content';
     $string['reset'] = 'Reset HTML - cannot be undone';
+    
+    // Missing module
+    $string['missing_module'] = 'Cannot find module details. Please ensure \'Course ID\' is set correctly for this page or edit this block to set your own values for module code, level, &c.';
+    
