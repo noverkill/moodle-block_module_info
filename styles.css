@@ -9,6 +9,14 @@ General display rules
 .block_module_info div.collapsibleregion {border-bottom: 1px solid white;}
 
 /**********************************
+Module code, level, &c.
+**********************************/
+.block_module_info p.module_specific {
+	padding-bottom: 2px;
+	border-bottom: 1px solid #dad0e1;
+}
+
+/**********************************
 Section headings
 **********************************/
 .block_module_info .collapsibleregioncaption {
@@ -23,9 +31,26 @@ Section headings
 	color: #FFFFFF;
 }
 
+/**********************************
+Section contents
+**********************************/
+.block_module_info div#schedule-pane, div#documents-pane, div#modinfo-viewlet-convenor_inner, div#additional-teachers-pane {
+    background-color:#FFFFFF;
+    padding-left: 5px;    
+}
+
+.block_module_info div.generalbox {
+	border: 0px;
+}
+
+
+/* 
+IDW 08/09/2013
+Don't do anything special with the legacy HTML heading for now...
+
 .block_module_info #modinfo-viewlet-legacyhtml_caption_anchor {
     color: #FF0000;
-}
+}*/
 
 
 

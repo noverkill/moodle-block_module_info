@@ -340,7 +340,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         // First, check to see if there is any additional teacher information
         if (! empty($this->data->block_config->additional_teacher_email) ) {
-            $result .= html_writer::start_tag('div', array('id'=>'additional_teachers_pane'));
+            $result .= html_writer::start_tag('div', array('id'=>'additional-teachers-pane'));
             // Display each additional teacher
             foreach($this->data->block_config->additional_teacher_email as $key=>$value) {
                 // NOTE: the following logic assumes that users can't change their email addresses...
@@ -517,7 +517,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         // Display section heading
         $result .= mod_info_collapsible_region_start('schedule-heading', 'modinfo-viewlet-schedule', get_string('schedule_header', 'block_module_info'), 'modinfo-schedule', false, true);
-        $result .= html_writer::start_tag('div', array('id'=>'schedule_pane'));
+        $result .= html_writer::start_tag('div', array('id'=>'schedule-pane'));
         
         // First check to see if there is any session information
         if (! empty($this->data->block_config->additional_session_subheading) || $this->data->block_config->enable_personal_timetable_link || $this->data->block_config->enable_module_timetable_link) {
@@ -576,32 +576,37 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         // Now build HTML
         if (! empty ($this->data->module_code)) {
-        	$result .= html_writer::start_tag('p');
+        	$result .= html_writer::start_tag('p', array('class'=>'module_specific'));
         	$result .= html_writer::tag('span', get_string( 'module_code', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_code);
         	$result .= html_writer::end_tag('p');
         }
         if (! empty ($this->data->module_level)) {
-        	$result .= html_writer::start_tag('p');
+        	$result .= html_writer::start_tag('p', array('class'=>'module_specific'));
         	$result .= html_writer::tag('span', get_string( 'module_level', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_level);
         	$result .= html_writer::end_tag('p');
         }
         if (! empty ($this->data->module_credit)) {
-        	$result .= html_writer::start_tag('p');
+        	$result .= html_writer::start_tag('p', array('class'=>'module_specific'));
         	$result .= html_writer::tag('span', get_string( 'module_credit', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_credit);
         	$result .= html_writer::end_tag('p');
         }
         if (! empty ($this->data->module_semester)) {
-        	$result .= html_writer::start_tag('p');
+        	$result .= html_writer::start_tag('p', array('class'=>'module_specific'));
         	$result .= html_writer::tag('span', get_string( 'module_semester', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_semester);
         	$result .= html_writer::end_tag('p');
+        }
+        
+        // If by this stage result is still empty then display a warning.
+        if(empty($result)) {
+            $result .= html_writer::tag('p', get_string( 'missing_module', 'block_module_info'), array('class'=>'missing_module'));
         }
         
         return $result;
