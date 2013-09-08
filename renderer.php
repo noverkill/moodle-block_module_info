@@ -576,28 +576,28 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         // Now build HTML
         if (! empty ($this->data->module_code)) {
-        	$result .= html_writer::start_tag('p');
+        	$result .= html_writer::start_tag('p', array('class'=>'module_specific'));
         	$result .= html_writer::tag('span', get_string( 'module_code', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_code);
         	$result .= html_writer::end_tag('p');
         }
         if (! empty ($this->data->module_level)) {
-        	$result .= html_writer::start_tag('p');
+        	$result .= html_writer::start_tag('p', array('class'=>'module_specific'));
         	$result .= html_writer::tag('span', get_string( 'module_level', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_level);
         	$result .= html_writer::end_tag('p');
         }
         if (! empty ($this->data->module_credit)) {
-        	$result .= html_writer::start_tag('p');
+        	$result .= html_writer::start_tag('p', array('class'=>'module_specific'));
         	$result .= html_writer::tag('span', get_string( 'module_credit', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_credit);
         	$result .= html_writer::end_tag('p');
         }
         if (! empty ($this->data->module_semester)) {
-        	$result .= html_writer::start_tag('p');
+        	$result .= html_writer::start_tag('p', array('class'=>'module_specific'));
         	$result .= html_writer::tag('span', get_string( 'module_semester', 'block_module_info' ).': ',
         			array('class'=>'module_info_title'));
         	$result .= html_writer::tag('strong', $this->data->module_semester);
