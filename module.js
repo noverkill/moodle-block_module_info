@@ -84,14 +84,14 @@ M.block_module_info.CollapsibleRegion = function(Y, id, userpref, strtooltip) {
     var height = this.div.get('offsetHeight');
     if (this.div.hasClass('collapsed')) {
         // Add the correct image and record the YUI node created in the process
-        this.icon = Y.Node.create('<img src="'+M.util.image_url('t/collapsed', 'moodle')+'" alt="" />');
+        this.icon = Y.Node.create('<img src="'+M.util.image_url('collapsed', 'block_module_info')+'" alt="" />');
         // Shrink the div as it is collapsed by default
         this.div.setStyle('height', caption.get('offsetHeight')+'px');
     } else {
         // Add the correct image and record the YUI node created in the process
-        this.icon = Y.Node.create('<img src="'+M.util.image_url('t/expanded', 'moodle')+'" alt="" />');
+        this.icon = Y.Node.create('<img src="'+M.util.image_url('expanded', 'block_module_info')+'" alt="" />');
     }
-    a.append(this.icon);
+    a.prepend(this.icon);
 
     // Create the animation.
     var animation = new Y.Anim({
@@ -106,9 +106,9 @@ M.block_module_info.CollapsibleRegion = function(Y, id, userpref, strtooltip) {
     animation.on('end', function() {
         this.div.toggleClass('collapsed');
         if (this.div.hasClass('collapsed')) {
-            this.icon.set('src', M.util.image_url('t/collapsed', 'moodle'));
+            this.icon.set('src', M.util.image_url('collapsed', 'block_module_info'));
         } else {
-            this.icon.set('src', M.util.image_url('t/expanded', 'moodle'));
+            this.icon.set('src', M.util.image_url('expanded', 'block_module_info'));
         }
     }, this);
 
