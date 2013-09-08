@@ -245,20 +245,6 @@ class block_module_info_renderer extends plugin_renderer_base {
                     $result .= obfuscate_mailto($convenor->email, '');
                     $result .= html_writer::end_tag('div');
                 }
-        
-                // Location:
-                if(in_array('location', $display_options) && $this->data->convenor_location) {
-                    $result .= html_writer::start_tag('div', array('class'=>'convenor-location'));
-                    $result .= get_string('location', 'block_module_info').': '.s($this->data->convenor_location);
-                    $result .= html_writer::end_tag('div');
-                }
-                
-                // Office hours:
-                if(in_array('officehours', $display_options) && $this->data->convenor_office_hours) {
-                    $result .= html_writer::start_tag('div', array('class'=>'convenor-office-hours'));
-                    $result .= get_string('officehours', 'block_module_info').': '.s($this->data->convenor_office_hours);
-                    $result .= html_writer::end_tag('div');
-                }
                 
                 // Standard fields:
                 if(in_array('icq', $display_options) && $convenor->icq) {
