@@ -70,9 +70,9 @@ Teaching sections
 }
 
 .block_module_info div.convenor-url, div.smart-link {
-	background: url([[pix:block_module_info|url]]) no-repeat left;
-	padding-left: 35px;
-	line-height: 40px;
+	background: url([[pix:block_module_info|weblink]]) no-repeat left;
+	padding-left: 20px;
+	line-height: 25px;
 }
 
 /**********************************
@@ -84,6 +84,17 @@ Documents
 
 .block_module_info .ygtvcell {
 	padding: 3px;
+}
+
+.block_module_info div#documents-pane img.icon {
+	display: none;
+}
+
+.block_module_info div#documents-pane a {
+	display: block;
+	background: url([[pix:block_module_info|doclink]]) no-repeat left;
+	padding-left: 20px;
+	line-height: 20px;
 }
 
 /* 
