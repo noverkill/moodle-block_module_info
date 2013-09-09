@@ -71,7 +71,19 @@ Teaching sections
 
 .block_module_info div.convenor-url, div.smart-link {
 	background: url([[pix:block_module_info|url]]) no-repeat left;
-	padding: 5px 0px 0px 25px;
+	padding-left: 35px;
+	line-height: 40px;
+}
+
+/**********************************
+Documents
+**********************************/
+.block_module_info .ygtvln, .ygtvtn {
+	display: none;
+}
+
+.block_module_info .ygtvcell {
+	padding: 3px;
 }
 
 /* 
