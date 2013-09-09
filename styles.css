@@ -65,8 +65,8 @@ Teaching sections
 	padding-top: 5px;
 }
 
-.block_module_info img.additional-teacher-profile-pic {
-	border: 5px solid #fff;
+.block_module_info img.convenor-profile-pic, img.additional-teacher-profile-pic {
+	border-top: 5px solid #fff;
 }
 
 .block_module_info div.convenor-url, div.smart-link {
@@ -83,7 +83,7 @@ Documents
 }
 
 .block_module_info .ygtvcell {
-	padding: 3px;
+	padding-top: 3px;
 }
 
 .block_module_info div#documents-pane img.icon {
