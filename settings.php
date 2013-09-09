@@ -101,9 +101,9 @@ $settings->add(new admin_setting_heading('block_module_info/default', get_string
 
 // Default settings
 
-$settings->add(new admin_setting_configtextarea('block_module_info/convenor_role_name_options', get_string('convenor_role_name_options', 'block_module_info'), get_string('convenor_role_name_options_desc', 'block_module_info'), '', PARAM_RAW, '65', '10'));
+$settings->add(new admin_setting_configtextarea('block_module_info/convenor_role_name_options', get_string('convenor_role_name_options', 'block_module_info'), get_string('convenor_role_name_options_desc', 'block_module_info'), get_string('convenor_role_name_default', 'block_module_info'), PARAM_RAW, '65', '10'));
 
-$settings->add(new admin_setting_configtextarea('block_module_info/additional_teacher_role_name_options', get_string('additional_teacher_role_name_options', 'block_module_info'), get_string('additional_teacher_role_name_options_desc', 'block_module_info'), '', PARAM_RAW, '65', '10'));
+$settings->add(new admin_setting_configtextarea('block_module_info/additional_teacher_role_name_options', get_string('additional_teacher_role_name_options', 'block_module_info'), get_string('additional_teacher_role_name_options_desc', 'block_module_info'), get_string('additional_teacher_role_name_default', 'block_module_info'), PARAM_RAW, '65', '10'));
 
 $profile_fields = array('name'=>get_string('fullname'));
 $profile_fields = array_merge($profile_fields, array('profilepic'=>get_string('profilepic', 'block_module_info')));
