@@ -169,11 +169,11 @@ class block_module_info_renderer extends plugin_renderer_base {
             $this->data->block_config->additional_teachers_heading = 0;
         }
         
-        if(empty($this->data->block_config->enable_personal_timetable_link)) {
+        if(!isset($this->data->block_config->enable_personal_timetable_link)) {
             $this->data->block_config->enable_personal_timetable_link = true;
         }
         
-        if(empty($this->data->block_config->enable_module_timetable_link)) {
+        if(!isset($this->data->block_config->enable_module_timetable_link)) {
             $this->data->block_config->enable_module_timetable_link = true;
         }
         
@@ -518,7 +518,7 @@ class block_module_info_renderer extends plugin_renderer_base {
             
             // Only display personal timetable link if user is logged in
             if(!isguestuser()) {
-                if($this->data->block_config->enable_personal_timetable_link) {
+                if($this->data->block_config->enable_personal_timetable_link == true) {
                     $result .= $this->get_personal_timetable_html();
                 }
             } else {
@@ -526,7 +526,7 @@ class block_module_info_renderer extends plugin_renderer_base {
             }     
             
             // Module timetable link
-            if($this->data->block_config->enable_module_timetable_link) {
+            if($this->data->block_config->enable_module_timetable_link == true) {
                 $result .= $this->get_module_timetable_html();
             }
             
