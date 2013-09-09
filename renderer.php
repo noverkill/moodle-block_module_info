@@ -149,8 +149,8 @@ class block_module_info_renderer extends plugin_renderer_base {
             $this->data->module_credit = $this->data->block_config->module_credit_override;
         }
         
-        if(! empty($this->data->block_config->module_convenor_override)) {
-            $this->data->module_convenor_email = $this->data->block_config->module_convenor_override;
+        if(! empty($this->data->block_config->convenor_email_override)) {
+            $this->data->module_convenor_email = $this->data->block_config->convenor_email_override;
         }
         
         if(empty($this->data->block_config->module_owner_heading)) {
@@ -201,7 +201,7 @@ class block_module_info_renderer extends plugin_renderer_base {
     }
     
     public function get_convenorinfo_output() {
-        global $DB, $OUTPUT;
+        global $DB, $OUTPUT, $CFG;
         
         $result = '';
 
@@ -285,7 +285,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                     $result .= html_writer::tag('div', get_string('department').': '.s($convenor->department), array('class'=>'convenor-department'));
                 }
                 if(in_array('phone1', $display_options) && $convenor->phone1) {
-                    $result .= html_writer::tag('div', get_string('phone').': '.s($convenor->phone), array('class'=>'convenor-phone'));
+                    $result .= html_writer::tag('div', get_string('phone').': '.s($convenor->phone1), array('class'=>'convenor-phone'));
                 }
                 if(in_array('phone2', $display_options) && $convenor->phone2) {
                     $result .= html_writer::tag('div', get_string('phone2').': '.s($convenor->phone2), array('class'=>'convenor-phone2'));
@@ -408,7 +408,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                         $result .= html_writer::tag('div', get_string('department').': '.s($thisteacher->department), array('class'=>'additional-teacher-department'));
                     }
                     if(in_array('phone1', $display_options) && $thisteacher->phone1) {
-                        $result .= html_writer::tag('div', get_string('phone').': '.s($thisteacher->phone), array('class'=>'additional-teacher-phone'));
+                        $result .= html_writer::tag('div', get_string('phone').': '.s($thisteacher->phone1), array('class'=>'additional-teacher-phone'));
                     }
                     if(in_array('phone2', $display_options) && $thisteacher->phone2) {
                         $result .= html_writer::tag('div', get_string('phone2').': '.s($thisteacher->phone2), array('class'=>'additional-teacher-phone2'));
@@ -492,6 +492,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         $params['identifier'] = $COURSE->idnumber;
         $params['style'] = $config->style;
         $params['template'] = $config->template;
+        $params['objectclass'] = 'module';
         
         $linkstring = get_string('default_module_smart_link', 'block_module_info');
         
