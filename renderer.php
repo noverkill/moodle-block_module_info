@@ -247,6 +247,13 @@ class block_module_info_renderer extends plugin_renderer_base {
                 }
                 
                 // Standard fields:
+                if(in_array('url', $display_options) && $convenor->url) {
+                    $url = $convenor->url;
+                    if (strpos($convenor->url, '://') === false) {
+                        $url = 'http://'. $url;
+                    }
+                    $result .= html_writer::tag('div', '<a href="'.s($url).'">'.s($convenor->url).'</a>', array('class'=>'convenor-url'));
+                }
                 if(in_array('icq', $display_options) && $convenor->icq) {
                     $result .= html_writer::tag('div', get_string('icqnumber').': <a href=\"http://web.icq.com/wwp?uin=\"'.urlencode($convenor->icq).'\">'.s($thisteacher->icq).' <img src=\"http://web.icq.com/whitepages/online?icq=\"'.urlencode($convenor->icq).'&amp;img=5\" alt=\"\" /></a>', array('class'=>'convenor-icq'));
                 }
@@ -361,7 +368,14 @@ class block_module_info_renderer extends plugin_renderer_base {
                         $result .= obfuscate_mailto($thisteacher->email, '');
                         $result .= html_writer::end_tag('div');
                     }
-            
+                    // Web page
+                    if(in_array('url', $display_options) && $thisteacher->url) {
+                        $url = $thisteacher->url;
+                        if (strpos($thisteacher->url, '://') === false) {
+                            $url = 'http://'. $url;
+                        }
+                        $result .= html_writer::tag('div', '<a href="'.s($url).'">'.s($thisteacher->url).'</a>', array('class'=>'additional-teacher-url'));
+                    }
                     // Standard fields:
                     if(in_array('icq', $display_options) && $thisteacher->icq) {
                         $result .= html_writer::tag('div', get_string('icqnumber').': <a href=\"http://web.icq.com/wwp?uin=\"'.urlencode($thisteacher->icq).'\">'.s($thisteacher->icq).' <img src=\"http://web.icq.com/whitepages/online?icq=\"'.urlencode($thisteacher->icq).'&amp;img=5\" alt=\"\" /></a>', array('class'=>'additional-teacher-icq'));
@@ -462,9 +476,8 @@ class block_module_info_renderer extends plugin_renderer_base {
             $params['objectclass'] = 'staff';
             $linkstring = get_string('staff_personal_smart_link', 'block_module_info');
         }
-
         $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
-        $result = html_writer::tag('div', $result, array('class'=>'smart'));
+        $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
         return $result;
     }
     
@@ -500,7 +513,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         }
 
         $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
-        $result = html_writer::tag('div', $result, array('class'=>'smart'));
+        $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
         return $result;
     }
     

@@ -69,6 +69,11 @@ Teaching sections
 	border: 5px solid #fff;
 }
 
+.block_module_info div.convenor-url, div.smart-link {
+	background: url([[pix:block_module_info|url]]) no-repeat left;
+	padding: 5px 0px 0px 25px;
+}
+
 /* 
 IDW 08/09/2013
 Don't do anything special with the legacy HTML heading for now...
