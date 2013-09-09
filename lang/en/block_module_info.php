@@ -71,8 +71,10 @@
 	
 	$string['convenor_role_name_options'] = 'Module owner names';
 	$string['convenor_role_name_options_desc'] = 'Possible valid alternative names for the module owner are \'Convenor\' or \'Module Organiser\', for instance. Write each option on a new line.';
+	$string['convenor_role_name_default'] = 'Module Owner';
 	$string['additional_teacher_role_name_options'] = 'Additional teacher names';
 	$string['additional_teacher_role_name_options_desc'] = 'Possible valid alternative names for additional teachers are \'Additional teachers\' or \'Teaching assistants\', for example. Write each option on a new line.';
+	$string['additional_teacher_role_name_default'] = 'Additional Teachers';
 	
 	$string['defaulthtml'] = 'Default HTML';
 
@@ -145,6 +147,7 @@
     $string['schedule_header'] = 'Schedule';
     $string['config_enable_personal_timetable_link'] = 'Display personal timetable link (SMART)';
     $string['config_enable_module_timetable_link'] = 'Display module timetable link (SMART)';
+    $string['login_to_view_timetable'] = 'Log in to view your personal timetable.';
     
     $string['config_additional_session'] = 'Additional teaching session';
     $string['config_additional_session_subheading'] = 'Teaching subheading';
