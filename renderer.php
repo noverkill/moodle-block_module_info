@@ -220,6 +220,10 @@ class block_module_info_renderer extends plugin_renderer_base {
             // Set the custom heading if there is one.
             if(!empty($this->data->block_config->custom_teacher_heading)) {
                 $headings_options[0] = $this->data->block_config->custom_teacher_heading;
+            } else { // user hasn't set a custom heading so we'll have to use the first of the default headings (if there is one).
+                if(!empty($headings_options[1])) {
+                    $headings_options[0] = $headings_options[1];
+                }
             }
             
             $result .= html_writer::tag('h2', $headings_options[$this->data->block_config->module_owner_heading], array('class'=>'convenor-heading'));
@@ -453,15 +457,9 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $config = get_config('block_module_info');
         $params = array();
-        if (!empty($config->week)) {
-            $params['week'] = $config->week;
-        }
-        if (!empty($config->day)) {
-            $params['day'] = $config->day;
-        }
-        if (!empty($config->period)) {
-            $params['period'] = $config->period;
-        }
+        $params['week'] = (empty($config->week)) ? '' :$config->week;
+        $params['day'] =  (empty($config->day)) ? '' : $config->day;
+        $params['period'] =  (empty($config->period)) ? '' : $config->period;
         $params['identifier'] = $USER->idnumber;
         $params['style'] = $config->style;
         $params['template'] = $config->template;
@@ -482,36 +480,23 @@ class block_module_info_renderer extends plugin_renderer_base {
     }
     
     private function get_module_timetable_html() {
-        global $USER;
+        global $USER, $COURSE;
         
         $result = '';
         
         $config = get_config('block_module_info');
         $params = array();
-        if (!empty($config->week)) {
-            $params['week'] = $config->week;
-        }
-        if (!empty($config->day)) {
-            $params['day'] = $config->day;
-        }
-        if (!empty($config->period)) {
-            $params['period'] = $config->period;
-        }
-        $params['identifier'] = $USER->idnumber;
+        $params['week'] = (empty($config->week)) ? '' :$config->week;
+        $params['day'] =  (empty($config->day)) ? '' : $config->day;
+        $params['period'] =  (empty($config->period)) ? '' : $config->period;         
+        $params['identifier'] = $COURSE->idnumber;
         $params['style'] = $config->style;
         $params['template'] = $config->template;
         
         $linkstring = get_string('default_module_smart_link', 'block_module_info');
         
         $html = html_writer::start_tag('div', array('class' => 'smart module-timetable'));
-        if (strlen($USER->idnumber) == 9) {
-            $params['objectclass'] = 'module';
-            $linkstring = get_string('student_module_smart_link', 'block_module_info');
-        } elseif (strlen($USER->idnumber) == 6) {
-            $params['objectclass'] = 'staff';
-            $linkstring = get_string('staff_module_smart_link', 'block_module_info');
-        }
-
+       
         $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
         $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
         return $result;
@@ -530,10 +515,14 @@ class block_module_info_renderer extends plugin_renderer_base {
     
             $result .= html_writer::start_tag('div', array('id' => 'schedule'));
             
-            // Personal timetable link
-            if($this->data->block_config->enable_personal_timetable_link) {
-                $result .= $this->get_personal_timetable_html();
-            }
+            // Only display personal timetable link if user is logged in
+            if(!isguestuser()) {
+                if($this->data->block_config->enable_personal_timetable_link) {
+                    $result .= $this->get_personal_timetable_html();
+                }
+            } else {
+                $result .= html_writer::tag('div', get_string('login_to_view_timetable', 'block_module_info'));
+            }     
             
             // Module timetable link
             if($this->data->block_config->enable_module_timetable_link) {
