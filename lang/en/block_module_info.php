@@ -160,7 +160,8 @@
     
     // Documents
     $string['documents_header'] = 'Documents';
-   
+    $string['config_hide_document_section_if_empty'] =  'Hide documents section if empty';
+    
     // Legacy
     $string['legacy_header'] = 'Additional Content';
     
