@@ -23,7 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -654,32 +653,40 @@ class block_module_info_renderer extends plugin_renderer_base {
     public function get_documentinfo_output() {
         global $USER;
         
-        $result = html_writer::start_tag('div', array('id'=>'documents'));
-        
-        $result .= mod_info_collapsible_region_start('documents-heading', 'modinfo-viewlet-documents', get_string('documents_header', 'block_module_info'), 'modinfo-documents', false, true);
+        $result = '';
         
         // Get the stored files
         $fs = get_file_storage();
         $dir = $fs->get_area_tree($this->page->context->id, 'block_module_info', 'documents', $this->data->context->id);
         
-        $module = array('name'=>'block_module_info', 'fullpath'=>'/blocks/module_info/module.js', 'requires'=>array('yui2-treeview'));
+        $has_files = !(empty($dir['subdirs']) && empty($dir['files'])); 
+        $hide_if_empty = $this->data->block_config->hide_document_section_if_empty;
         
-        $result .= html_writer::start_tag('div', array('id'=>'documents-pane'));
+        $display_something = $has_files || (!$has_files && !$hide_if_empty);
         
-        if (empty($dir['subdirs']) && empty($dir['files'])) {
-            $result .= $this->output->box(get_string('nofilesavailable', 'repository'));
-        } else {
-            $htmlid = 'document_tree_'.uniqid();
-            $this->page->requires->js_init_call('M.block_module_info.init', array(false, $htmlid));
-            $result .= '<div id="'.$htmlid.'">';
-            $result .= $this->htmllize_document_tree($this->page->context, $this->data->context, $dir);
-            $result .= '</div>';
+        if($display_something) {
+            $result = html_writer::start_tag('div', array('id'=>'documents'));
+            
+            $result .= mod_info_collapsible_region_start('documents-heading', 'modinfo-viewlet-documents', get_string('documents_header', 'block_module_info'), 'modinfo-documents', false, true);
+            
+            $result .= html_writer::start_tag('div', array('id'=>'documents-pane'));
+        
+            if (!$has_files) {
+                $result .= $this->output->box(get_string('nofilesavailable', 'repository'));
+            } else {
+                $htmlid = 'document_tree_'.uniqid();
+                $this->page->requires->js_init_call('M.block_module_info.init', array(false, $htmlid));
+                $result .= '<div id="'.$htmlid.'">';
+                $result .= $this->htmllize_document_tree($this->page->context, $this->data->context, $dir);
+                $result .= '</div>';
+            }
+        
+            $result .= html_writer::end_tag('div');
+            $result .= html_writer::end_tag('div');
+        
+            $result .= mod_info_collapsible_region_end(true);
         }
         
-        $result .= html_writer::end_tag('div');
-        $result .= html_writer::end_tag('div');
-        
-        $result .= mod_info_collapsible_region_end(true);
         return $result;
     }
 
