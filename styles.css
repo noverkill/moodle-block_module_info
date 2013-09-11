@@ -3,8 +3,10 @@ General display rules
 **********************************/
 
 .block_module_info .collapsibleregioncaption img {
-	margin-right: 5px;
-	margin-left: 5px;
+	height: auto;
+	vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .block_module_info div.collapsibleregion {border-bottom: 1px solid white;}
@@ -23,18 +25,15 @@ Section headings
 **********************************/
 .block_module_info .collapsibleregioncaption {
 	background-color: #444;
-	font-weight: bold;
+	font-weight: normal;
     font-size: 123.1%;
-    padding-top: 7px;
-    padding-bottom: 5px;    
+    padding-top: 10px;
+    padding-bottom: 5px;   
+    height: 30px; 
 }
 
 .block_module_info .collapsibleregioncaption a {
-	color: #FFFFFF;
-}
-
-.block_module_info .collapsibleregioncaption img {
-	vertical-align: 0;
+	color: #FFF;
 }
 
 /**********************************

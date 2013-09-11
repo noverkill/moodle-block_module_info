@@ -190,9 +190,9 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('header', 'configheader', get_string('schedule_header', 'block_module_info'));
         
         $mform->addElement('advcheckbox', 'config_enable_personal_timetable_link', get_string('config_enable_personal_timetable_link', 'block_module_info'));
-        $mform->setDefault('config_enable_personal_timetable_link', 1);
+        $mform->setDefault('config_enable_personal_timetable_link', 0);
         $mform->addElement('advcheckbox', 'config_enable_module_timetable_link', get_string('config_enable_module_timetable_link', 'block_module_info'));
-        $mform->setDefault('config_enable_module_timetable_link', 1);
+        $mform->setDefault('config_enable_module_timetable_link', 0);
         
         $sessionarray = array();
         $sessionarray[] = $mform->createElement('header', '', get_string('config_additional_session','block_module_info').' {no}');
@@ -238,6 +238,9 @@ class block_module_info_edit_form extends block_edit_form {
         		$this->block->context->id);
         
         $mform->addElement('filemanager', 'files_filemanager', get_string('files'), null, $fileoptions);
+        
+        $mform->addElement('advcheckbox', 'config_hide_document_section_if_empty', get_string('config_hide_document_section_if_empty', 'block_module_info'));
+        $mform->setDefault('config_hide_document_section_if_empty', 0);
         
         // Legacy
         $mform->addElement('header', 'configheader', get_string('legacy_header', 'block_module_info'));
