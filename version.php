@@ -22,9 +22,9 @@
  * @copyright 2012 onwards University of London Computer Centre
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2012091100;  // YYYYMMDDHH (year, month, day, 24-hr time)
+$plugin->version = 2013090900;  // YYYYMMDDHH (year, month, day, 24-hr time)
 $plugin->requires = 2011112900; // YYYYMMDDHH (This is the release version for Moodle 2.0)
 $plugin->component = 'block_module_info';      // Full name of the plugin (used for diagnostics)
