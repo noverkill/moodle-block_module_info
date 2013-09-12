@@ -660,7 +660,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         $dir = $fs->get_area_tree($this->page->context->id, 'block_module_info', 'documents', $this->data->context->id);
         
         $has_files = !(empty($dir['subdirs']) && empty($dir['files'])); 
-        $hide_if_empty = $this->data->block_config->hide_document_section_if_empty;
+        $hide_if_empty = !empty($this->data->block_config->hide_document_section_if_empty);
         
         $display_something = $has_files || (!$has_files && !$hide_if_empty);
         
