@@ -51,17 +51,22 @@ Section contents
 /**********************************
 Teaching sections
 **********************************/
-.block_module_info h2.convenor-heading, h2.additional-teachers-heading {
+.block_module_info h2.convenor-heading, h2.additional-teachers-heading, h2.session-heading {
     background-color: #cbc0d9;
     text-transform: uppercase;
     font-weight: bold;
     font-size: 12px;
     margin-right: 5px;
-    padding: 4px 0px 4px 3px;
+    padding: 4px 0px 3px 5px;
 }
 
-.block_module_info div#convenor-pane, div#additional-teachers {
+.block_module_info div#convenor-pane, div#additional-teachers, div#schedule-pane {
 	padding-top: 5px;
+}
+
+.block_module_info div.session-details {
+	margin-top: 5px;
+	border-bottom: 7px solid #fff;
 }
 
 .block_module_info img.convenor-profile-pic, img.additional-teacher-profile-pic {
@@ -72,6 +77,10 @@ Teaching sections
 	background: url([[pix:block_module_info|weblink]]) no-repeat left;
 	padding-left: 20px;
 	line-height: 25px;
+}
+
+.block_module_info div.smart-link {
+	margin-bottom: 4px;
 }
 
 /**********************************
