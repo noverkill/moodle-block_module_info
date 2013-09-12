@@ -91,7 +91,8 @@ M.block_module_info.CollapsibleRegion = function(Y, id, userpref, strtooltip) {
         // Add the correct image and record the YUI node created in the process
         this.icon = Y.Node.create('<img src="'+M.util.image_url('expanded', 'block_module_info')+'" alt="" />');
     }
-    caption.insertBefore(this.icon, a);
+    //caption.insertBefore(this.icon, a);
+    a.prepend(this.icon);
 
     // Create the animation.
     var animation = new Y.Anim({
