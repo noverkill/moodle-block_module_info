@@ -532,14 +532,14 @@ class block_module_info_renderer extends plugin_renderer_base {
             // Display each session
             foreach($this->data->block_config->additional_session_subheading as $key=>$value) {
                 // Session title:
-                $result .= html_writer::tag('h3', s($value), array('class'=>'session-title'));
+                $result .= html_writer::tag('h2', s($value), array('class'=>'session-heading'));
 
                 // Formatted session details:
                 $a = new stdClass();
                 $a->day = $this->data->block_config->additional_session_day[$key];
                 $a->time = $this->data->block_config->additional_session_time[$key];
                 $a->location = $this->data->block_config->additional_session_location[$key];
-                $result .= html_writer::tag('div', get_string('session_details', 'block_module_info', $a));
+                $result .= html_writer::tag('div', get_string('session_details', 'block_module_info', $a), array('class'=>'session-details'));
             }
             
             $result .= html_writer::end_tag('div');
