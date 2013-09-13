@@ -149,6 +149,12 @@
     $string['config_enable_module_timetable_link'] = 'Display module timetable link (SMART)';
     $string['login_to_view_timetable'] = 'Log in to view your personal timetable.';
     
+    $string['config_custom_timetable_url'] = 'Custom timetable URL';
+    $string['config_custom_timetable_url_help'] = 'If you know the URL of a SMART timetable then enter it here. Otherwise you can leave this setting empty. The link you specify here will always open in a new window.';
+    $string['config_custom_timetable_text'] = 'Custom timetable link text';
+    $string['config_custom_timetable_text_default'] = 'Custom timetable';
+    $string['config_custom_timetable_text_help'] = 'This is the text users will click on to access the \'Custom timetable URL\'';
+    
     $string['config_additional_session'] = 'Additional teaching session';
     $string['config_additional_session_subheading'] = 'Teaching subheading';
     $string['config_additional_session_day'] = 'Day';
