@@ -194,6 +194,12 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('advcheckbox', 'config_enable_module_timetable_link', get_string('config_enable_module_timetable_link', 'block_module_info'));
         $mform->setDefault('config_enable_module_timetable_link', 0);
         
+        $mform->addElement('url', 'config_custom_timetable_url', get_string('config_custom_timetable_url', 'block_module_info'), array('size'=>'50'), array('usefilepicker'=>true));
+        $mform->addHelpButton('config_custom_timetable_url', 'config_custom_timetable_url', 'block_module_info');
+        $mform->addElement('text', 'config_custom_timetable_text', get_string('config_custom_timetable_text', 'block_module_info'), array('size'=>'30'));
+        $mform->setDefault('config_custom_timetable_text', get_string('config_custom_timetable_text_default', 'block_module_info'));
+        $mform->addHelpButton('config_custom_timetable_text', 'config_custom_timetable_text', 'block_module_info');
+        
         $sessionarray = array();
         $sessionarray[] = $mform->createElement('header', '', get_string('config_additional_session','block_module_info').' {no}');
         $sessionarray[] = $mform->createElement('text', 'config_additional_session_subheading', get_string('config_additional_session_subheading','block_module_info'));
