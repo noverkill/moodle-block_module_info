@@ -226,6 +226,9 @@ class block_module_info_edit_form extends block_edit_form {
         // Documents
         $mform->addElement('header', 'configheader', get_string('documents_header', 'block_module_info'));
         
+        $mform->addElement('advcheckbox', 'config_hide_document_section_if_empty', get_string('config_hide_document_section_if_empty', 'block_module_info'));
+        $mform->setDefault('config_hide_document_section_if_empty', 1);
+        
         global $COURSE;
         
         $fileoptions = array('subdirs'=>0,
@@ -244,9 +247,6 @@ class block_module_info_edit_form extends block_edit_form {
         		$this->block->context->id);
         
         $mform->addElement('filemanager', 'files_filemanager', get_string('files'), null, $fileoptions);
-        
-        $mform->addElement('advcheckbox', 'config_hide_document_section_if_empty', get_string('config_hide_document_section_if_empty', 'block_module_info'));
-        $mform->setDefault('config_hide_document_section_if_empty', 1);
         
         // Legacy
         $mform->addElement('header', 'configheader', get_string('legacy_header', 'block_module_info'));
