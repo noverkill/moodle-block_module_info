@@ -170,6 +170,7 @@
     
     // Legacy
     $string['legacy_header'] = 'Additional Content';
+    $string['config_legacy_html_heading'] = 'Additional content heading';
     
     $string['convenor_not_found'] = ' not found in QMplus database';
     
