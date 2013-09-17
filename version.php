@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2013091200;  // YYYYMMDDHH (year, month, day, 24-hr time)
+$plugin->version = 2013091700;  // YYYYMMDDHH (year, month, day, 24-hr time)
 $plugin->requires = 2011112900; // YYYYMMDDHH (This is the release version for Moodle 2.0)
 $plugin->component = 'block_module_info';      // Full name of the plugin (used for diagnostics)
 
