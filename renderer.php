@@ -465,7 +465,6 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $linkstring = get_string('default_personal_smart_link', 'block_module_info');
         
-        $html = html_writer::start_tag('div', array('class' => 'smart personal-timetable'));
         if (strlen($USER->idnumber) == 9) {
             $params['objectclass'] = 'student+set';
             $linkstring = get_string('student_personal_smart_link', 'block_module_info');
@@ -495,9 +494,23 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $linkstring = get_string('default_module_smart_link', 'block_module_info');
         
-        $html = html_writer::start_tag('div', array('class' => 'smart module-timetable'));
-       
         $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
+        $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
+        return $result;
+    }
+    
+    private function get_custom_timetable_html() {
+        $result = '';
+    
+        $linkstring = get_string('config_custom_timetable_text_default', 'block_module_info');
+        
+        if(!empty($this->data->block_config->custom_timetable_text)) {
+            $linkstring = $this->data->block_config->custom_timetable_text;
+        }
+    
+        $html = html_writer::start_tag('div', array('class' => 'custom-timetable'));
+         
+        $result = html_writer::link(new moodle_url($this->data->block_config->custom_timetable_url), $linkstring, array('target' => '_BLANK'));
         $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
         return $result;
     }
@@ -527,6 +540,11 @@ class block_module_info_renderer extends plugin_renderer_base {
             // Module timetable link
             if($this->data->block_config->enable_module_timetable_link == true) {
                 $result .= $this->get_module_timetable_html();
+            }
+            
+            // Display custom timetable link if URL is specified
+            if(!empty($this->data->block_config->custom_timetable_url)) {
+                $result .= $this->get_custom_timetable_html();
             }
             
             // Display each session
