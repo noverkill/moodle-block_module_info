@@ -253,7 +253,10 @@ class block_module_info_edit_form extends block_edit_form {
         
         $mform->addElement('advcheckbox', 'config_html', get_string('config_html', 'block_module_info'));
         $mform->setDefault('config_html', 0);
-
+        
+        $mform->addElement('text', 'config_legacy_html_heading', get_string('config_legacy_html_heading', 'block_module_info'), array('size'=>'30'));
+        $mform->setDefault('config_legacy_html_heading', get_string('legacy_header', 'block_module_info'));
+         
         // A sample string variable with a default value.
         $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean'=>true, 'context'=>$this->block->context);
         $mform->addElement('editor', 'config_htmlcontent', get_string('config_htmlcontent', 'block_module_info'), null, $editoroptions);
