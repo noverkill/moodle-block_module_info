@@ -26,10 +26,11 @@ Section headings
 .block_module_info .collapsibleregioncaption {
 	background-color: #444;
 	font-weight: normal;
-    font-size: 123.1%;
+    font-size: 100%;
     padding-top: 10px;
     padding-bottom: 5px;   
     height: 30px; 
+    line-height: 1.8em;
 }
 
 .block_module_info .collapsibleregioncaption a {
