@@ -456,12 +456,6 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $config = get_config('block_module_info');
         $params = array();
-        $params['week'] = (empty($config->week)) ? '' :$config->week;
-        $params['day'] =  (empty($config->day)) ? '' : $config->day;
-        $params['period'] =  (empty($config->period)) ? '' : $config->period;
-        $params['identifier'] = $USER->idnumber;
-        $params['style'] = $config->style;
-        $params['template'] = $config->template;
         
         $linkstring = get_string('default_personal_smart_link', 'block_module_info');
         
@@ -472,6 +466,14 @@ class block_module_info_renderer extends plugin_renderer_base {
             $params['objectclass'] = 'staff';
             $linkstring = get_string('staff_personal_smart_link', 'block_module_info');
         }
+        
+        $params['week'] = (empty($config->week)) ? '' :$config->week;
+        $params['day'] =  (empty($config->day)) ? '' : $config->day;
+        $params['period'] =  (empty($config->period)) ? '' : $config->period;
+        $params['identifier'] = $USER->idnumber;
+        $params['style'] = $config->style;
+        $params['template'] = $config->template; 
+        
         $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
         $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
         return $result;
@@ -484,13 +486,13 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $config = get_config('block_module_info');
         $params = array();
+        $params['objectclass'] = 'module';
         $params['week'] = (empty($config->week)) ? '' :$config->week;
         $params['day'] =  (empty($config->day)) ? '' : $config->day;
         $params['period'] =  (empty($config->period)) ? '' : $config->period;         
         $params['identifier'] = $COURSE->idnumber;
         $params['style'] = $config->style;
         $params['template'] = $config->template;
-        $params['objectclass'] = 'module';
         
         $linkstring = get_string('default_module_smart_link', 'block_module_info');
         
