@@ -1,0 +1,112 @@
+/**********************************
+General display rules
+**********************************/
+
+.block_module_info .collapsibleregioncaption img {
+	height: auto;
+	vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.block_module_info div.collapsibleregion {border-bottom: 1px solid white;}
+
+/**********************************
+Module code, level, &c.
+**********************************/
+.block_module_info p.module_specific {
+	padding-bottom: 2px;
+	border-bottom: 1px solid #dad0e1;
+	margin-bottom: 5px;
+}
+
+/**********************************
+Section headings
+**********************************/
+.block_module_info .collapsibleregioncaption {
+	background-color: #444;
+	font-weight: normal;
+    font-size: 100%;
+    padding-top: 10px;
+    padding-bottom: 5px;   
+    height: 30px; 
+    line-height: 1.8em;
+}
+
+.block_module_info .collapsibleregioncaption a {
+	color: #FFF;
+}
+
+/**********************************
+Section contents
+**********************************/
+.block_module_info div#schedule-pane, div#documents-pane, div#modinfo-viewlet-teaching_inner {
+    background-color: #FFFFFF;
+    padding-left: 5px;    
+}
+
+.block_module_info div.generalbox {
+	border: 0px;
+}
+
+/**********************************
+Teaching sections
+**********************************/
+.block_module_info h2.convenor-heading, h2.additional-teachers-heading, h2.session-heading {
+    background-color: #cbc0d9;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 5px;
+    padding: 4px 0px 3px 5px;
+}
+
+.block_module_info div#convenor-pane, div#additional-teachers, div#schedule-pane {
+	padding-top: 5px;
+}
+
+.block_module_info div.session-details {
+	margin-top: 5px;
+	border-bottom: 7px solid #fff;
+}
+
+.block_module_info img.convenor-profile-pic, img.additional-teacher-profile-pic {
+	border-top: 5px solid #fff;
+}
+
+.block_module_info div.convenor-url, div.smart-link {
+	background: url([[pix:block_module_info|weblink]]) no-repeat left;
+	padding-left: 20px;
+	line-height: 25px;
+}
+
+.block_module_info div.smart-link {
+	margin-bottom: 4px;
+}
+
+/**********************************
+Documents
+**********************************/
+.block_module_info .ygtvln, .ygtvtn {
+	display: none;
+}
+
+.block_module_info .ygtvcell {
+	padding-top: 3px;
+}
+
+.block_module_info div#documents-pane img.icon {
+	display: none;
+}
+
+.block_module_info div#documents-pane a {
+	display: block;
+	background: url([[pix:block_module_info|doclink]]) no-repeat left;
+	padding-left: 20px;
+	line-height: 20px;
+}
+
+
+
+
+
