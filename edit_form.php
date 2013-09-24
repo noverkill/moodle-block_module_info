@@ -190,9 +190,15 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('header', 'configheader', get_string('schedule_header', 'block_module_info'));
         
         $mform->addElement('advcheckbox', 'config_enable_personal_timetable_link', get_string('config_enable_personal_timetable_link', 'block_module_info'));
-        $mform->setDefault('config_enable_personal_timetable_link', 1);
+        $mform->setDefault('config_enable_personal_timetable_link', 0);
         $mform->addElement('advcheckbox', 'config_enable_module_timetable_link', get_string('config_enable_module_timetable_link', 'block_module_info'));
-        $mform->setDefault('config_enable_module_timetable_link', 1);
+        $mform->setDefault('config_enable_module_timetable_link', 0);
+        
+        $mform->addElement('url', 'config_custom_timetable_url', get_string('config_custom_timetable_url', 'block_module_info'), array('size'=>'50'), array('usefilepicker'=>true));
+        $mform->addHelpButton('config_custom_timetable_url', 'config_custom_timetable_url', 'block_module_info');
+        $mform->addElement('text', 'config_custom_timetable_text', get_string('config_custom_timetable_text', 'block_module_info'), array('size'=>'30'));
+        $mform->setDefault('config_custom_timetable_text', get_string('config_custom_timetable_text_default', 'block_module_info'));
+        $mform->addHelpButton('config_custom_timetable_text', 'config_custom_timetable_text', 'block_module_info');
         
         $sessionarray = array();
         $sessionarray[] = $mform->createElement('header', '', get_string('config_additional_session','block_module_info').' {no}');
@@ -220,6 +226,9 @@ class block_module_info_edit_form extends block_edit_form {
         // Documents
         $mform->addElement('header', 'configheader', get_string('documents_header', 'block_module_info'));
         
+        $mform->addElement('advcheckbox', 'config_hide_document_section_if_empty', get_string('config_hide_document_section_if_empty', 'block_module_info'));
+        $mform->setDefault('config_hide_document_section_if_empty', 1);
+        
         global $COURSE;
         
         $fileoptions = array('subdirs'=>0,
@@ -244,7 +253,10 @@ class block_module_info_edit_form extends block_edit_form {
         
         $mform->addElement('advcheckbox', 'config_html', get_string('config_html', 'block_module_info'));
         $mform->setDefault('config_html', 0);
-
+        
+        $mform->addElement('text', 'config_legacy_html_heading', get_string('config_legacy_html_heading', 'block_module_info'), array('size'=>'30'));
+        $mform->setDefault('config_legacy_html_heading', get_string('legacy_header', 'block_module_info'));
+         
         // A sample string variable with a default value.
         $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean'=>true, 'context'=>$this->block->context);
         $mform->addElement('editor', 'config_htmlcontent', get_string('config_htmlcontent', 'block_module_info'), null, $editoroptions);

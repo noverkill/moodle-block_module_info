@@ -3,8 +3,10 @@ General display rules
 **********************************/
 
 .block_module_info .collapsibleregioncaption img {
-	margin-right: 5px;
-	margin-left: 5px;
+	height: auto;
+	vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .block_module_info div.collapsibleregion {border-bottom: 1px solid white;}
@@ -23,18 +25,16 @@ Section headings
 **********************************/
 .block_module_info .collapsibleregioncaption {
 	background-color: #444;
-	font-weight: bold;
-    font-size: 123.1%;
-    padding-top: 7px;
-    padding-bottom: 5px;    
+	font-weight: normal;
+    font-size: 100%;
+    padding-top: 10px;
+    padding-bottom: 5px;   
+    height: 30px; 
+    line-height: 1.8em;
 }
 
 .block_module_info .collapsibleregioncaption a {
-	color: #FFFFFF;
-}
-
-.block_module_info .collapsibleregioncaption img {
-	vertical-align: 0;
+	color: #FFF;
 }
 
 /**********************************
@@ -52,17 +52,22 @@ Section contents
 /**********************************
 Teaching sections
 **********************************/
-.block_module_info h2.convenor-heading, h2.additional-teachers-heading {
+.block_module_info h2.convenor-heading, h2.additional-teachers-heading, h2.session-heading {
     background-color: #cbc0d9;
     text-transform: uppercase;
     font-weight: bold;
     font-size: 12px;
     margin-right: 5px;
-    padding: 4px 0px 4px 3px;
+    padding: 4px 0px 3px 5px;
 }
 
-.block_module_info div#convenor-pane, div#additional-teachers {
+.block_module_info div#convenor-pane, div#additional-teachers, div#schedule-pane {
 	padding-top: 5px;
+}
+
+.block_module_info div.session-details {
+	margin-top: 5px;
+	border-bottom: 7px solid #fff;
 }
 
 .block_module_info img.convenor-profile-pic, img.additional-teacher-profile-pic {
@@ -73,6 +78,10 @@ Teaching sections
 	background: url([[pix:block_module_info|weblink]]) no-repeat left;
 	padding-left: 20px;
 	line-height: 25px;
+}
+
+.block_module_info div.smart-link {
+	margin-bottom: 4px;
 }
 
 /**********************************
@@ -96,14 +105,6 @@ Documents
 	padding-left: 20px;
 	line-height: 20px;
 }
-
-/* 
-IDW 08/09/2013
-Don't do anything special with the legacy HTML heading for now...
-
-.block_module_info #modinfo-viewlet-legacyhtml_caption_anchor {
-    color: #FF0000;
-}*/
 
 
 

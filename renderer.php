@@ -23,7 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -457,16 +456,9 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $config = get_config('block_module_info');
         $params = array();
-        $params['week'] = (empty($config->week)) ? '' :$config->week;
-        $params['day'] =  (empty($config->day)) ? '' : $config->day;
-        $params['period'] =  (empty($config->period)) ? '' : $config->period;
-        $params['identifier'] = $USER->idnumber;
-        $params['style'] = $config->style;
-        $params['template'] = $config->template;
         
         $linkstring = get_string('default_personal_smart_link', 'block_module_info');
         
-        $html = html_writer::start_tag('div', array('class' => 'smart personal-timetable'));
         if (strlen($USER->idnumber) == 9) {
             $params['objectclass'] = 'student+set';
             $linkstring = get_string('student_personal_smart_link', 'block_module_info');
@@ -474,6 +466,14 @@ class block_module_info_renderer extends plugin_renderer_base {
             $params['objectclass'] = 'staff';
             $linkstring = get_string('staff_personal_smart_link', 'block_module_info');
         }
+        
+        $params['week'] = (empty($config->week)) ? '' :$config->week;
+        $params['day'] =  (empty($config->day)) ? '' : $config->day;
+        $params['period'] =  (empty($config->period)) ? '' : $config->period;
+        $params['identifier'] = $USER->idnumber;
+        $params['style'] = $config->style;
+        $params['template'] = $config->template; 
+        
         $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
         $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
         return $result;
@@ -486,19 +486,33 @@ class block_module_info_renderer extends plugin_renderer_base {
         
         $config = get_config('block_module_info');
         $params = array();
+        $params['objectclass'] = 'module';
         $params['week'] = (empty($config->week)) ? '' :$config->week;
         $params['day'] =  (empty($config->day)) ? '' : $config->day;
         $params['period'] =  (empty($config->period)) ? '' : $config->period;         
         $params['identifier'] = $COURSE->idnumber;
         $params['style'] = $config->style;
         $params['template'] = $config->template;
-        $params['objectclass'] = 'module';
         
         $linkstring = get_string('default_module_smart_link', 'block_module_info');
         
-        $html = html_writer::start_tag('div', array('class' => 'smart module-timetable'));
-       
         $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
+        $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
+        return $result;
+    }
+    
+    private function get_custom_timetable_html() {
+        $result = '';
+    
+        $linkstring = get_string('config_custom_timetable_text_default', 'block_module_info');
+        
+        if(!empty($this->data->block_config->custom_timetable_text)) {
+            $linkstring = $this->data->block_config->custom_timetable_text;
+        }
+    
+        $html = html_writer::start_tag('div', array('class' => 'custom-timetable'));
+         
+        $result = html_writer::link(new moodle_url($this->data->block_config->custom_timetable_url), $linkstring, array('target' => '_BLANK'));
         $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
         return $result;
     }
@@ -530,17 +544,22 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $result .= $this->get_module_timetable_html();
             }
             
+            // Display custom timetable link if URL is specified
+            if(!empty($this->data->block_config->custom_timetable_url)) {
+                $result .= $this->get_custom_timetable_html();
+            }
+            
             // Display each session
             foreach($this->data->block_config->additional_session_subheading as $key=>$value) {
                 // Session title:
-                $result .= html_writer::tag('h3', s($value), array('class'=>'session-title'));
+                $result .= html_writer::tag('h2', s($value), array('class'=>'session-heading'));
 
                 // Formatted session details:
                 $a = new stdClass();
                 $a->day = $this->data->block_config->additional_session_day[$key];
                 $a->time = $this->data->block_config->additional_session_time[$key];
                 $a->location = $this->data->block_config->additional_session_location[$key];
-                $result .= html_writer::tag('div', get_string('session_details', 'block_module_info', $a));
+                $result .= html_writer::tag('div', get_string('session_details', 'block_module_info', $a), array('class'=>'session-details'));
             }
             
             $result .= html_writer::end_tag('div');
@@ -654,32 +673,40 @@ class block_module_info_renderer extends plugin_renderer_base {
     public function get_documentinfo_output() {
         global $USER;
         
-        $result = html_writer::start_tag('div', array('id'=>'documents'));
-        
-        $result .= mod_info_collapsible_region_start('documents-heading', 'modinfo-viewlet-documents', get_string('documents_header', 'block_module_info'), 'modinfo-documents', false, true);
+        $result = '';
         
         // Get the stored files
         $fs = get_file_storage();
         $dir = $fs->get_area_tree($this->page->context->id, 'block_module_info', 'documents', $this->data->context->id);
         
-        $module = array('name'=>'block_module_info', 'fullpath'=>'/blocks/module_info/module.js', 'requires'=>array('yui2-treeview'));
+        $has_files = !(empty($dir['subdirs']) && empty($dir['files'])); 
+        $hide_if_empty = !empty($this->data->block_config->hide_document_section_if_empty);
         
-        $result .= html_writer::start_tag('div', array('id'=>'documents-pane'));
+        $display_something = $has_files || (!$has_files && !$hide_if_empty);
         
-        if (empty($dir['subdirs']) && empty($dir['files'])) {
-            $result .= $this->output->box(get_string('nofilesavailable', 'repository'));
-        } else {
-            $htmlid = 'document_tree_'.uniqid();
-            $this->page->requires->js_init_call('M.block_module_info.init', array(false, $htmlid));
-            $result .= '<div id="'.$htmlid.'">';
-            $result .= $this->htmllize_document_tree($this->page->context, $this->data->context, $dir);
-            $result .= '</div>';
+        if($display_something) {
+            $result = html_writer::start_tag('div', array('id'=>'documents'));
+            
+            $result .= mod_info_collapsible_region_start('documents-heading', 'modinfo-viewlet-documents', get_string('documents_header', 'block_module_info'), 'modinfo-documents', false, true);
+            
+            $result .= html_writer::start_tag('div', array('id'=>'documents-pane'));
+        
+            if (!$has_files) {
+                $result .= $this->output->box(get_string('nofilesavailable', 'repository'));
+            } else {
+                $htmlid = 'document_tree_'.uniqid();
+                $this->page->requires->js_init_call('M.block_module_info.init', array(false, $htmlid));
+                $result .= '<div id="'.$htmlid.'">';
+                $result .= $this->htmllize_document_tree($this->page->context, $this->data->context, $dir);
+                $result .= '</div>';
+            }
+        
+            $result .= html_writer::end_tag('div');
+            $result .= html_writer::end_tag('div');
+        
+            $result .= mod_info_collapsible_region_end(true);
         }
         
-        $result .= html_writer::end_tag('div');
-        $result .= html_writer::end_tag('div');
-        
-        $result .= mod_info_collapsible_region_end(true);
         return $result;
     }
 

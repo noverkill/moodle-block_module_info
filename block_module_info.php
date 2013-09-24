@@ -87,7 +87,11 @@ class block_module_info extends block_base {
         }
         
         if (!empty($this->config->html)) {
-            $output_buffer .= mod_info_collapsible_region_start('legacyhtml-heading', 'modinfo-viewlet-legacyhtml', get_string('legacy_header', 'block_module_info'), 'modinfo-legacyhtml', true, true);
+            $legacyheading = get_string('legacy_header', 'block_module_info');
+            if(!empty($this->config->legacy_html_heading)) {
+                $legacyheading = $this->config->legacy_html_heading;
+            }
+            $output_buffer .= mod_info_collapsible_region_start('legacyhtml-heading', 'modinfo-viewlet-legacyhtml', $legacyheading, 'modinfo-legacyhtml', true, true);
             if (!empty($this->config->htmlcontent['text']) && !empty($this->config->htmlcontent['format'])) {
                 // rewrite url
                 $this->config->htmlcontent['text'] = file_rewrite_pluginfile_urls($this->config->htmlcontent['text'], 'pluginfile.php', $this->context->id, 'block_module_info', 'content', NULL);
