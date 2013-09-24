@@ -190,6 +190,7 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addElement('header', 'configheader', get_string('schedule_header', 'block_module_info'));
         
         $mform->addElement('advcheckbox', 'config_enable_personal_timetable_link', get_string('config_enable_personal_timetable_link', 'block_module_info'));
+
         $mform->setDefault('config_enable_personal_timetable_link', 0);
         $mform->addElement('advcheckbox', 'config_enable_module_timetable_link', get_string('config_enable_module_timetable_link', 'block_module_info'));
         $mform->setDefault('config_enable_module_timetable_link', 0);
@@ -250,6 +251,7 @@ class block_module_info_edit_form extends block_edit_form {
         
         // Legacy
         $mform->addElement('header', 'configheader', get_string('legacy_header', 'block_module_info'));
+
         
         $mform->addElement('advcheckbox', 'config_html', get_string('config_html', 'block_module_info'));
         $mform->setDefault('config_html', 0);
