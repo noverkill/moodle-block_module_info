@@ -14,12 +14,12 @@ class block_module_info_edit_form extends block_edit_form {
         $action = optional_param('action','',PARAM_TEXT);
 
         if($action == 'reset') {
-        	$this->_form->values->config_module_code = true;
-        	$this->_form->values->config_module_level = true;
-        	$this->_form->values->config_module_credit = true;
-        	$this->_form->values->config_module_semester = true;
+        	$this->_form->values->config_module_code = false;
+        	$this->_form->values->config_module_level = false;
+        	$this->_form->values->config_module_credit = false;
+        	$this->_form->values->config_module_semester = false;
         	$this->_form->values->config_display_convenor = true;
-        	$this->_form->values->config_html = true;
+        	$this->_form->values->config_html = false;
             $this->_form->values->config_htmlcontent = $defaulthtml;
         }
 
@@ -35,38 +35,38 @@ class block_module_info_edit_form extends block_edit_form {
         $module_code = array();
         $module_code[] = & $mform->createElement('advcheckbox', 'config_module_code', get_string('config_module_code', 'block_module_info'), null, array('group'=>1));
         $module_code[] = & $mform->createElement('text', 'config_module_code_override', get_string('config_module_code_override', 'block_module_info'));
-        $mform->addGroup($module_code, 'module_code', get_string('config_module_code', 'block_module_info'), array(' '), false);
+        $mform->addGroup($module_code, 'module_code', get_string('config_module_code', 'block_module_info'), array(' '), true);
         $mform->setType('config_module_code_override', PARAM_MULTILANG);
         $mform->addHelpButton('module_code', 'module_code', 'block_module_info');
         $mform->disabledIf('config_module_code_override','config_module_code');
-        $mform->setDefault('config_module_code', 1);
+        $mform->setDefault('config_module_code', false);
         
         $module_level = array();
         $module_level[] = & $mform->createElement('advcheckbox', 'config_module_level', get_string('config_module_level', 'block_module_info'), null, array('group'=>1));
         $module_level[] = & $mform->createElement('text', 'config_module_level_override', get_string('config_module_level_override', 'block_module_info'));
-        $mform->addGroup($module_level, 'module_level', get_string('config_module_level', 'block_module_info'), array(' '), false);
+        $mform->addGroup($module_level, 'module_level', get_string('config_module_level', 'block_module_info'), array(' '), true);
         $mform->setType('config_module_level_override', PARAM_MULTILANG);
         $mform->addHelpButton('module_level', 'module_level', 'block_module_info');
         $mform->disabledIf('config_module_level_override','config_module_level');
-        $mform->setDefault('config_module_level', 1);
+        $mform->setDefault('config_module_level', false);
         
         $module_credit = array();
         $module_credit[] = & $mform->createElement('advcheckbox', 'config_module_credit', get_string('config_module_credit', 'block_module_info'), null, array('group'=>1));
         $module_credit[] = & $mform->createElement('text', 'config_module_credit_override', get_string('config_module_credit_override', 'block_module_info'));
-        $mform->addGroup($module_credit, 'module_credit', get_string('config_module_credit', 'block_module_info'), array(' '), false);
+        $mform->addGroup($module_credit, 'module_credit', get_string('config_module_credit', 'block_module_info'), array(' '), true);
         $mform->setType('config_module_credit_override', PARAM_MULTILANG);
         $mform->addHelpButton('module_credit', 'module_credit', 'block_module_info');
         $mform->disabledIf('config_module_credit_override','config_module_credit');
-        $mform->setDefault('config_module_credit', 1);
+        $mform->setDefault('config_module_credit', false);
         
         $module_semester = array();
         $module_semester[] = & $mform->createElement('advcheckbox', 'config_module_semester', get_string('config_module_semester', 'block_module_info'), null, array('group'=>1));
         $module_semester[] = & $mform->createElement('text', 'config_module_semester_override', get_string('config_module_semester_override', 'block_module_info'));
-        $mform->addGroup($module_semester, 'module_semester', get_string('config_module_semester', 'block_module_info'), array(' '), false);
+        $mform->addGroup($module_semester, 'module_semester', get_string('config_module_semester', 'block_module_info'), array(' '), true);
         $mform->setType('config_module_semester_override', PARAM_MULTILANG);
         $mform->addHelpButton('module_semester', 'module_semester', 'block_module_info');
         $mform->disabledIf('config_module_semester_override','config_module_semester');
-        $mform->setDefault('config_module_semester', 1);
+        $mform->setDefault('config_module_semester', false);
         
         $this->add_checkbox_controller(1);
         
