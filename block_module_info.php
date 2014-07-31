@@ -51,6 +51,25 @@ class block_module_info extends block_base {
     public function instance_allow_multiple() {
         return false;
     }
+
+    /**
+     * allow instances to have their own configuration
+     *
+     * @return boolean
+     */
+    function instance_allow_config() {
+
+        return true;
+    }
+
+    /**
+     * allow the block to have a configuration page
+     *
+     * @return boolean
+     */
+     public function has_config() {
+        return true;
+    }
     
     // The PHP tag and the curly bracket for the class definition 
     // will only be closed after there is another function added in the next section.
