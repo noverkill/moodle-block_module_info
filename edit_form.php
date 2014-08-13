@@ -122,11 +122,24 @@ class block_module_info_edit_form extends block_edit_form {
                 }
             }
         }
-        
+	
+	$display_options_sorted = array();
+
+	$defaults = array('name', 'profilepic', 'email', 'location', 'officehours');
+
+	foreach($defaults as $default){
+            if(array_key_exists($default, $display_options)) {
+                $display_options_sorted[$default] = $display_options[$default];
+            }		
+	}
+
+	$display_options_sorted = array_merge($display_options_sorted, array_diff_key($display_options, $display_options_sorted));
+      
         $attributes = array('size'=>'7'); 
-        $select = $mform->addElement('select', 'config_display_convenor_options', get_string('config_display_convenor_options', 'block_module_info'), $display_options, $attributes);
+        $select = $mform->addElement('select', 'config_display_convenor_options', get_string('config_display_convenor_options', 'block_module_info'), $display_options_sorted, $attributes);
         $select->setMultiple(true);
-        $mform->setDefault('config_display_convenor_options', array('name', 'profilepic', 'email'));
+        $mform->setDefault('config_display_convenor_options', $defaults);
+        $mform->addHelpButton('config_display_convenor_options', 'config_display_convenor_options', 'block_module_info');
         
         // Overrides
         
