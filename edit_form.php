@@ -192,9 +192,9 @@ class block_module_info_edit_form extends block_edit_form {
         
         $mform->addElement('advcheckbox', 'config_enable_personal_timetable_link', get_string('config_enable_personal_timetable_link', 'block_module_info'));
 
-        $mform->setDefault('config_enable_personal_timetable_link', 0);
+        $mform->setDefault('config_enable_personal_timetable_link', 1);
         $mform->addElement('advcheckbox', 'config_enable_module_timetable_link', get_string('config_enable_module_timetable_link', 'block_module_info'));
-        $mform->setDefault('config_enable_module_timetable_link', 0);
+        $mform->setDefault('config_enable_module_timetable_link', 1);
         
         $mform->addElement('url', 'config_custom_timetable_url', get_string('config_custom_timetable_url', 'block_module_info'), array('size'=>'50'), array('usefilepicker'=>false));
         $mform->addHelpButton('config_custom_timetable_url', 'config_custom_timetable_url', 'block_module_info');
