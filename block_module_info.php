@@ -104,8 +104,8 @@ class block_module_info extends block_base {
             // fancy html allowed only on course, category and system blocks.
             $filteropt->noclean = true;
         }
-        
-        if (!empty($this->config->html)) {
+     
+	if((! $this->config->html) || ($this->config->html && (! empty($this->config->htmlcontent['text'])))) {
             $legacyheading = get_string('legacy_header', 'block_module_info');
             if(!empty($this->config->legacy_html_heading)) {
                 $legacyheading = $this->config->legacy_html_heading;

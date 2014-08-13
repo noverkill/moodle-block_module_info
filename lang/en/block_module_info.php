@@ -174,7 +174,7 @@
     
     $string['convenor_not_found'] = ' not found in QMplus database';
     
-    $string['config_html'] = 'Display HTML';
+    $string['config_html'] = 'Hide additional content if empty';
     $string['config_htmlcontent'] = 'HTML Content';
     $string['reset'] = 'Reset HTML - cannot be undone';
     
