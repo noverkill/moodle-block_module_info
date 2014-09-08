@@ -526,7 +526,7 @@ class block_module_info_renderer extends plugin_renderer_base {
         $result .= html_writer::start_tag('div', array('id'=>'schedule-pane'));
         
         // First check to see if there is any session information
-        if (! empty($this->data->block_config->additional_session_subheading) || $this->data->block_config->enable_personal_timetable_link || $this->data->block_config->enable_module_timetable_link) {
+        if (! empty($this->data->block_config->additional_session_subheading) || $this->data->block_config->enable_personal_timetable_link || $this->data->block_config->enable_module_timetable_link || !empty($this->data->block_config->custom_timetable_url)) {
     
             $result .= html_writer::start_tag('div', array('id' => 'schedule'));
             

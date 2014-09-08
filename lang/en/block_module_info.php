@@ -120,6 +120,8 @@
     $string['config_module_owner_heading'] = 'Module Owner heading';
     $string['config_module_owner_heading_help'] = 'Schools and faculties have their own name to describe the module owner. Select from the predefined options or select \'Custom\' to enter your own.';
     $string['config_display_convenor_options'] = 'Module owner display options';
+    $string['config_display_convenor_options_help'] = 'The options chosen here will be displayed in the Module Info block. They will only be displayed if you have added the information to your Moodle profile. To select or de-select options from the list please
+Ctrl + left mouse click (windows), Cmd + Click on Mac';
     $string['config_convenor_name_override'] = 'Module Owner name override';
     $string['config_convenor_email_override'] = 'Module owner email override';
     $string['config_convenor_location_override'] = 'Module owner location override';
@@ -174,7 +176,7 @@
     
     $string['convenor_not_found'] = ' not found in QMplus database';
     
-    $string['config_html'] = 'Display HTML';
+    $string['config_html'] = 'Hide additional content if empty';
     $string['config_htmlcontent'] = 'HTML Content';
     $string['reset'] = 'Reset HTML - cannot be undone';
     

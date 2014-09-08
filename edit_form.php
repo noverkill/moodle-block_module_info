@@ -1,25 +1,27 @@
 <?php
 require_once($CFG->dirroot.'/repository/lib.php');
 
+require_once($CFG->dirroot . '/blocks/module_info/lib.php');
+
 class block_module_info_edit_form extends block_edit_form {
-	
-	private $file_manager_data = null;
-	
+    
+    private $file_manager_data = null;
+    
     protected function specific_definition($mform) {
-    	
-    	global $DB;
+        
+        global $DB;
 
         $defaulthtml = get_config('block_module_info', 'defaulthtml');
 
         $action = optional_param('action','',PARAM_TEXT);
 
         if($action == 'reset') {
-        	$this->_form->values->config_module_code = false;
-        	$this->_form->values->config_module_level = false;
-        	$this->_form->values->config_module_credit = false;
-        	$this->_form->values->config_module_semester = false;
-        	$this->_form->values->config_display_convenor = true;
-        	$this->_form->values->config_html = false;
+            $this->_form->values->config_module_code = false;
+            $this->_form->values->config_module_level = false;
+            $this->_form->values->config_module_credit = false;
+            $this->_form->values->config_module_semester = false;
+            $this->_form->values->config_display_convenor = true;
+            $this->_form->values->config_html = false;
             $this->_form->values->config_htmlcontent = $defaulthtml;
         }
 
@@ -78,7 +80,7 @@ class block_module_info_edit_form extends block_edit_form {
         $headings_options = array(get_string('custom_teacher_heading', 'block_module_info'));
         $headings = get_config('block_module_info', 'convenor_role_name_options');
         if(!empty($headings) && strlen($headings) > 0) {
-        	$headings_options = array_merge($headings_options, explode("\r\n", $headings));
+            $headings_options = array_merge($headings_options, explode("\r\n", $headings));
         }
         
         $mform->addElement('select', 'config_module_owner_heading', get_string('config_module_owner_heading', 'block_module_info'), $headings_options);
@@ -122,11 +124,24 @@ class block_module_info_edit_form extends block_edit_form {
                 }
             }
         }
-        
+    
+        $display_options_sorted = array();
+
+        $defaults = array('name', 'profilepic', 'email', 'location', 'officehours');
+
+        foreach($defaults as $default){
+                if(array_key_exists($default, $display_options)) {
+                    $display_options_sorted[$default] = $display_options[$default];
+                }       
+        }
+
+        $display_options_sorted = array_merge($display_options_sorted, array_diff_key($display_options, $display_options_sorted));
+      
         $attributes = array('size'=>'7'); 
-        $select = $mform->addElement('select', 'config_display_convenor_options', get_string('config_display_convenor_options', 'block_module_info'), $display_options, $attributes);
+        $select = $mform->addElement('select', 'config_display_convenor_options', get_string('config_display_convenor_options', 'block_module_info'), $display_options_sorted, $attributes);
         $select->setMultiple(true);
-        $mform->setDefault('config_display_convenor_options', array('name', 'profilepic', 'email'));
+        $mform->setDefault('config_display_convenor_options', $defaults);
+        $mform->addHelpButton('config_display_convenor_options', 'config_display_convenor_options', 'block_module_info');
         
         // Overrides
         
@@ -147,7 +162,7 @@ class block_module_info_edit_form extends block_edit_form {
         $headings = get_config('block_module_info', 'additional_teacher_role_name_options');
         
         if(!empty($headings) && strlen($headings) > 0) {
-        	$headings_options = array_merge($headings_options, explode("\r\n", $headings));
+            $headings_options = array_merge($headings_options, explode("\r\n", $headings));
         } 
         
         $mform->addElement('select', 'config_additional_teachers_heading', get_string('config_additional_teachers_heading', 'block_module_info'), $headings_options);
@@ -192,11 +207,11 @@ class block_module_info_edit_form extends block_edit_form {
         
         $mform->addElement('advcheckbox', 'config_enable_personal_timetable_link', get_string('config_enable_personal_timetable_link', 'block_module_info'));
 
-        $mform->setDefault('config_enable_personal_timetable_link', 0);
+        $mform->setDefault('config_enable_personal_timetable_link', 1);
         $mform->addElement('advcheckbox', 'config_enable_module_timetable_link', get_string('config_enable_module_timetable_link', 'block_module_info'));
-        $mform->setDefault('config_enable_module_timetable_link', 0);
+        $mform->setDefault('config_enable_module_timetable_link', 1);
         
-        $mform->addElement('url', 'config_custom_timetable_url', get_string('config_custom_timetable_url', 'block_module_info'), array('size'=>'50'), array('usefilepicker'=>true));
+        $mform->addElement('url', 'config_custom_timetable_url', get_string('config_custom_timetable_url', 'block_module_info'), array('size'=>'50'), array('usefilepicker'=>false));
         $mform->addHelpButton('config_custom_timetable_url', 'config_custom_timetable_url', 'block_module_info');
         $mform->addElement('text', 'config_custom_timetable_text', get_string('config_custom_timetable_text', 'block_module_info'), array('size'=>'30'));
         $mform->setDefault('config_custom_timetable_text', get_string('config_custom_timetable_text_default', 'block_module_info'));
@@ -234,19 +249,19 @@ class block_module_info_edit_form extends block_edit_form {
         global $COURSE;
         
         $fileoptions = array('subdirs'=>0,
-        		'maxbytes'=>$COURSE->maxbytes,
-        		'accepted_types'=>'*',
-        		'return_types'=>FILE_INTERNAL);
+                'maxbytes'=>$COURSE->maxbytes,
+                'accepted_types'=>'*',
+                'return_types'=>FILE_INTERNAL);
         
         global $USER;
         $this->file_manager_data = new stdClass();
         file_prepare_standard_filemanager($this->file_manager_data,
-        		'files',
-        		$fileoptions,
-        		$this->page->context,
-        		'block_module_info',
-        		'documents',
-        		$this->block->context->id);
+                'files',
+                $fileoptions,
+                $this->page->context,
+                'block_module_info',
+                'documents',
+                $this->block->context->id);
         
         $mform->addElement('filemanager', 'files_filemanager', get_string('files'), null, $fileoptions);
         
@@ -255,7 +270,7 @@ class block_module_info_edit_form extends block_edit_form {
 
         
         $mform->addElement('advcheckbox', 'config_html', get_string('config_html', 'block_module_info'));
-        $mform->setDefault('config_html', 0);
+        $mform->setDefault('config_html', 1);
         
         $mform->addElement('text', 'config_legacy_html_heading', get_string('config_legacy_html_heading', 'block_module_info'), array('size'=>'30'));
         $mform->setDefault('config_legacy_html_heading', get_string('legacy_header', 'block_module_info'));
@@ -313,17 +328,17 @@ class block_module_info_edit_form extends block_edit_form {
             
             global $COURSE;
             $fileoptions = array('subdirs'=>1,
-            		'maxbytes'=>$COURSE->maxbytes,
-            		'accepted_types'=>'*',
-            		'return_types'=>FILE_INTERNAL);
+                    'maxbytes'=>$COURSE->maxbytes,
+                    'accepted_types'=>'*',
+                    'return_types'=>FILE_INTERNAL);
             
             file_postupdate_standard_filemanager($data,
-            		'files',
-            		$fileoptions,
-            		$this->page->context,
-            		'block_module_info',
-            		'documents',
-            		$this->block->context->id);
+                    'files',
+                    $fileoptions,
+                    $this->page->context,
+                    'block_module_info',
+                    'documents',
+                    $this->block->context->id);
         } 
         return $data;
     }
@@ -332,6 +347,125 @@ class block_module_info_edit_form extends block_edit_form {
         parent::set_data($default_values);
         $default_values->files_filemanager = $this->file_manager_data->files_filemanager;
         parent::set_data($default_values);
+        
+        $this->set_data_external($default_values);
+
+    }
+
+    /*
+    *   Setup default values for fields with external database mapping
+    */
+    function set_data_external($default_values) {
+
+        global $CFG, $DB, $COURSE;
+
+        $cparams = array(
+            'type'   => get_config ( 'block_module_info', 'dbconnectiontype' ),
+            'host'   => get_config ( 'block_module_info', 'dbhost' ),
+            'user'   => get_config ( 'block_module_info', 'dbuser' ),
+            'pass'   => get_config ( 'block_module_info', 'dbpass' ),
+            'dbname' => get_config ( 'block_module_info', 'dbname' ),
+            'debug'  => false
+        );
+
+        $dbc = new module_info_data_connection($cparams);
+
+
+        $table = get_config('block_module_info','dbtable');
+
+
+        //create the key that will be used in sql query
+
+        $keyfields = array(get_config('block_module_info','extcourseid') => array('=' => "'$COURSE->idnumber'"));
+
+        
+        $table_fields = array (
+            'module_code'     => get_config ('block_module_info', 'module_code'),
+            'module_level'    => get_config ('block_module_info', 'module_level'),
+            'module_credit'   => get_config ('block_module_info', 'module_credit'),
+            'module_semester' => get_config ('block_module_info', 'module_semester'),
+            'convenor_name'   => get_config ('block_module_info', 'convenor_name'),
+            'convenor_field'  => get_config ('block_module_info', 'convenor')
+        );
+
+
+        $config_fields = array_keys ($table_fields);
+   
+
+        $fields = array();
+
+        foreach($config_fields as $config_field) {
+
+                if(! empty ($table_fields[$config_field])) {
+
+                    $fields[] = $table_fields[$config_field];
+
+                }
+        }
+
+        $table_values = $dbc->return_table_values($table, $keyfields, $fields);
+
+        $def_values = array();
+
+        foreach ($config_fields as $config_field) {
+            $key = "config_$config_field";
+            $keyover = $key . "_override";
+
+            if($default_values->$keyover === '') {
+                $def_values[$key] = false;
+                $def_values[$keyover] = $table_values[0][$table_fields[$config_field]];
+            }
+        }
+
+        $semester = "config_module_semester";
+        $semesterover = $semester . "_override";
+
+        if($default_values->$semesterover === '') {
+                $after_hyphen = strchr($COURSE->idnumber, "-");
+
+            if(!empty($after_hyphen) && strlen($after_hyphen) > 2) {
+                $def_values[$semester] = false; 
+                $def_values[$semesterover] = substr($after_hyphen, 1, 1);
+            }
+        }
+
+        $this->_form->setDefaults($def_values);
+
+        //if($debug) {
+
+            // print 'default_values:<br><pre>';
+            // print_r($default_values);
+            // print '</pre><br>';
+
+            // print 'table_fields:<br><pre>';
+            // print_r($table_fields);
+            // print '</pre><br>'; 
+
+            // print 'config_fields:<br><pre>';
+            // print_r($config_fields);
+            // print '</pre><br>';
+
+            // foreach($config_fields as $config_field) {
+            //     print "config_field: $config_field<br>";
+            // }
+
+            // print 'fields:<br><pre>';
+            // print_r($fields);
+            // print '</pre><br>';
+
+            // print 'table_values:<br><pre>';
+            // print_r($table_values);
+            // print '</pre><br>';
+
+            // foreach ($config_fields as $config_field) {
+            //     $key = "config_{$config_field}_override";
+            //     print "key: $key, value: " . $table_values[0][$table_fields[$config_field]] . '<br>';
+            // }
+
+            // print 'def_values:<br><pre>';
+            // print_r($def_values);
+            // print '</pre><br>';
+        //}        
     }
     
     function validation($data, $files) {

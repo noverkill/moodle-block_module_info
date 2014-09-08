@@ -51,6 +51,25 @@ class block_module_info extends block_base {
     public function instance_allow_multiple() {
         return false;
     }
+
+    /**
+     * allow instances to have their own configuration
+     *
+     * @return boolean
+     */
+    function instance_allow_config() {
+
+        return true;
+    }
+
+    /**
+     * allow the block to have a configuration page
+     *
+     * @return boolean
+     */
+     public function has_config() {
+        return true;
+    }
     
     // The PHP tag and the curly bracket for the class definition 
     // will only be closed after there is another function added in the next section.
@@ -85,8 +104,8 @@ class block_module_info extends block_base {
             // fancy html allowed only on course, category and system blocks.
             $filteropt->noclean = true;
         }
-        
-        if (!empty($this->config->html)) {
+     
+	if((! $this->config->html) || ($this->config->html && (! empty($this->config->htmlcontent['text'])))) {
             $legacyheading = get_string('legacy_header', 'block_module_info');
             if(!empty($this->config->legacy_html_heading)) {
                 $legacyheading = $this->config->legacy_html_heading;
