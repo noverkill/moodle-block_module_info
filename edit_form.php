@@ -411,7 +411,7 @@ class block_module_info_edit_form extends block_edit_form {
             $key = "config_$config_field";
             $keyover = $key . "_override";
 
-            if($default_values->$keyover === '') {
+            if($default_values->$keyover == '') {
                 $def_values[$key] = false;
                 $def_values[$keyover] = $table_values[0][$table_fields[$config_field]];
             }
@@ -420,7 +420,7 @@ class block_module_info_edit_form extends block_edit_form {
         $semester = "config_module_semester";
         $semesterover = $semester . "_override";
 
-        if($default_values->$semesterover === '') {
+        if($default_values->$semesterover == '') {
                 $after_hyphen = strchr($COURSE->idnumber, "-");
 
             if(!empty($after_hyphen) && strlen($after_hyphen) > 2) {
