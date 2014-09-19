@@ -71,7 +71,7 @@ class block_module_info_edit_form extends block_edit_form {
         $mform->addHelpButton('module_semester', 'module_semester', 'block_module_info');
         $mform->disabledIf('config_module_semester_override','config_module_semester');
         
-        $this->add_checkbox_controller(1);
+        //$this->add_checkbox_controller(1);
         
         // Teaching
         $mform->addElement('header', 'configheader', get_string('teaching_header', 'block_module_info'));
@@ -370,12 +370,9 @@ class block_module_info_edit_form extends block_edit_form {
 
         $dbc = new module_info_data_connection($cparams);
 
-
         $table = get_config('block_module_info','dbtable');
 
-
         //create the key that will be used in sql query
-
         $keyfields = array(get_config('block_module_info','extcourseid') => array('=' => "'$COURSE->idnumber'"));
 
         
@@ -408,19 +405,25 @@ class block_module_info_edit_form extends block_edit_form {
         $def_values = array();
 
         foreach ($config_fields as $config_field) {
+
             $key = "config_$config_field";
             $keyover = $key . "_override";
 
-            if($default_values->$keyover == '') {
+            // if the checkbox is not checked or the text field is empty
+            // then set the value from the mis database
+            if(! $default_values->$key || ! $default_values->$keyover) {
                 $def_values[$key] = false;
-                $def_values[$keyover] = $table_values[0][$table_fields[$config_field]];
+                $def_values[$keyover] = isset ($table_values[0][$table_fields[$config_field]]) ? ($table_values[0][$table_fields[$config_field]]) : '';
             }
+
         }
 
         $semester = "config_module_semester";
         $semesterover = $semester . "_override";
 
-        if($default_values->$semesterover == '') {
+        // if the checkbox is not checked or the text field is empty
+        // then set the value from the mis database
+        if(! $default_values->$semester || ! $default_values->$semesterover) {
                 $after_hyphen = strchr($COURSE->idnumber, "-");
 
             if(!empty($after_hyphen) && strlen($after_hyphen) > 2) {

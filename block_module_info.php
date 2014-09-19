@@ -34,7 +34,9 @@ class block_module_info extends block_base {
         $this->config->module_level = false;
         $this->config->module_credit = false;
         $this->config->module_semester = false;
-        $this->config->display_convenor = true;
+        
+        //$this->config->display_convenor = true;
+        
         $defaulthtml = get_config('block_module_info', 'defaulthtml');
         $this->config->htmlcontent['text'] = $defaulthtml;
         $this->config->html = true;
