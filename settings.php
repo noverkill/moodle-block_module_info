@@ -1,28 +1,13 @@
 <?php
 
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+/****************************************************************
 
-/**
- * Strings for component 'block_module_info', language 'en', branch 'MOODLE_20_STABLE'
- *
- * @package   block_module_info
- * @copyright 2012 onwards University of London Computer Centre
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
- 
+File:       block/module_info/settings.php
+
+Purpose:    Global configuration page for the block
+
+****************************************************************/
+
 global $DB;
 
 $settings->add(new admin_setting_heading('block_module_info/mis_connection', get_string('mis_connection', 'block_module_info'), get_string('mis_connection_desc', 'block_module_info')));
@@ -38,8 +23,7 @@ $options = array(
 );
 $mis_connection			= 	new admin_setting_configselect('block_module_info/dbconnectiontype',get_string('db_connection','block_module_info'),'', '', $options);
 $settings->add( $mis_connection );
-/*
-*/
+
 
 $settings->add(new admin_setting_configtext('block_module_info/dbname',get_string( 'db_name', 'block_module_info' ),get_string( 'set_db_name', 'block_module_info' ),'',PARAM_RAW));
 

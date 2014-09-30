@@ -36,8 +36,8 @@ Section headings
 	font-weight: normal;
     font-size: 1.1em;
     padding-top: 5px;
-    padding-bottom: 0px;   
-    height: 30px; 
+    padding-bottom: 0px;
+    height: 30px;
     line-height: 1.8em;
 }
 
@@ -50,7 +50,7 @@ Section contents
 **********************************/
 .block_module_info div#schedule-pane, div#documents-pane, div#modinfo-viewlet-teaching_inner {
     background-color: #FFFFFF;
-    padding-left: 5px;    
+    padding-left: 5px;
 }
 
 .block_module_info div.generalbox {
