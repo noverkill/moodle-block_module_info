@@ -28,6 +28,7 @@ class module_info_data_connection{
 
     /**
      * Constructor function
+     *
      * @param array $cparams arguments used to connect to a db. array keys:
      * 			type: the type of connection mssql, mysql etc
      * 			host: host connection string

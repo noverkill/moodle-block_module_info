@@ -1,27 +1,13 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/****************************************************************
 
-/**
- * Constructs HTML for Module Info block
- *
- * @package    block_module_info
- * @copyright  2013 Queen Mary, University of London
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+File:       block/module_info/renderer.php
+
+Purpose:    Class with collection of methods that
+            handle rendering of visual aspects of the block
+
+****************************************************************/
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -30,44 +16,48 @@ global $CFG;
 require_once($CFG->dirroot . '/blocks/module_info/lib.php');
 
 class block_module_info_renderer extends plugin_renderer_base {
-    
+
     /**
-     * Array of configuration data.
-     * 
+     * Array of configuration data
+     *
      * @var unknown_type
      */
     private $data = null;
-    
+
+    /**
+     * Initialize configuration data
+     *
+     * @return boolean
+     */
     public function initialise($owner) {
-        global $CFG,$COURSE;
-        
-        $result = false;
-        
+
+        global $CFG, $COURSE;
+
         if(!empty($data)) {
-            return $result;
+            return false;
         }
-        
+
         $this->data = new stdClass();
-        
+
         $cparams = array('type' => get_config( 'block_module_info', 'dbconnectiontype' ),
                     'host' => get_config( 'block_module_info', 'dbhost' ),
                     'user' => get_config( 'block_module_info', 'dbuser' ),
                     'pass' => get_config( 'block_module_info', 'dbpass' ),
                     'dbname' => get_config( 'block_module_info', 'dbname' ),
                     'debug' => false);
-        
+
         $dbc = new module_info_data_connection($cparams);
         $table = get_config('block_module_info','dbtable');
         //create the key that will be used in sql query
         $keyfields = array(get_config('block_module_info','extcourseid') => array('=' => "'$COURSE->idnumber'"));
-    
+
         $module_code_field = get_config('block_module_info','module_code');
         $module_level_field = get_config('block_module_info','module_level');
         $module_credit_field = get_config('block_module_info','module_credit');
         $module_semester_field = get_config('block_module_info','module_semester');
         $convenor_name_field = get_config('block_module_info','convenor_name');
         $convenor_field = get_config('block_module_info','convenor');
-    
+
         $fields = array();
         if(! empty ($module_code_field)) {
             $fields[] = $module_code_field;
@@ -91,30 +81,30 @@ class block_module_info_renderer extends plugin_renderer_base {
         $this->data->info = $dbc->return_table_values($table, $keyfields, $fields);
         $this->data->block_config = $owner->config;
         $this->data->context = $owner->context;
-        
+
         $convenor  = get_config('block_module_info','convenor');
         $convenorid = get_config('block_module_info','convenorid');
-        
+
         $this->data->module_code = '';
         $this->data->module_level = '';
         $this->data->module_semester = '';
         $this->data->module_credit = '';
         $this->data->module_convenor_email = '';
-        
-        // What are the database field names for course code, semester, credit, &c. ? 
+
+        // What are the database field names for course code, semester, credit, &c. ?
         $module_code_field = get_config('block_module_info','module_code');
         $module_level_field = get_config('block_module_info','module_level');
         $module_credit_field = get_config('block_module_info','module_credit');
         $module_semester_field = get_config('block_module_info','module_semester');
         $convenor_name_field = get_config('block_module_info','convenor_name');
         $convenor_field = get_config('block_module_info','convenor');
-        
+
         // Initially attempt to extract the semester from the course id.
         $after_hyphen = strchr($COURSE->idnumber, "-");
         if(!empty($after_hyphen) && strlen($after_hyphen) > 2) {
             $this->data->module_semester = substr($after_hyphen, 1, 1);
         }
-        
+
         // Get the data from the database, if it's specified.
         foreach((array)$this->data->info as $field) {
             if (! empty($field[$module_code_field])) {
@@ -133,7 +123,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $this->data->module_convenor_email = $field[$convenor_field];
             }
         }
-        
+
         // override values out of the interim MIS if necessary
         if(! empty($this->data->block_config->module_code) && ! empty($this->data->block_config->module_code_override)) {
             $this->data->module_code = $this->data->block_config->module_code_override;
@@ -147,75 +137,84 @@ class block_module_info_renderer extends plugin_renderer_base {
         if(! empty($this->data->block_config->module_credit) && ! empty($this->data->block_config->module_credit_override)) {
             $this->data->module_credit = $this->data->block_config->module_credit_override;
         }
-        
+
         if(! empty($this->data->block_config->convenor_email_override)) {
             $this->data->module_convenor_email = $this->data->block_config->convenor_email_override;
         }
-        
+
         if(empty($this->data->block_config->module_owner_heading)) {
             $this->data->block_config->module_owner_heading = 0;
         }
-        
+
         if(empty($this->data->block_config->display_convenor_options)) {
             $this->data->block_config->display_convenor_options = array('name','profilepic','email');
         }
-        
+
         if(empty($this->data->block_config->convenor_profilepic_size)) {
             $this->data->block_config->convenor_profilepic_size = 'small';
         }
-        
+
         if(empty($this->data->block_config->additional_teachers_heading)) {
             $this->data->block_config->additional_teachers_heading = 0;
         }
-        
+
         if(!isset($this->data->block_config->enable_personal_timetable_link)) {
             $this->data->block_config->enable_personal_timetable_link = true;
         }
-        
+
         if(!isset($this->data->block_config->enable_module_timetable_link)) {
             $this->data->block_config->enable_module_timetable_link = true;
         }
-        
+
         if(empty($this->data->block_config->additional_session_subheading)) {
             $this->data->block_config->additional_session_subheading = array();
         }
-        
-        $result = true;
-        
-        return $result;
+
+        return true;
     }
-    
+
+    /**
+     * Create output for the teaching section
+     *
+     * @return html
+     */
     public function get_teaching_output() {
+
         $result = '';
-        
+
         $result .= mod_info_collapsible_region_start('teaching-heading', 'modinfo-viewlet-teaching', get_string('teaching_header', 'block_module_info'), false, false, true);
-        
+
         $result .= $this->get_convenorinfo_output();
-        
+
         $result .= $this->get_additionteacherinfo_output();
-        
+
         $result .= mod_info_collapsible_region_end(true);
-        
+
         return $result;
     }
-    
+
+    /**
+     * Create output for the convenor info section
+     *
+     * @return html
+     */
     public function get_convenorinfo_output() {
         global $DB, $OUTPUT, $CFG;
-        
+
         $result = '';
 
         // Output module convenor information
         // Mug shot:
         if (! empty($this->data->block_config->display_convenor) && ! empty ($this->data->module_convenor_email)) {
-            
+
             $result .= html_writer::start_tag('div', array('id' => 'convenor-pane'));
-            
+
             $headings_options = array(get_string('custom_teacher_heading', 'block_module_info'));
             $headings = get_config('block_module_info', 'convenor_role_name_options');
             if(!empty($headings) && strlen($headings) > 0) {
             	$headings_options = array_merge($headings_options, explode("\r\n", $headings));
             }
-        
+
             // Set the custom heading if there is one.
             if(!empty($this->data->block_config->custom_teacher_heading)) {
                 $headings_options[0] = $this->data->block_config->custom_teacher_heading;
@@ -224,9 +223,9 @@ class block_module_info_renderer extends plugin_renderer_base {
                     $headings_options[0] = $headings_options[1];
                 }
             }
-            
+
             $result .= html_writer::tag('h2', $headings_options[$this->data->block_config->module_owner_heading], array('class'=>'convenor-heading'));
-             
+
             // NOTE: the following logic assumes that users can't change their email addresses...
             if($convenor = $DB->get_record('user', array('email' => $this->data->module_convenor_email))) {
                 $display_options = array_values($this->data->block_config->display_convenor_options);
@@ -236,19 +235,19 @@ class block_module_info_renderer extends plugin_renderer_base {
                     $size = (strcmp($pic_size,'small')==0)?'50':'64';
                     $result .= $OUTPUT->user_picture($convenor, array('size' => $size, 'class'=>'convenor-profile-pic'));
                 }
-        
-                // Name: 
-                if(in_array('name', $display_options)) {      
+
+                // Name:
+                if(in_array('name', $display_options)) {
                     $result .= html_writer::tag('div', fullname($convenor, true), array('class'=>'convenor-name'));
                 }
-         
+
                 // Email address:
                 if(in_array('email', $display_options)) {
                     $result .= html_writer::start_tag('div', array('class'=>'convenor-email'));
                     $result .= obfuscate_mailto($convenor->email, '');
                     $result .= html_writer::end_tag('div');
                 }
-                
+
                 // Standard fields:
                 if(in_array('url', $display_options) && $convenor->url) {
                     $url = $convenor->url;
@@ -292,7 +291,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                 if(in_array('address', $display_options) && $convenor->address) {
                     $result .= html_writer::tag('div', get_string('address').': '.s($convenor->address), array('class'=>'convenor-address'));
                 }
-                
+
                 // Custom fields:
                 if ($fields = $DB->get_records('user_info_field')) {
                     foreach ($fields as $field) {
@@ -311,40 +310,45 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $result .= html_writer::start_tag('p');
                 $result .= html_writer::tag('strong', $this->data->module_convenor_email.get_string( 'convenor_not_found', 'block_module_info' ));
                 $result .= html_writer::end_tag('p');
-        
+
             }
-            
+
             $result .= html_writer::end_tag('div');
         }
-        
+
         return $result;
     }
-    
+
+    /**
+     * Create output for the additional teacher info section
+     *
+     * @return html
+     */
     public function get_additionteacherinfo_output() {
         global $DB, $OUTPUT, $CFG;
-        
+
         $result = '';
-        
+
         $result .= html_writer::start_tag('div', array('id' => 'additional-teachers'));
-        
+
         // Display section heading if necessary
-        $display_additional_teachers_heading = ($this->data->block_config->additional_teachers_heading > 0); 
-        
+        $display_additional_teachers_heading = ($this->data->block_config->additional_teachers_heading > 0);
+
         if($display_additional_teachers_heading) {
             $headings_options = array(get_string('no_teacher_heading', 'block_module_info'), get_string('custom_teacher_heading', 'block_module_info'));;
             $headings = get_config('block_module_info', 'additional_teacher_role_name_options');
-            
+
             if(!empty($headings) && strlen($headings) > 0) {
             	$headings_options = array_merge($headings_options, explode("\r\n", $headings));
-            	
+
             	// Set the custom heading if there is one.
             	if(!empty($this->data->block_config->custom_additional_teachers_heading)) {
             	    $headings_options[1] = $this->data->block_config->custom_additional_teachers_heading;
             	}
-            } 
-            $result .= html_writer::tag('h2', $headings_options[$this->data->block_config->additional_teachers_heading], array('class'=>'additional-teachers-heading'));     
+            }
+            $result .= html_writer::tag('h2', $headings_options[$this->data->block_config->additional_teachers_heading], array('class'=>'additional-teachers-heading'));
         }
-        
+
         // First, check to see if there is any additional teacher information
         if (! empty($this->data->block_config->additional_teacher_email) ) {
             $result .= html_writer::start_tag('div', array('id'=>'additional-teachers-pane'));
@@ -359,12 +363,12 @@ class block_module_info_renderer extends plugin_renderer_base {
                         $size = (strcmp($pic_size,'small')==0)?'50':'64';
                         $result .= $OUTPUT->user_picture($thisteacher, array('size' => $size, 'class'=>'additional-teacher-profile-pic'));
                     }
-            
+
                     // Name:
-                    if(in_array('name', $display_options) && $thisteacher->firstname && $thisteacher->lastname) {      
+                    if(in_array('name', $display_options) && $thisteacher->firstname && $thisteacher->lastname) {
                         $result .= html_writer::tag('div', fullname($thisteacher, true), array('class'=>'additional-teacher-name'));
                     }
-             
+
                     // Email address:
                     if(in_array('email', $display_options) && $thisteacher->email) {
                         $result .= html_writer::start_tag('div', array('class'=>'additional-teacher-email'));
@@ -415,7 +419,7 @@ class block_module_info_renderer extends plugin_renderer_base {
                     if(in_array('address', $display_options) && $thisteacher->address) {
                         $result .= html_writer::tag('div', get_string('address').': '.s($thisteacher->address), array('class'=>'additional-teacher-address'));
                     }
-                    
+
                     // Custom fields:
                     if ($fields = $DB->get_records('user_info_field')) {
                         foreach ($fields as $field) {
@@ -437,28 +441,34 @@ class block_module_info_renderer extends plugin_renderer_base {
                 }
             }
             $result .= html_writer::end_tag('div');
-            
+
         } else {
             if($display_additional_teachers_heading) {
                 $result .= $this->output->box(get_string('noadditionalteachersavailable', 'block_module_info'));
             }
         }
-        
+
         $result .= html_writer::end_tag('div');
-        
+
         return $result;
     }
-    
+
+    /**
+     * Create the personal timetable link
+     *
+     * @return html
+     */
     private function get_personal_timetable_html() {
+
         global $USER;
-        
+
         $result = '';
-        
+
         $config = get_config('block_module_info');
         $params = array();
-        
+
         $linkstring = get_string('default_personal_smart_link', 'block_module_info');
-        
+
         if (strlen($USER->idnumber) == 9) {
             $params['objectclass'] = 'student+set';
             $linkstring = get_string('student_personal_smart_link', 'block_module_info');
@@ -466,70 +476,90 @@ class block_module_info_renderer extends plugin_renderer_base {
             $params['objectclass'] = 'staff';
             $linkstring = get_string('staff_personal_smart_link', 'block_module_info');
         }
-        
-        $params['week'] = (empty($config->week)) ? '' :$config->week;
+
+        $params['week'] = (empty($config->week)) ? '' : $config->week;
         $params['day'] =  (empty($config->day)) ? '' : $config->day;
         $params['period'] =  (empty($config->period)) ? '' : $config->period;
         $params['identifier'] = $USER->idnumber;
         $params['style'] = $config->style;
-        $params['template'] = $config->template; 
-        
+        $params['template'] = $config->template;
+
         $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
         $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
+
         return $result;
     }
-    
+
+    /**
+     * Create the module timetable link
+     *
+     * @return html
+     */
     private function get_module_timetable_html() {
+
         global $USER, $COURSE;
-        
+
         $result = '';
-        
+
         $config = get_config('block_module_info');
         $params = array();
         $params['objectclass'] = 'module';
         $params['week'] = (empty($config->week)) ? '' :$config->week;
         $params['day'] =  (empty($config->day)) ? '' : $config->day;
-        $params['period'] =  (empty($config->period)) ? '' : $config->period;         
+        $params['period'] =  (empty($config->period)) ? '' : $config->period;
         $params['identifier'] = $COURSE->idnumber;
         $params['style'] = $config->style;
         $params['template'] = $config->template;
-        
+
         $linkstring = get_string('default_module_smart_link', 'block_module_info');
-        
+
         $result = html_writer::link(new moodle_url($config->baseurl, $params), $linkstring, array('target' => '_BLANK'));
         $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
+
         return $result;
     }
-    
+
+    /**
+     * Create custom timetable link
+     *
+     * @return html
+     */
     private function get_custom_timetable_html() {
+
         $result = '';
-    
+
         $linkstring = get_string('config_custom_timetable_text_default', 'block_module_info');
-        
+
         if(!empty($this->data->block_config->custom_timetable_text)) {
             $linkstring = $this->data->block_config->custom_timetable_text;
         }
-    
+
         $html = html_writer::start_tag('div', array('class' => 'custom-timetable'));
-         
+
         $result = html_writer::link(new moodle_url($this->data->block_config->custom_timetable_url), $linkstring, array('target' => '_BLANK'));
         $result = html_writer::tag('div', $result, array('class'=>'smart-link'));
+
         return $result;
     }
-    
+
+    /**
+     * Create output for the session info section
+     *
+     * @return html
+     */
     public function get_sessioninfo_output() {
-        
+
         $result = '';
-        
+
         // Display section heading
         $result .= mod_info_collapsible_region_start('schedule-heading', 'modinfo-viewlet-schedule', get_string('schedule_header', 'block_module_info'), 'modinfo-schedule', false, true);
         $result .= html_writer::start_tag('div', array('id'=>'schedule-pane'));
-        
+
         // First check to see if there is any session information
         if (! empty($this->data->block_config->additional_session_subheading) || $this->data->block_config->enable_personal_timetable_link || $this->data->block_config->enable_module_timetable_link || !empty($this->data->block_config->custom_timetable_url)) {
-    
+
             $result .= html_writer::start_tag('div', array('id' => 'schedule'));
-            
+
             // Only display personal timetable link if user is logged in
             if(!isguestuser()) {
                 if($this->data->block_config->enable_personal_timetable_link == true) {
@@ -537,18 +567,18 @@ class block_module_info_renderer extends plugin_renderer_base {
                 }
             } else {
                 $result .= html_writer::tag('div', get_string('login_to_view_timetable', 'block_module_info'));
-            }     
-            
+            }
+
             // Module timetable link
             if($this->data->block_config->enable_module_timetable_link == true) {
                 $result .= $this->get_module_timetable_html();
             }
-            
+
             // Display custom timetable link if URL is specified
             if(!empty($this->data->block_config->custom_timetable_url)) {
                 $result .= $this->get_custom_timetable_html();
             }
-            
+
             // Display each session
             foreach($this->data->block_config->additional_session_subheading as $key=>$value) {
                 // Session title:
@@ -561,34 +591,31 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $a->location = $this->data->block_config->additional_session_location[$key];
                 $result .= html_writer::tag('div', get_string('session_details', 'block_module_info', $a), array('class'=>'session-details'));
             }
-            
+
             $result .= html_writer::end_tag('div');
-            
+
         } else {
             $result .= $this->output->box(get_string('nosessionsavailable', 'block_module_info'));
         }
-        
+
         $result .= html_writer::end_tag('div');
         $result .= mod_info_collapsible_region_end(true);
-    
+
         return $result;
     }
-    
+
     /**
-     * Returns HTML to display module information.
-     * 
-     * @param unknown_type $info
-     * @param unknown_type $config
-     * @param unknown_type $contextid
-     * @return string
+     * Create output for the module info section
+     *
+     * @return html
      */
     public function get_moduleinfo_output() {
-    	
-        global $CFG,$DB,$OUTPUT;
+
+        global $CFG, $DB, $OUTPUT;
         require_once($CFG->libdir . '/filelib.php');
- 
+
         $result = '';
-        
+
         // Now build HTML
         if (! empty ($this->data->module_code)) {
         	$result .= html_writer::start_tag('p', array('class'=>'module_specific'));
@@ -618,32 +645,34 @@ class block_module_info_renderer extends plugin_renderer_base {
         	$result .= html_writer::tag('strong', $this->data->module_semester);
         	$result .= html_writer::end_tag('p');
         }
-        
+
         // If by this stage result is still empty then display a warning.
         if(empty($result)) {
             $result .= html_writer::tag('p', get_string( 'missing_module', 'block_module_info'), array('class'=>'missing_module'));
         }
-        
+
         return $result;
-        
+
     }
-    
+
     /**
      * Internal function - creates htmls structure suitable for YUI tree.
-     * 
+     *
      * @param unknown_type $context
      * @param unknown_type $block_context
      * @param unknown_type $dir
-     * @return string
+     *
+     * @return html
      */
     protected function htmllize_document_tree($context, $block_context, $dir) {
+
         global $CFG;
-        
+
         $result = '';
-        
+
         $yuiconfig = array();
         $yuiconfig['type'] = 'html';
-    
+
         if (empty($dir['subdirs']) and empty($dir['files'])) {
             return '';
         }
@@ -660,37 +689,37 @@ class block_module_info_renderer extends plugin_renderer_base {
             $result .= '<li yuiConfig=\''.json_encode($yuiconfig).'\'><div>'.html_writer::link($url, $image.$filename).'</div></li>';
         }
         $result .= '</ul>';
-    
+
         return $result;
     }
-    
+
     /**
      * Returns a collapsible document tree. Documents are associated with this module - specified by the course owner.
-     * 
-     * @param unknown_type $block_context
-     * @return string
+     *
+     * @return html
      */
     public function get_documentinfo_output() {
+
         global $USER;
-        
+
         $result = '';
-        
+
         // Get the stored files
         $fs = get_file_storage();
         $dir = $fs->get_area_tree($this->page->context->id, 'block_module_info', 'documents', $this->data->context->id);
-        
-        $has_files = !(empty($dir['subdirs']) && empty($dir['files'])); 
+
+        $has_files = !(empty($dir['subdirs']) && empty($dir['files']));
         $hide_if_empty = !empty($this->data->block_config->hide_document_section_if_empty);
-        
+
         $display_something = $has_files || (!$has_files && !$hide_if_empty);
-        
+
         if($display_something) {
             $result = html_writer::start_tag('div', array('id'=>'documents'));
-            
+
             $result .= mod_info_collapsible_region_start('documents-heading', 'modinfo-viewlet-documents', get_string('documents_header', 'block_module_info'), 'modinfo-documents', false, true);
-            
+
             $result .= html_writer::start_tag('div', array('id'=>'documents-pane'));
-        
+
             if (!$has_files) {
                 $result .= $this->output->box(get_string('nofilesavailable', 'repository'));
             } else {
@@ -700,13 +729,13 @@ class block_module_info_renderer extends plugin_renderer_base {
                 $result .= $this->htmllize_document_tree($this->page->context, $this->data->context, $dir);
                 $result .= '</div>';
             }
-        
+
             $result .= html_writer::end_tag('div');
             $result .= html_writer::end_tag('div');
-        
+
             $result .= mod_info_collapsible_region_end(true);
         }
-        
+
         return $result;
     }
 
