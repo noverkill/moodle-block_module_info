@@ -6,7 +6,14 @@ require_once($CFG->dirroot . '/blocks/module_info/lib.php');
 class block_module_info_edit_form extends block_edit_form {
     
     private $file_manager_data = null;
-    
+
+    /**
+     * Define elements on the config form
+     *
+     * @param MoodleQuickForm $mform the moodle default instance configuration form
+     *                               which we need to extend with our new elements
+     * @return void
+     */
     protected function specific_definition($mform) {
         
         global $DB;
@@ -287,18 +294,20 @@ class block_module_info_edit_form extends block_edit_form {
         //$mform->addElement('html', html_writer::link($link, get_string('reset', 'block_module_info')));
 
     }
-    
-    private function deleteArrayElement($anArray=array(), $index) {
-        unset($anArray[$index]);
-        $anArray = array_values($anArray);
-        
-        return $anArray;
-    }
-    
+
+    /**
+     * Handle submitted data
+     *
+     * Return submitted data if properly submitted
+     * or returns NULL if validation fails
+     * or if there is no submitted data
+     *
+     * @return object submitted data; NULL if not valid or not submitted or cancelled
+     */
     function get_data() {
         
         $data = parent::get_data();
-        
+
         if($data != null) {
             // If an additional teacher's name is blank then remove this element from the array
             $names = $data->config_additional_teacher_email;
@@ -342,21 +351,22 @@ class block_module_info_edit_form extends block_edit_form {
         } 
         return $data;
     }
-    
+
+    /**
+     * Set form defaults
+     *
+     * @param mixed $default_values object or array of default values
+     *
+     * @return void
+     */
     function set_data($default_values) {
-        parent::set_data($default_values);
+
+        // show the files already uploaded in the upload box
+        // parent::set_data($default_values); //it was here originally but dont understand why, maybe there is a moodle bug???
         $default_values->files_filemanager = $this->file_manager_data->files_filemanager;
         parent::set_data($default_values);
-        
-        $this->set_data_external($default_values);
-
-    }
-
-    /*
-    *   Setup default values for fields with external database mapping
-    */
-    function set_data_external($default_values) {
-
+ 
+        // set up default values from the external database if needed
         global $CFG, $DB, $COURSE;
 
         $cparams = array(
@@ -373,12 +383,9 @@ class block_module_info_edit_form extends block_edit_form {
 
         $table = get_config('block_module_info','dbtable');
 
-
-        //create the key that will be used in sql query
-
+        // create the key that will be used in sql query
         $keyfields = array(get_config('block_module_info','extcourseid') => array('=' => "'$COURSE->idnumber'"));
 
-        
         $table_fields = array (
             'module_code'     => get_config ('block_module_info', 'module_code'),
             'module_level'    => get_config ('block_module_info', 'module_level'),
@@ -388,9 +395,7 @@ class block_module_info_edit_form extends block_edit_form {
             'convenor_field'  => get_config ('block_module_info', 'convenor')
         );
 
-
         $config_fields = array_keys ($table_fields);
-   
 
         $fields = array();
 
@@ -430,48 +435,5 @@ class block_module_info_edit_form extends block_edit_form {
         }
 
         $this->_form->setDefaults($def_values);
-
-        //if($debug) {
-
-            // print 'default_values:<br><pre>';
-            // print_r($default_values);
-            // print '</pre><br>';
-
-            // print 'table_fields:<br><pre>';
-            // print_r($table_fields);
-            // print '</pre><br>'; 
-
-            // print 'config_fields:<br><pre>';
-            // print_r($config_fields);
-            // print '</pre><br>';
-
-            // foreach($config_fields as $config_field) {
-            //     print "config_field: $config_field<br>";
-            // }
-
-            // print 'fields:<br><pre>';
-            // print_r($fields);
-            // print '</pre><br>';
-
-            // print 'table_values:<br><pre>';
-            // print_r($table_values);
-            // print '</pre><br>';
-
-            // foreach ($config_fields as $config_field) {
-            //     $key = "config_{$config_field}_override";
-            //     print "key: $key, value: " . $table_values[0][$table_fields[$config_field]] . '<br>';
-            // }
-
-            // print 'def_values:<br><pre>';
-            // print_r($def_values);
-            // print '</pre><br>';
-        //}        
     }
-    
-    function validation($data, $files) {
-        $errors = parent::validation($data, $files);
-          
-        return $errors;
-    }
-    
 }
