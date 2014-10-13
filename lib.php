@@ -1,12 +1,14 @@
 <?php
-/**
- * Class used to create a connection to an external database and to perform subsequent queries needed to extract data
- *
- * @copyright 2013 Queen Mary, University of London
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package block_module_info
- * @version 1
- */
+
+/****************************************************************
+
+File:       block/module_info/lib.php
+
+Purpose:    Class used to create a connection to an external
+            database and to perform subsequent queries needed
+            to extract data
+
+****************************************************************/
 
 global $CFG;
 
@@ -85,8 +87,8 @@ class module_info_data_connection{
     }
 
     /**
-     *
      * Creates a connection to a database using the values given in the arguments
+     *
      * @param string $type the type of connection to be used
      * @param string $host the hosts address
      * @param string $user the username that will be used to connect to db
@@ -125,8 +127,10 @@ class module_info_data_connection{
 
     /**
      * Take a result array and return a list of the values in a single field
+     *
      * @param array of arrays $a
      * @param string $fieldname
+     *
      * @return array of scalars
      */
     protected function get_column_valuelist( $a, $fieldname ) {
@@ -140,8 +144,10 @@ class module_info_data_connection{
     /**
      * Takes an array in the format array($a=>array($b=> $c)) and returns
      * a string in the format $a $b $c
-     * @param array $paramarray the params that need to be converted to
-     * a string
+     *
+     * @param array $paramarray the params that need to be converted to a string
+     *
+     * @return string
      */
     protected function arraytostring($paramarray) {
         $str = '';
@@ -164,7 +170,7 @@ class module_info_data_connection{
     }
 
     /**
-     * builds an sql query using the given parameter and returns the results of the query
+     * Builds an sql query using the given parameter and returns the results of the query
      *
      * @param string $table the name of the table or view that will be queried
      * @param array  $whereparams array holding params that should be used in the where statement
@@ -176,6 +182,8 @@ class module_info_data_connection{
      * 				 'group' the field that results should be grouped by
      * 				 'lowerlimit' lower limit of results
      * 				 'upperlimit' should be used in conjunction with lowerlimt to limit results
+     *
+     * @return mixed
      */
     public function return_table_values ($table, $whereparams=null, $fields='*', $addionalargs=null) {
         // Check if the fields param is an array if it is implode.
@@ -223,6 +231,7 @@ class module_info_data_connection{
      * Recursive function to convert an array into a value
      *
      * @param $val
+     *
      * @return mixed
      */
     protected function arraytovar($val) {
@@ -239,6 +248,7 @@ class module_info_data_connection{
 
     /**
      * Builds a stored procedure query using the arguments given and returns the result
+     *
      * @param string $procedurename the name of the stored proceudre being called
      * @param mixed array or string $procedureargs variables passed to stored procedure
      *
@@ -269,9 +279,9 @@ class module_info_data_connection{
     /**
      * Step through an array of $key=>$value and assign them
      * to the class $params array
+     *
      * @param array $arrayvar the array that will hold the params
      * @param array $params the params that will be passed to $arrayvar
-     * @return
      */
     protected function set_params( &$arrayvar, $params ) {
         foreach ($params as $key => $value) {
@@ -297,6 +307,7 @@ class module_info_data_connection{
 
     /**
      * Marks the start of a transaction. Note that this is not supported in all databases (e.g. in mysqli but not mysql)
+     *
      * @return bool
      */
     public function begin_transaction() {
@@ -310,6 +321,7 @@ class module_info_data_connection{
 
     /**
      * Marks the end of a transaction. Any changes up to this point are committed.
+     *
      * @return bool
      */
     public function commit_transaction() {
@@ -323,6 +335,7 @@ class module_info_data_connection{
 
     /**
      * Cancels all changes made since the last begin_transaction() method call, and ends the transaction.
+     *
      * @return bool
      */
     public function rollback_transaction() {
@@ -336,7 +349,9 @@ class module_info_data_connection{
 
     /**
      * Executes the given sql query
+     *
      * @param string $sql
+     *
      * @return array of arrays
      */
     public function execute( $sql ) {
@@ -353,8 +368,10 @@ class module_info_data_connection{
      * Intended to return just the front item from an array of arrays (eg a recordset)
      * if just the array is sent, just the first row will be returned
      * if 2nd argument sent, then just the value of that field in the first row will be returned
+     *
      * @param array $a
      * @param string $fieldname
+     *
      * @return mixed (array or single value)
      */
     public static function get_top_item( $a , $fieldname=false ) {
@@ -378,6 +395,7 @@ class module_info_data_connection{
  *      (May be blank if you do not wish the state to be persisted.
  * @param boolean $default Initial collapsed state to use if the user_preference it not set.
  * @param boolean $return if true, return the HTML as a string, rather than printing it.
+ *
  * @return string|void if $return is false, returns nothing, otherwise returns a string of HTML.
  */
 function mod_info_collapsible_region_start($classes, $id, $caption, $userpref = '', $default = false, $return = false) {
@@ -415,6 +433,7 @@ function mod_info_collapsible_region_start($classes, $id, $caption, $userpref = 
  * Close a region started with print_collapsible_region_start.
  *
  * @param boolean $return if true, return the HTML as a string, rather than printing it.
+ *
  * @return string|void if $return is false, returns nothing, otherwise returns a string of HTML.
  */
 function mod_info_collapsible_region_end($return = false) {
@@ -426,7 +445,7 @@ function mod_info_collapsible_region_end($return = false) {
         echo $output;
     }
 }
- 
+
 /**
  * Serves the documents.
  *
@@ -436,6 +455,7 @@ function mod_info_collapsible_region_end($return = false) {
  * @param string $filearea
  * @param array $args
  * @param bool $forcedownload
+ *
  * @return bool false if file not found, does not return if found - justsend the file
  */
 function block_module_info_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
@@ -458,7 +478,7 @@ function block_module_info_pluginfile($course, $cm, $context, $filearea, $args, 
     if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
         return false;
     }
- 
+
    // finally send the file
    send_stored_file($file, 0, 0, true); // download MUST be forced - security!
 }

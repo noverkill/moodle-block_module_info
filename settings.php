@@ -21,7 +21,9 @@ $options = array(
     'postgres' => 'Postgres',
     'sybase' => 'Sybase'
 );
-$mis_connection			= 	new admin_setting_configselect('block_module_info/dbconnectiontype',get_string('db_connection','block_module_info'),'', '', $options);
+
+$mis_connection	= new admin_setting_configselect('block_module_info/dbconnectiontype',get_string('db_connection','block_module_info'),'', '', $options);
+
 $settings->add( $mis_connection );
 
 

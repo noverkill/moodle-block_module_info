@@ -490,42 +490,6 @@ class block_module_info_edit_form extends block_edit_form {
         }
 
         $this->_form->setDefaults($def_values);
-
-        //if($debug) {
-
-            // print 'default_values:<br><pre>';
-            // print_r($default_values);
-            // print '</pre><br>';
-
-            // print 'table_fields:<br><pre>';
-            // print_r($table_fields);
-            // print '</pre><br>';
-
-            // print 'config_fields:<br><pre>';
-            // print_r($config_fields);
-            // print '</pre><br>';
-
-            // foreach($config_fields as $config_field) {
-            //     print "config_field: $config_field<br>";
-            // }
-
-            // print 'fields:<br><pre>';
-            // print_r($fields);
-            // print '</pre><br>';
-
-            // print 'table_values:<br><pre>';
-            // print_r($table_values);
-            // print '</pre><br>';
-
-            // foreach ($config_fields as $config_field) {
-            //     $key = "config_{$config_field}_override";
-            //     print "key: $key, value: " . $table_values[0][$table_fields[$config_field]] . '<br>';
-            // }
-
-            // print 'def_values:<br><pre>';
-            // print_r($def_values);
-            // print '</pre><br>';
-        //}
     }
 
     /**
